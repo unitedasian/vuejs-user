@@ -1,0 +1,16 @@
+{
+  "name": "uam-vuejs-user",
+  "version": "1.0.0",
+  "description": "Vuejs user plugin",
+  "main": "index.js",
+  "repository": "git@gitlab.united-asian.com:vuejs/user.git",
+  "author": "Olivier Pichon <op@united-asian.com>",
+  "license": "proprietary",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.16.2",
+    "vue-ls": "^2.3.0",
+    "vue": "^2.3.3",
+    "vuex": "^2.4.0"
+  }
+}

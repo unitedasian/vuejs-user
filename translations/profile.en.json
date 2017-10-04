@@ -1,0 +1,41 @@
+{
+  "submit": {
+    "label": "Save"
+  },
+  "username": {
+    "label": "Username:",
+    "placeholder": "Enter username"
+  },
+  "email": {
+    "label": "Email address:",
+    "placeholder": "Enter email"
+  },
+  "password": {
+    "label": "Password:",
+    "placeholder": "Enter password"
+  },
+  "confirmPassword": {
+    "label": "Confirm Password:",
+    "placeholder": "Confirm password"
+  },
+  "gender": {
+    "label": "Gender:",
+    "options": {
+      "female": "Mrs",
+      "male": "Mr"
+    }
+  },
+  "firstName": {
+    "label": "First name:",
+    "placeholder": "Enter first name"
+  },
+  "surName": {
+    "label": "Surname:",
+    "placeholder": "Enter surname"
+  },
+  "notifyLabel": {
+    "cannotconnect": "Cannot connect to server",
+    "cannotrefresh": "An error occurred. You may have been automatically logged-out. Please login.",
+    "updated": "Profile updated successfully."
+  }
+}
