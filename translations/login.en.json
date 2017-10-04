@@ -1,0 +1,16 @@
+{
+  "title": "Login",
+  "submit": {
+    "label": "Login"
+  },
+  "username": {
+    "label": "Your email"
+  },
+  "password": {
+    "label": "Your password"
+  },
+  "notifyLabel": {
+    "unauthorized": "Invalid credentials",
+    "cannotconnect": "Cannot connect to server"
+  }
+}
