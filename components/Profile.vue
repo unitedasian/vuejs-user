@@ -181,7 +181,7 @@ export default {
               this.$user.updateUser(response.data)
                 .then(() => {
                   this.isLoading = false
-                  this.addNotification(this.$i18n.t('notifyLabel.updated'))
+                  this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                 })
             })
             .catch((error) => {
@@ -194,7 +194,7 @@ export default {
                           this.$user.updateUser(response.data)
                             .then(() => {
                               this.isLoading = false
-                              this.addNotification(this.$i18n.t('notifyLabel.updated'))
+                              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                             })
                         })
                     })
@@ -223,7 +223,7 @@ export default {
               this.$user.updateProfile(response.data.profile)
                 .then(() => {
                   this.isLoading = false
-                  this.addNotification(this.$i18n.t('notifyLabel.updated'))
+                  this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                 })
             })
             .catch((error) => {
@@ -236,7 +236,7 @@ export default {
                           this.$user.updateProfile(response.data.profile)
                             .then(() => {
                               this.isLoading = false
-                              this.addNotification(this.$i18n.t('notifyLabel.updated'))
+                              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                             })
                         })
                     })
