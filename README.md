@@ -30,6 +30,4 @@ Vue.use(User, { store: store, router: router })
 |Option | Description | Default |
 |:------|:------------|:--------|
 |store  | The Vuex store to use | `store` |
-|router  | the router to use | `router` |
-|api_base_url | The base url of the auth api. Should not include a final /. | none|
-|login_route | The route for the API login endpoint | `/login` |
+|login_url | The API login url. | none|
