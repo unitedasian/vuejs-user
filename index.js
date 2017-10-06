@@ -1,6 +1,6 @@
-import * as components from './components'
-import User from './User'
-import userModule from './user-store'
+import * as components from './src/components'
+import User from './src/user'
+import userModule from './src/user-store-module'
 
 const VuePlugin = {
   /**
