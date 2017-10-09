@@ -29,17 +29,17 @@ const VuePlugin = {
       Vue.component(component, components[component])
     }
 
-    options.router.addRoutes([
+    options.router.addRoutes([/*
       {
         path: '/login',
         name: 'login',
         component: components['login'],
         props: (route) => ({ redirectTo: route.query.redirect })
-      },
+      }, */
       {
         path: '/profile',
         name: 'profile',
-        component: components['profile'],
+        component: components['uamProfile'],
         meta: { requiresAuth: true },
         props: {
           getUrl: '/user/me',

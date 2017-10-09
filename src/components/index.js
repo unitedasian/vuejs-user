@@ -1,11 +1,11 @@
-import login from './Login.vue'
-import notification from './Notification.vue'
-import profile from './Profile.vue'
-import userMenu from './UserMenu.vue'
+import uamLogin from './Login.vue'
+import uamNotification from './Notification.vue'
+import uamProfile from './Profile.vue'
+import uamUserMenu from './UserMenu.vue'
 
 export {
-  login,
-  notification,
-  profile,
-  userMenu
+  uamLogin,
+  uamNotification,
+  uamProfile,
+  uamUserMenu
 }

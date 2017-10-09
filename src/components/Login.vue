@@ -1,29 +1,19 @@
 <template lang="html">
-<b-container>
-  <b-row class="justify-content-center">
+  <div>
     <i v-show="isLoading" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
-
-    <b-col cols="10" sm="10" md="8" lg="6" xl="4" class="login" v-show="!isLoading">
-      <div class="card">
-        <div class="card-header">
-          <h1 class="text-center">{{ $t('title') }}</h1>
-        </div>
-        <div class="card-block login-body">
-          <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
-          <b-form @submit.prevent="onSubmit" class="login-form">
-            <b-form-group :label="this.$i18n.t('username.label')" label-for="username">
-              <b-form-input v-model="credentials.email" type="email" required :placeholder="this.$i18n.t('username.label')" id="username"></b-form-input>
-            </b-form-group>
-            <b-form-group :label="$t('password.label')" label-for="password">
-              <b-form-input v-model="credentials.password" type="password" required :placeholder="this.$i18n.t('password.label')" id="password"></b-form-input>
-            </b-form-group>
-              <b-button type="submit" variant="primary">{{ $t('submit.label') }}</b-button>
-          </b-form>
-        </div>
+    <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
+    <form @submit.prevent="onSubmit" class="login-form" v-show="!isLoading">
+      <div class="form-group">
+        <label for="username">{{ $t('username.label') }}</label>
+        <input type="email" required class="form-control" id="username" :placeholder="this.$i18n.t('username.label')" v-model="credentials.email">
       </div>
-    </b-col>
-  </b-row>
-</b-container>
+      <div class="form-group">
+        <label for="password">{{ $t('password.label') }}</label>
+        <input type="password" required class="form-control" id="password" :placeholder="this.$i18n.t('password.label')" v-model="credentials.password">
+      </div>
+      <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -75,16 +65,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .login {
-    padding-top: 5em;
-  }
-
-  .login-body {
-    padding: 1em;
-  }
-  .loading {
-    margin-top: 3em;
-  }
-</style>
