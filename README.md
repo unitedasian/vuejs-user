@@ -29,5 +29,6 @@ Vue.use(User, { store: store, router: router })
 
 |Option | Description | Default |
 |:------|:------------|:--------|
-|store  | The Vuex store to use | `store` |
-|login_url | The API login url. | none|
+|store  | The Vuex store to use | none |
+|router  | The registered router instance | none |
+|loginUrl | The API login url. | '/login' |
