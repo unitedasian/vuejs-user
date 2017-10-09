@@ -1,23 +1,32 @@
 <template lang="html">
-  <b-nav-item-dropdown :right="right">
-    <template slot="button-content">
-      {{ $t('label.welcome') }} {{ $user.getCurrentUser().username }}
-    </template>
+<li class="nav-item dropdown">
+  <a
+    class="nav-link dropdown-toggle"
+    href="#"
+    id="navbarDropdownMenuLink"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+     {{ $t('label.welcome') }} {{ $user.getCurrentUser().username }}
+  </a>
 
-    <b-dropdown-item to="/profile">
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+    <router-link class="dropdown-item" to="/profile">
       <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
       {{ $t('label.profile') }}
-    </b-dropdown-item>
+    </router-link>
 
     <slot></slot>
 
-    <b-dropdown-divider></b-dropdown-divider>
+    <div class="dropdown-divider"></div>
 
-    <b-dropdown-item href="#" @click.prevent="logout()">
+    <a class="dropdown-item" href="#" @click.prevent="logout()">
       <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
       {{ $t('label.logout') }}
-    </b-dropdown-item>
-  </b-nav-item-dropdown>
+    </a>
+  </div>
+</li>
 </template>
 
 <script>
