@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Vuejs user plugin",
   "main": "index.js",
-  "repository": "file:../../vuejs/user",
+  "repository": "git@gitlab.united-asian.com:vuejs/user.git",
   "author": "Olivier Pichon <op@united-asian.com>",
   "license": "proprietary",
   "private": true,
