@@ -1,13 +1,13 @@
 <template lang="html">
   <div>
-    <b-alert
+    <div
       v-for="(notification, index) in notifications"
       :key="index"
-      :variant="notification.type"
-      show
+      :class="'alert alert-' + notification.type"
+      role="alert"
     >
       {{ notification.message }}
-    </b-alert>
+    </div>
   </div>
 </template>
 
