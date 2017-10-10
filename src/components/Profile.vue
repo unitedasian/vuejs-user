@@ -1,119 +1,89 @@
 <template lang="html">
-<b-container>
-  <b-row>
-    <b-col v-show="!isLoading">
-      <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
+<div>
+  <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
 
-      <b-card no-body>
-        <b-tabs ref="tabs" card>
-          <b-tab title="Credentials" active>
-            <b-form @submit.prevent="onSubmit('user')" data-vv-scope="user">
-              <b-form-group id="username-input-group" :label="this.$i18n.t('username.label')" label-for="username">
-                <b-form-input
-                  id="username"
-                  :state="errors.has('user.username') ? false : null"
-                  type="text" v-model="user.username" required
-                  :placeholder="this.$i18n.t('username.placeholder')"  name="username"
-                  v-validate="'required|max:255'"
-                ></b-form-input>
+  <i v-show="isLoading" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
 
-                <b-form-feedback id="username-feedback">
-                  {{ errors.first('user.username') }}
-                </b-form-feedback>
-              </b-form-group>
+  <div class="card" v-show="!isLoading">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" id="credentials-tab" data-toggle="tab" href="#credentials" role="tab" aria-controls="credentials" aria-expanded="true">Credentials</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="you-tab" data-toggle="tab" href="#you" role="tab" aria-controls="you" aria-expanded="false">You</a>
+        </li>
+      </ul>
+    </div>
 
-              <b-form-group id="email-input-group" :label="this.$i18n.t('email.label')" label-for="email">
-                <b-form-input
-                  id="email"
-                  :state="errors.has('user.email') ? false : null"
-                  type="email" v-model="user.email" required
-                  :placeholder="this.$i18n.t('email.placeholder')" name="email"
-                  v-validate="'required|email'"
-                ></b-form-input>
+    <div class="tab-content card-body">
+      <div class="tab-pane fade show active" id="credentials" role="tabpanel" aria-labelledby="credentials-tab">
+        <form @submit.prevent="onSubmit('user')" data-vv-scope="user">
+          <div class="form-group">
+            <label for="username">{{ $t('username.label') }}</label>
+            <input type="text"  class="form-control" id="username" :placeholder="this.$i18n.t('username.placeholder')" v-model="user.username" name="username" v-validate="'required|min:2|max:255'" required/>
 
-                <b-form-feedback id="email-feedback">
-                  {{ errors.first('user.email') }}
-                </b-form-feedback>
-              </b-form-group>
+            <span v-show="errors.has('user.username')" class="invalid-feedback">{{ errors.first('user.username') }}</span>
+          </div>
 
-              <b-form-group id="password-input-group" :label="this.$i18n.t('password.label')" label-for="password">
-                <b-form-input
-                  id="password"
-                  :state="errors.has('user.password') ? false : null"
-                  type="password" v-model="user.password"
-                  :placeholder="this.$i18n.t('password.placeholder')"  name="password"
-                  v-validate="'min:6|max:255'"
-                ></b-form-input>
+          <div class="form-group">
+            <label for="email">{{ $t('email.label') }}</label>
+            <input type="email"  class="form-control" id="email" :placeholder="this.$i18n.t('email.placeholder')" v-model="user.email" name="email" v-validate="'required|email'" required/>
 
-                <b-form-feedback id="password-feedback">
-                  {{ errors.first('user.password') }}
-                </b-form-feedback>
-              </b-form-group>
+            <span v-show="errors.has('user.email')" class="invalid-feedback">{{ errors.first('user.email') }}</span>
+          </div>
 
-              <b-form-group id="confirm-password-input-group" :label="this.$i18n.t('confirmPassword.label')" label-for="confirm-password">
-                <b-form-input
-                  id="confirm-password"
-                  :state="errors.has('user.confirm_password') ? false : null"
-                  type="password" v-model="confirmPassword"
-                  :placeholder="this.$i18n.t('confirmPassword.placeholder')"  name="confirm_password"
-                  v-validate="'confirmed:password'"
-                ></b-form-input>
+          <div class="form-group">
+            <label for="password">{{ $t('password.label') }}</label>
+            <input type="password"  class="form-control" id="password" :placeholder="this.$i18n.t('password.placeholder')" v-model="user.password" name="password" v-validate="'min:6|max:255'" />
 
-                <b-form-feedback id="confirm-password-feedback">
-                  {{ errors.first('user.confirm_password') }}
-                </b-form-feedback>
-              </b-form-group>
+            <span v-show="errors.has('user.password')" class="invalid-feedback">{{ errors.first('user.password') }}</span>
+          </div>
 
-              <b-button type="submit" variant="primary">{{ $t('submit.label') }}</b-button>
-             </b-form>
-          </b-tab>
+          <div class="form-group">
+            <label for="confirm-password">{{ $t('confirmPassword.label') }}</label>
+            <input type="password"  class="form-control" id="confirm-password" :placeholder="this.$i18n.t('confirmPassword.placeholder')" v-model="confirmPassword" name="confirm_password" v-validate="'confirmed:password'" />
 
-          <b-tab title="You">
-            <b-form @submit.prevent="onProfileSubmit('profile')"  data-vv-scope="profile">
-              <b-form-group id="gender-input-group" :label="this.$i18n.t('gender.label')" label-for="gender">
-                <b-form-radio-group id="gender" v-model="profile.gender" :options="genderOptions" name="gender">
-                </b-form-radio-group>
-              </b-form-group>
+            <span v-show="errors.has('user.confirm_password')" class="invalid-feedback">{{ errors.first('user.confirm_password') }}</span>
+          </div>
 
-              <b-form-group id="firstname-input-group" :label="this.$i18n.t('firstName.label')" label-for="firstname">
-                <b-form-input
-                  id="firstname"
-                  :state="errors.has('profile.firstname') ? false : null"
-                  type="text" v-model="profile.firstname" required
-                  :placeholder="this.$i18n.t('firstName.placeholder')"  name="firstname"
-                  v-validate="'required|max:255'"
-                ></b-form-input>
+          <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
+        </form>
+      </div>
 
-                <b-form-feedback id="firstname-feedback">
-                  {{ errors.first('profile.firstname') }}
-                </b-form-feedback>
-              </b-form-group>
+      <div class="tab-pane fade" id="you" role="tabpanel" aria-labelledby="you-tab">
+        <form @submit.prevent="onProfileSubmit('profile')" data-vv-scope="profile">
+          <div class="form-group">
+            <div><label>{{ $t('gender.label') }}</label></div>
+            <label class="custom-control custom-radio" v-for="option in genderOptions" :key="option.value">
+              <input name="gender" type="radio" class="custom-control-input" :value="option.value" v-model="profile.gender"  v-validate="'required|in:1,2'">
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">{{ option.text }}</span>
+            </label>
 
-              <b-form-group id="surname-input-group" :label="this.$i18n.t('surName.label')" label-for="surname">
-                <b-form-input
-                  id="surname"
-                  :state="errors.has('profile.surname') ? false : null"
-                  type="text" v-model="profile.surname" required
-                  :placeholder="this.$i18n.t('surName.placeholder')"  name="surname"
-                  v-validate="'required|max:255'"
-                ></b-form-input>
+            <span v-show="errors.has('profile.gender')" class="invalid-feedback">{{ errors.first('profile.gender') }}</span>
+          </div>
 
-                <b-form-feedback id="surname-feedback">
-                  {{ errors.first('profile.surname') }}
-                </b-form-feedback>
-              </b-form-group>
+          <div class="form-group">
+            <label for="firstname">{{ $t('firstName.label') }}</label>
+            <input type="text"  class="form-control" id="firstname" :placeholder="this.$i18n.t('firstName.placeholder')" v-model="profile.firstname" name="firstname" v-validate="'required|min:2|max:255'" required/>
 
-              <b-button type="submit" variant="primary">{{ $t('submit.label') }}</b-button>
-            </b-form>
-          </b-tab>
-        </b-tabs>
-      </b-card>
+            <span v-show="errors.has('profile.firstname')" class="invalid-feedback">{{ errors.first('profile.firstname') }}</span>
+          </div>
 
-    </b-col>
+          <div class="form-group">
+            <label for="surname">{{ $t('surName.label') }}</label>
+            <input type="text"  class="form-control" id="surname" :placeholder="this.$i18n.t('surName.placeholder')" v-model="profile.surname" name="surname" v-validate="'required|min:2|max:255'" required/>
 
-    <i v-show="isLoading" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
-  </b-row>
-</b-container>
+            <span v-show="errors.has('profile.surname')" class="invalid-feedback">{{ errors.first('profile.surname') }}</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -132,8 +102,8 @@ export default {
         password: ''
       },
       genderOptions: [
-        { text: this.$i18n.t('gender.options.female'), value: '1' },
-        { text: this.$i18n.t('gender.options.male'), value: '2' }
+        { text: this.$i18n.t('gender.options.female'), value: 1 },
+        { text: this.$i18n.t('gender.options.male'), value: 2 }
       ],
       profile: {
         gender: null,
@@ -151,6 +121,9 @@ export default {
         custom: {
           confirm_password: {
             confirmed: 'The password confirmation does not match.'
+          },
+          gender: {
+            in: 'Select gender.'
           }
         }
       }
@@ -261,3 +234,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+    .invalid-feedback {
+        display: block;
+    }
+</style>

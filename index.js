@@ -16,6 +16,8 @@ const VuePlugin = {
 
     Vue._uam_user_vue_installed = true
 
+    options.loginUrl = options.loginUrl || '/login'
+
     // register `user` module to store dynamically
     options.store.registerModule('user', userModule)
 
@@ -29,32 +31,13 @@ const VuePlugin = {
       Vue.component(component, components[component])
     }
 
-    options.router.addRoutes([
-      {
-        path: '/login',
-        name: 'login',
-        component: components['login'],
-        props: (route) => ({ redirectTo: route.query.redirect })
-      },
-      {
-        path: '/profile',
-        name: 'profile',
-        component: components['profile'],
-        meta: { requiresAuth: true },
-        props: {
-          getUrl: '/user/me',
-          updateUrl: '/users/'
-        }
-      }
-    ])
-
     options.router.beforeEach((to, from, next) => {
       if (to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires authenticated user, check if logged in
         // if not, redirect to login page.
         if (!Vue.user.isLoggedIn()) {
           next({
-            path: '/login',
+            path: options.loginUrl,
             query: { redirect: to.fullPath }
           })
         } else {

@@ -73,8 +73,8 @@ export default {
                 Vue.ls.set('user', userResponse.user)
 
                 commit(LOGIN_SUCCESS)
+                resolve()
               })
-            resolve()
           })
           .catch(function (error) {
             reject(error)
