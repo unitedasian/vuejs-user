@@ -7,14 +7,14 @@
     <form @submit.prevent="onSubmit" class="login-form" v-show="!isLoading">
       <div class="form-group">
         <label for="username">{{ $t('username.label') }}</label>
-        <input type="email"  class="form-control" id="username" :placeholder="this.$i18n.t('username.label')" v-model="credentials.email" name="email" v-validate="'required|email'" />
+        <input type="email"  class="form-control" id="username" :placeholder="this.$i18n.t('username.label')" v-model="credentials.email" name="email" v-validate="'required|email'" required/>
 
         <span v-show="errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</span>
       </div>
 
       <div class="form-group">
         <label for="password">{{ $t('password.label') }}</label>
-        <input type="password"  class="form-control" id="password" :placeholder="this.$i18n.t('password.label')" v-model="credentials.password" name="password" v-validate="'required|min:6|max:255'" />
+        <input type="password"  class="form-control" id="password" :placeholder="this.$i18n.t('password.label')" v-model="credentials.password" name="password" v-validate="'required|min:6|max:255'" required/>
 
         <span v-show="errors.has('password')" class="invalid-feedback">{{ errors.first('password') }}</span>
       </div>

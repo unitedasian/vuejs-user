@@ -31,19 +31,6 @@ const VuePlugin = {
       Vue.component(component, components[component])
     }
 
-    options.router.addRoutes([
-      {
-        path: '/profile',
-        name: 'profile',
-        component: components['uamProfile'],
-        meta: { requiresAuth: true },
-        props: {
-          getUrl: '/user/me',
-          updateUrl: '/users/'
-        }
-      }
-    ])
-
     options.router.beforeEach((to, from, next) => {
       if (to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires authenticated user, check if logged in
