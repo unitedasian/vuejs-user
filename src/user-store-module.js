@@ -81,6 +81,28 @@ export default {
           })
       })
     },
+    loginWithToken ({state, commit, rootState}, accessToken) {
+      commit(LOGIN)
+
+      return new Promise((resolve, reject) => {
+        Vue.ls.set('id_token', accessToken)
+
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('id_token')
+
+        axios.get('/user/me?includes[]=profile')
+          .then((response) =>{
+            Vue.ls.set('profile', response.data.user.profile)
+            delete response.data.user.profile
+            Vue.ls.set('user', response.data.user)
+
+            commit(LOGIN_SUCCESS)
+            resolve()
+          })
+          .catch(function (error) {
+            reject(error)
+          })
+      })
+    },
     refreshToken ({commit}) {
       commit(LOGIN)
 
