@@ -20,6 +20,12 @@
       </div>
       <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
     </form>
+
+    <button @click="authenticate('facebook')">Sign in with Facebook</button>
+    <button @click="authenticate('twitter')">Sign in with Twitter</button>
+    <button @click="authenticate('google')">Sign in with Google</button>
+    <button @click="authenticate('linkedin')">Sign in with Linkedin</button>
+    <button @click="authenticate('github')">Sign in with Github</button>
   </div>
 </template>
 
@@ -40,6 +46,16 @@ export default {
     }
   },
   methods: {
+    authenticate: function (provider) {
+      let this_ = this
+      this.$auth.authenticate(provider)
+        .then((authResponse) => {
+          this_.$user.loginWithToken(authResponse.data.access_token)
+            .then(() => {
+              this_.$router.push('/')
+            })
+        })
+    },
     onSubmit () {
       this.$validator.validateAll().then((result) => {
         if (result) {
