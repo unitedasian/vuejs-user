@@ -21,11 +21,15 @@
       <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
     </form>
 
-    <button @click="authenticate('facebook')">Sign in with Facebook</button>
-    <button @click="authenticate('twitter')">Sign in with Twitter</button>
-    <button @click="authenticate('google')">Sign in with Google</button>
-    <button @click="authenticate('linkedin')">Sign in with Linkedin</button>
-    <button @click="authenticate('github')">Sign in with Github</button>
+    <div class="social-login">
+      <p>Login with:</p>
+
+      <a @click="authenticate('facebook')" class="fa fa-facebook"></a>
+      <a @click="authenticate('twitter')" class="fa fa-twitter"></a>
+      <a @click="authenticate('google')" class="fa fa-google"></a>
+      <a @click="authenticate('linkedin')" class="fa fa-linkedin"></a>
+      <a @click="authenticate('github')" class="fa fa-github"></a>
+      </div>
   </div>
 </template>
 
@@ -96,5 +100,51 @@ export default {
 <style scoped>
 .invalid-feedback {
     display: block;
+}
+
+.social-login {
+    margin-top: 30px;
+}
+
+/* Style all font awesome icons */
+a.fa {
+    cursor: pointer;
+    padding: 10px;
+    font-size: 30px;
+    width: 50px;
+    text-align: center;
+    text-decoration: none;
+    margin: 5px;
+}
+
+a.fa:hover {
+    opacity: 0.8;
+    color: white;
+}
+
+/* Set a specific color for each brand */
+a.fa-facebook {
+    background: #3B5998;
+    color: white;
+}
+
+a.fa-twitter {
+    background: #55ACEE;
+    color: white;
+}
+
+a.fa-google {
+    background: #dd4b39;
+    color: white;
+}
+
+a.fa-linkedin {
+    background: #007bb5;
+    color: white;
+}
+
+a.fa-github {
+    background: #222;
+    color: white;
 }
 </style>
