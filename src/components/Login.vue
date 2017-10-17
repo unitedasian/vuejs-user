@@ -21,14 +21,13 @@
       <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
     </form>
 
-    <div class="social-login">
+    <div v-if="facebook || github || google || linkedin" class="social-login">
       <p>Login with:</p>
 
-      <a @click="authenticate('facebook')" class="fa fa-facebook"></a>
-      <a @click="authenticate('twitter')" class="fa fa-twitter"></a>
-      <a @click="authenticate('google')" class="fa fa-google"></a>
-      <a @click="authenticate('linkedin')" class="fa fa-linkedin"></a>
-      <a @click="authenticate('github')" class="fa fa-github"></a>
+      <a v-if="facebook" @click="authenticate('facebook')" class="fa fa-facebook"></a>
+      <a v-if="google" @click="authenticate('google')" class="fa fa-google"></a>
+      <a v-if="linkedin" @click="authenticate('linkedin')" class="fa fa-linkedin"></a>
+      <a v-if="github" @click="authenticate('github')" class="fa fa-github"></a>
       </div>
   </div>
 </template>
@@ -40,6 +39,26 @@ export default {
   name: 'login',
   mixins: [mixinNotification],
   props: ['redirectTo'],
+  props: {
+    redirectTo: String,
+    facebook: { // facebook login
+      type: Boolean,
+      default: false
+    },
+    github: { // github login
+      type: Boolean,
+      default: false
+    },
+    google: { // google login
+      type: Boolean,
+      default: false
+    },
+    linkedin: { // linkedin login
+      type: Boolean,
+      default: false
+    },
+  },
+
   data () {
     return {
       credentials: {
@@ -58,6 +77,11 @@ export default {
             .then(() => {
               this_.$router.push('/')
             })
+            .catch((error) => {
+              console.log(error)
+            })
+        }, (error) => {
+          console.log('Cancelled.', error.message)
         })
     },
     onSubmit () {
@@ -125,11 +149,6 @@ a.fa:hover {
 /* Set a specific color for each brand */
 a.fa-facebook {
     background: #3B5998;
-    color: white;
-}
-
-a.fa-twitter {
-    background: #55ACEE;
     color: white;
 }
 
