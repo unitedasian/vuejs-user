@@ -36,9 +36,8 @@
 import mixinNotification from '../mixins/MixinNotification.vue'
 
 export default {
-  name: 'login',
+  name: 'uam_login',
   mixins: [mixinNotification],
-  props: ['redirectTo'],
   props: {
     redirectTo: String,
     facebook: { // facebook login

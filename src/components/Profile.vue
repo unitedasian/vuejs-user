@@ -91,7 +91,7 @@ import axios from 'axios'
 import mixinNotification from '../mixins/MixinNotification.vue'
 
 export default {
-  name: 'profile',
+  name: 'uam_profile',
   mixins: [mixinNotification],
   props: ['get-url', 'update-url'],
   data () {

@@ -13,6 +13,7 @@
 
 <script>
 export default {
+  name: 'uam_notification',
   props: ['notifications']
 }
 </script>
