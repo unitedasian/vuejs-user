@@ -1,10 +1,10 @@
 <template lang="html">
-  <div>
+<div>
+  <i v-if="isRequestPending || isSocialAuthPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
+
+  <div v-else>
     <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
 
-    <i v-if="isLoading || isSocialAuthPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
-
-    <div v-else>
     <form @submit.prevent="onSubmit" class="login-form">
       <div class="form-group">
         <label for="username">{{ $t('username.label') }}</label>
@@ -23,15 +23,15 @@
     </form>
 
     <div v-if="facebook || github || google || linkedin" class="social-login">
-      <p>Login with:</p>
+      <p>{{ $t('loginWith') }}</p>
 
       <a v-if="facebook" @click="authenticate('facebook')" class="fa fa-facebook"></a>
       <a v-if="google" @click="authenticate('google')" class="fa fa-google"></a>
       <a v-if="linkedin" @click="authenticate('linkedin')" class="fa fa-linkedin"></a>
       <a v-if="github" @click="authenticate('github')" class="fa fa-github"></a>
     </div>
-    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -65,23 +65,26 @@ export default {
       credentials: {
         email: '',
         password: ''
-      },
-      isLoading: false
+      }
     }
   },
   computed: {
     isSocialAuthPending () {
       return this.$store.getters['user/isSocialAuthPending']
+    },
+    isRequestPending () {
+      return this.$store.getters['user/isRequestPending']
     }
   },
   methods: {
     authenticate (provider) {
-      let this_ = this
+      this.clearNotifications()
+
       this.$auth.authenticate(provider)
         .then((authResponse) => {
-          this_.$user.loginWithToken(authResponse.data.access_token)
+          this.$user.loginWithToken(authResponse.data.access_token)
             .then(() => {
-              this_.$router.push('/')
+              this.$router.push('/')
             })
             .catch((error) => {
               console.log(error)
@@ -94,7 +97,6 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.clearNotifications()
-          this.isLoading = true
 
           this.$user.login(this.credentials)
             .then(() => {
@@ -103,11 +105,8 @@ export default {
               } else {
                 this.$router.push('/')
               }
-
-              this.isLoading = false
             })
             .catch((error) => {
-              this.isLoading = false
               if (error.response && error.response.status === 401) {
                 this.credentials.password = ''
                 this.addNotification(this.$i18n.t('notifyLabel.unauthorized'))
@@ -152,7 +151,7 @@ a.fa:hover {
     color: white;
 }
 
-/* Set a specific color for each brand */
+/* Set a specific color for each social platform */
 a.fa-facebook {
     background: #3B5998;
     color: white;

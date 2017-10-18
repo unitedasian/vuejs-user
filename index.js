@@ -22,10 +22,12 @@ const VuePlugin = {
 
     options.loginUrl = options.loginUrl || '/login'
 
-    // register `user` module to store dynamically
-    options.store.registerModule('user', userModule)
+    let store = options.store
 
-    let user = new User(options.store)
+    // register `user` module to store dynamically
+    store.registerModule('user', userModule)
+
+    let user = new User(store)
 
     Vue.user = user
     Vue.prototype.$user = user
@@ -60,15 +62,21 @@ const VuePlugin = {
     let axiosInterceptors = {
       bindRequestInterceptor: function () {
         socialAuthAxiosInstance.interceptors.request.use((config) => {
-          options.store.dispatch('user/updateSocialAuthPending', true)
+          store.dispatch('user/updateSocialAuthPending', true)
           return config
+        }, (error) => {
+          store.dispatch('user/updateSocialAuthPending', false)
+          return Promise.reject(error);
         })
       },
 
       bindResponseInterceptor: function () {
         socialAuthAxiosInstance.interceptors.response.use((response) => {
-          options.store.dispatch('user/updateSocialAuthPending', false)
+          store.dispatch('user/updateSocialAuthPending', false)
           return response
+        }, (error) => {
+          store.dispatch('user/updateSocialAuthPending', false)
+          return Promise.reject(error);
         })
       }
     }
@@ -78,6 +86,24 @@ const VuePlugin = {
     }
 
     Vue.use(VueAuthenticate, options.vueAuthenticateOptions)
+
+    // Axios request interceptor
+    axios.interceptors.request.use((config) => {
+      store.dispatch('user/updateRequestPending', true)
+      return config;
+    }, (error) => {
+      store.dispatch('user/updateRequestPending', false)
+      return Promise.reject(error);
+    });
+
+    // Axios response interceptor
+    axios.interceptors.response.use((response) => {
+      store.dispatch('user/updateRequestPending', false)
+      return response;
+    }, (error) => {
+      store.dispatch('user/updateRequestPending', false)
+      return Promise.reject(error);
+    });
   }
 }
 
