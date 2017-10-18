@@ -26,42 +26,31 @@ For Font Awesome icons, add following to `<head>` :
 
 Install Vuejs user module as follows:
 
-```vuejs
+```
 # main.js
 
 import User from 'uam-vuejs-user'
 
-Vue.use(User, { store: store, router: router })
+Vue.use(User, { store: store, router: router, loginUrl: '/login' })
 ```
 
 ## Options
 
-|Option   | Description                    | Default  |
-|:--------|:-------------------------------|:---------|
-|store    | The Vuex store to use          |          |
-|router   | The registered router instance |          |
-|loginUrl | The API login url              | `'/login'` |
+| Option                 | Description                    | Default Value |
+|:-----------------------|:-------------------------------|:--------------|
+| store                  | The Vuex store to use          |               |
+| router                 | The registered router instance |               |
+| loginUrl               | The API login url              | `'/login'`    |
+| vueAuthenticateOptions | Social login provider options  |               |
 
 ## Social login
 
-For social login, install and setup [vue-authenticate](https://github.com/dgrubelic/vue-authenticate#installation) as follows:
+For social login, install and setup [vue-authenticate](https://github.com/dgrubelic/vue-authenticate#installation) in your app as follows:
 
-```bash
-# shell
-yarn add vue-authenticate
-yarn add vue-axios --dev
 ```
-
-```vuejs
 # main.js
 
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-import VueAuthenticate from 'vue-authenticate'
-
-Vue.use(VueAxios, axios)
-
-Vue.use(VueAuthenticate, {
+let vueAuthOptions = {
   baseUrl: process.env.API_BASE_URL, // API domain
 
   providers: {
@@ -82,7 +71,10 @@ Vue.use(VueAuthenticate, {
       redirectUri: window.location.origin
     }
   }
-})
+}
+
+Vue.use(User, { store: store, router: router, loginUrl: '/login', vueAuthenticateOptions: vueAuthOptions })
+
 ```
 
 Configure client ID of each platform that you want to enable on `config/{environment}.env.js` of your app.
@@ -99,10 +91,10 @@ Then you can render login component with various social login links by passing r
 
 #### Properties
 
-|Property    | Description                 | Type    | Default Value |
-|:-----------|:----------------------------|:--------|:--------------|
-|redirect-to | URL to redirect after login | String  |               |
-|facebook    | Facebook login button       | Boolean | `false`       |
-|github      | Github login button         | Boolean | `false`       |
-|google      | Google login button         | Boolean | `false`       |
-|linkedin    | Linkedin login button       | Boolean | `false`       |
+| Property    | Description                 | Type    | Default Value |
+|:------------|:----------------------------|:--------|:--------------|
+| redirect-to | URL to redirect after login | String  |               |
+| facebook    | Facebook login button       | Boolean | `false`       |
+| github      | Github login button         | Boolean | `false`       |
+| google      | Google login button         | Boolean | `false`       |
+| linkedin    | Linkedin login button       | Boolean | `false`       |
