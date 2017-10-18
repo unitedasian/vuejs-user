@@ -41,6 +41,17 @@ vee-validate@^2.0.0-rc.18:
   version "2.0.0-rc.18"
   resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.0.0-rc.18.tgz#30857abeb2ba87e52d3e66c09b35a78e66419527"
 
+vue-authenticate@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/vue-authenticate/-/vue-authenticate-1.3.1.tgz#2f826d7946d7a685c574a66b5ba03656f1509181"
+  dependencies:
+    vue "^2.2.5"
+    vue-axios "^2.0.2"
+
+vue-axios@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.0.2.tgz#0fe5a69f1edb09a1cd6c4a7f88c74d2fb7fe1778"
+
 vue-i18n@^7.2.0:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-7.3.1.tgz#62930f0f229d4ba467209140f15b664539c1794b"
@@ -48,6 +59,10 @@ vue-i18n@^7.2.0:
 vue-ls@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-ls/-/vue-ls-2.3.3.tgz#a78d62c620b8e1f30614e2dd2984eaf455e45bae"
+
+vue@^2.2.5:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.2.tgz#fd367a87bae7535e47f9dc5c9ec3b496e5feb5a4"
 
 vue@^2.3.3:
   version "2.4.4"
