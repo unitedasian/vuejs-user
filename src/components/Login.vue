@@ -1,10 +1,11 @@
 <template lang="html">
   <div>
-    <i v-show="isLoading" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
-
     <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
 
-    <form @submit.prevent="onSubmit" class="login-form" v-show="!isLoading">
+    <i v-if="isLoading || isSocialAuthPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
+
+    <div v-else>
+    <form @submit.prevent="onSubmit" class="login-form">
       <div class="form-group">
         <label for="username">{{ $t('username.label') }}</label>
         <input type="email"  class="form-control" id="username" :placeholder="this.$i18n.t('username.label')" v-model="credentials.email" name="email" v-validate="'required|email'" required/>
@@ -28,7 +29,8 @@
       <a v-if="google" @click="authenticate('google')" class="fa fa-google"></a>
       <a v-if="linkedin" @click="authenticate('linkedin')" class="fa fa-linkedin"></a>
       <a v-if="github" @click="authenticate('github')" class="fa fa-github"></a>
-      </div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -67,8 +69,13 @@ export default {
       isLoading: false
     }
   },
+  computed: {
+    isSocialAuthPending () {
+      return this.$store.getters['user/isSocialAuthPending']
+    }
+  },
   methods: {
-    authenticate: function (provider) {
+    authenticate (provider) {
       let this_ = this
       this.$auth.authenticate(provider)
         .then((authResponse) => {

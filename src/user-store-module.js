@@ -8,8 +8,10 @@ const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGOUT = 'LOGOUT'
 const UPDATE_USER = 'UPDATE_USER'
 const UPDATE_PROFILE = 'UPDATE_PROFILE'
+const UPDATE_SOCIAL_AUTH_PENDING = 'UPDATE_SOCIAL_AUTH_PENDING'
+const UPDATE_REQUEST_PENDING = 'UPDATE_REQUEST_PENDING'
 
-let options = {
+const options = {
   namespace: '_user_'
 }
 
@@ -26,7 +28,9 @@ export default {
     user: Vue.ls.get('user'),
     profile: Vue.ls.get('profile'),
     pending: false,
-    locale: 'en'
+    locale: 'en',
+    isSocialAuthPending: false,
+    isRequestPending: false
   },
   mutations: {
     [LOGIN] (state) {
@@ -49,6 +53,12 @@ export default {
     },
     [UPDATE_PROFILE] (state, profile) {
       state.profile = profile
+    },
+    [UPDATE_SOCIAL_AUTH_PENDING] (state, payload) {
+      state.isSocialAuthPending = payload.isSocialAuthPending
+    },
+    [UPDATE_REQUEST_PENDING] (state, payload) {
+      state.isRequestPending = payload.isRequestPending
     }
   },
   actions: {
@@ -141,6 +151,18 @@ export default {
         commit(UPDATE_PROFILE, profile)
         resolve()
       })
+    },
+    updateSocialAuthPending ({commit}, isSocialAuthPending) {
+      return new Promise(resolve => {
+        commit(UPDATE_SOCIAL_AUTH_PENDING, { isSocialAuthPending })
+        resolve()
+      })
+    },
+    updateRequestPending ({commit}, isRequestPending) {
+      return new Promise(resolve => {
+        commit(UPDATE_REQUEST_PENDING, { isRequestPending })
+        resolve()
+      })
     }
   },
   getters: {
@@ -155,6 +177,12 @@ export default {
     },
     profile: state => {
       return state.profile
+    },
+    isSocialAuthPending: state => {
+      return state.isSocialAuthPending
+    },
+    isRequestPending: state => {
+      return state.isRequestPending
     }
   }
 }

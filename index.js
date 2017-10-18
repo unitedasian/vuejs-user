@@ -2,6 +2,10 @@ import * as components from './src/components'
 import User from './src/user'
 import userModule from './src/user-store-module'
 
+import axios from 'axios'
+import VueAuthenticate from 'vue-authenticate'
+import VueAxios from 'vue-axios'
+
 const VuePlugin = {
   /**
    * Install user plugin
@@ -47,6 +51,33 @@ const VuePlugin = {
         next()
       }
     })
+
+    let socialAuthAxiosInstance = axios.create({
+    })
+
+    Vue.use(VueAxios, socialAuthAxiosInstance)
+
+    let axiosInterceptors = {
+      bindRequestInterceptor: function () {
+        socialAuthAxiosInstance.interceptors.request.use((config) => {
+          options.store.dispatch('user/updateSocialAuthPending', true)
+          return config
+        })
+      },
+
+      bindResponseInterceptor: function () {
+        socialAuthAxiosInstance.interceptors.response.use((response) => {
+          options.store.dispatch('user/updateSocialAuthPending', false)
+          return response
+        })
+      }
+    }
+
+    for (let name in axiosInterceptors) {
+      options.vueAuthenticateOptions[name] = axiosInterceptors[name];
+    }
+
+    Vue.use(VueAuthenticate, options.vueAuthenticateOptions)
   }
 }
 

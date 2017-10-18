@@ -95,7 +95,7 @@ Then you can render login component with various social login links by passing r
 
 ## Component Reference
 
-### <uam-login>
+### `<uam-login>`
 
 #### Properties
 
