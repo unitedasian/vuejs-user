@@ -42,6 +42,10 @@ export default {
   mixins: [mixinNotification],
   props: {
     redirectTo: String,
+    isInModal: { // state to check if login form is inside a modal
+      type: Boolean,
+      default: false
+    },
     facebook: { // facebook login
       type: Boolean,
       default: false
@@ -100,7 +104,13 @@ export default {
 
           this.$user.login(this.credentials)
             .then(() => {
-              if (this.redirectTo !== undefined) {
+              if (this.isInModal) {
+                window.$('#loginModal').modal('hide')
+
+                if (this.redirectTo !== undefined) {
+                  this.$router.push(this.redirectTo)
+                }
+              } else if (this.redirectTo !== undefined) {
                 this.$router.push(this.redirectTo)
               } else {
                 this.$router.push('/')
