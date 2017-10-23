@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  name: 'user-menu',
+  name: 'uam_user_menu',
   props: {
     right: {
       // Right align dowpdown menu (default is left align)

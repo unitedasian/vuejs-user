@@ -12,5 +12,6 @@
   "notifyLabel": {
     "unauthorized": "Invalid credentials",
     "cannotconnect": "Cannot connect to server"
-  }
+  },
+  "loginWith": "Login with:"
 }

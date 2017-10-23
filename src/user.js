@@ -20,6 +20,11 @@ class User {
       .dispatch('user/login', credentials)
   }
 
+  loginWithToken (token) {
+    return this.store
+      .dispatch('user/loginWithToken', token)
+  }
+
   logout () {
     return this.store
       .dispatch('user/logout')
