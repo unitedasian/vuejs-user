@@ -1,10 +1,24 @@
 <template lang="html">
 <div>
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
+    aria-labelledby="loginModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title" id="loginModalLabel">Looks like you have been logged out. Please login again:</h6>
+        </div>
+        <div class="modal-body">
+          <Login isInModal></Login>
+        </div>
+      </div>
+    </div>
+   </div>
+
   <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
 
-  <i v-show="isLoading" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
+  <i v-if="isRequestPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
 
-  <div class="card" v-show="!isLoading">
+  <div class="card" v-else>
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
@@ -52,7 +66,7 @@
       </div>
 
       <div class="tab-pane fade" id="you" role="tabpanel" aria-labelledby="you-tab">
-        <form @submit.prevent="onProfileSubmit('profile')" data-vv-scope="profile">
+        <form @submit.prevent="onSubmit('profile')" data-vv-scope="profile">
           <div class="form-group">
             <div><label>{{ $t('gender.label') }}</label></div>
             <label class="custom-control custom-radio" v-for="option in genderOptions" :key="option.value">
@@ -89,9 +103,13 @@
 <script>
 import axios from 'axios'
 import mixinNotification from '../mixins/MixinNotification.vue'
+import Login from './Login.vue'
 
 export default {
   name: 'uam_profile',
+  components: {
+    Login
+  },
   mixins: [mixinNotification],
   props: ['get-url', 'update-url'],
   data () {
@@ -110,9 +128,12 @@ export default {
         firstname: '',
         surname: ''
       },
-      confirmPassword: '',
-      userId: null,
-      isLoading: false
+      confirmPassword: ''
+    }
+  },
+  computed: {
+    isRequestPending () {
+      return this.$store.getters['user/isRequestPending']
     }
   },
   created () {
@@ -136,93 +157,108 @@ export default {
 
     this.user.username = currentUser.username
     this.user.email = currentUser.email
-    this.userId = currentUser.id
 
     this.profile.gender = String(profile.gender)
     this.profile.firstname = profile.given_name
     this.profile.surname = profile.surname
   },
   methods: {
+    updateUser () {
+      this.clearNotifications()
+
+      axios.put(this.updateUrl + this.$user.getCurrentUser().id, { user: this.user })
+        .then((response) => {
+          this.$user.updateUser(response.data)
+            .then(() => {
+              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+            })
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            if (error.response.headers['www-authenticate'] === 'Bearer') {
+              this.$user.refreshToken()
+                .then(() => {
+                  axios.put(this.updateUrl + this.$user.getCurrentUser().id, { user: this.user })
+                    .then((response) => {
+                      this.$user.updateUser(response.data)
+                        .then(() => {
+                          this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+                        })
+                    })
+                })
+                .catch((error) => {
+                  if (error.response.status === 401) {
+                    window.$('#loginModal').modal('show')
+
+                    let this_ = this
+
+                    window.$('#loginModal').off().on('hidden.bs.modal', function (e) {
+                      this_.updateUser()
+                    })
+                  } else {
+                    this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
+                  }
+                })
+            }
+          } else {
+            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+          }
+        })
+    },
+    updateProfile () {
+      this.clearNotifications()
+
+      this.profile.given_name = this.profile.firstname
+
+      axios.put(this.updateUrl + this.$user.getCurrentUser().id, { profile: this.profile })
+        .then((response) => {
+          this.$user.updateProfile(response.data.profile)
+            .then(() => {
+              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+            })
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            if (error.response.headers['www-authenticate'] === 'Bearer') {
+              this.$user.refreshToken()
+                .then(() => {
+                  axios.put(this.updateUrl + this.$user.getCurrentUser().id, { profile: this.profile })
+                    .then((response) => {
+                      this.$user.updateProfile(response.data.profile)
+                        .then(() => {
+                          this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+                        })
+                    })
+                })
+                .catch((error) => {
+                  if (error.response.status === 401) {
+                    window.$('#loginModal').modal('show')
+
+                    let this_ = this
+
+                    window.$('#loginModal').off().on('hidden.bs.modal', function (e) {
+                      this_.updateProfile()
+                    })
+                  } else {
+                    this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
+                  }
+                })
+            }
+          } else {
+            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+          }
+        })
+    },
     onSubmit (scope) {
       this.$validator.validateAll(scope).then(result => {
         if (result) {
-          this.clearNotifications()
-          this.isLoading = true
+          if (scope === 'user') {
+            this.updateUser()
+          }
 
-          axios.put(this.updateUrl + this.userId, { user: this.user })
-            .then((response) => {
-              this.$user.updateUser(response.data)
-                .then(() => {
-                  this.isLoading = false
-                  this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-                })
-            })
-            .catch((error) => {
-              if (error.response && error.response.status === 401) {
-                if (error.response.headers['www-authenticate'] === 'Bearer') {
-                  this.$user.refreshToken()
-                    .then(() => {
-                      axios.put(this.updateUrl + this.userId, { user: this.user })
-                        .then((response) => {
-                          this.$user.updateUser(response.data)
-                            .then(() => {
-                              this.isLoading = false
-                              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-                            })
-                        })
-                    })
-                    .catch(() => {
-                      this.isLoading = false
-                      this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
-                    })
-                }
-              } else {
-                this.isLoading = false
-                this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
-              }
-            })
-        }
-      })
-    },
-    onProfileSubmit (scope) {
-      this.$validator.validateAll(scope).then(result => {
-        if (result) {
-          this.clearNotifications()
-          this.isLoading = true
-          this.profile.given_name = this.profile.firstname
-
-          axios.put(this.updateUrl + this.userId, { profile: this.profile })
-            .then((response) => {
-              this.$user.updateProfile(response.data.profile)
-                .then(() => {
-                  this.isLoading = false
-                  this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-                })
-            })
-            .catch((error) => {
-              if (error.response && error.response.status === 401) {
-                if (error.response.headers['www-authenticate'] === 'Bearer') {
-                  this.$user.refreshToken()
-                    .then(() => {
-                      axios.put(this.updateUrl + this.userId, { profile: this.profile })
-                        .then((response) => {
-                          this.$user.updateProfile(response.data.profile)
-                            .then(() => {
-                              this.isLoading = false
-                              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-                            })
-                        })
-                    })
-                    .catch(() => {
-                      this.isLoading = false
-                      this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
-                    })
-                }
-              } else {
-                this.isLoading = false
-                this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
-              }
-            })
+          if (scope === 'profile') {
+            this.updateProfile()
+          }
         }
       })
     }

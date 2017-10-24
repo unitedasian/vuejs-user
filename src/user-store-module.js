@@ -124,10 +124,10 @@ export default {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('id_token')
             commit(LOGIN_SUCCESS)
             resolve()
-          }, () => {
+          }, (error) => {
             Vue.ls.clear()
             commit(LOGOUT)
-            reject()
+            reject(error)
           })
       })
     },

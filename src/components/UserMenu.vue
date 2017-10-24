@@ -11,7 +11,7 @@
      {{ $t('label.welcome') }} {{ $user.getCurrentUser().username }}
   </a>
 
-  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+  <div :class="'dropdown-menu' + (right ? ' dropdown-menu-right' : '')" aria-labelledby="navbarDropdownMenuLink">
     <router-link class="dropdown-item" to="/profile">
       <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
       {{ $t('label.profile') }}

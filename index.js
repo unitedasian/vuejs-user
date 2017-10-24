@@ -66,7 +66,7 @@ const VuePlugin = {
           return config
         }, (error) => {
           store.dispatch('user/updateSocialAuthPending', false)
-          return Promise.reject(error);
+          return Promise.reject(error)
         })
       },
 
@@ -76,13 +76,13 @@ const VuePlugin = {
           return response
         }, (error) => {
           store.dispatch('user/updateSocialAuthPending', false)
-          return Promise.reject(error);
+          return Promise.reject(error)
         })
       }
     }
 
     for (let name in axiosInterceptors) {
-      options.vueAuthenticateOptions[name] = axiosInterceptors[name];
+      options.vueAuthenticateOptions[name] = axiosInterceptors[name]
     }
 
     Vue.use(VueAuthenticate, options.vueAuthenticateOptions)
@@ -90,20 +90,20 @@ const VuePlugin = {
     // Axios request interceptor
     axios.interceptors.request.use((config) => {
       store.dispatch('user/updateRequestPending', true)
-      return config;
+      return config
     }, (error) => {
       store.dispatch('user/updateRequestPending', false)
-      return Promise.reject(error);
-    });
+      return Promise.reject(error)
+    })
 
     // Axios response interceptor
     axios.interceptors.response.use((response) => {
       store.dispatch('user/updateRequestPending', false)
-      return response;
+      return response
     }, (error) => {
       store.dispatch('user/updateRequestPending', false)
-      return Promise.reject(error);
-    });
+      return Promise.reject(error)
+    })
   }
 }
 
