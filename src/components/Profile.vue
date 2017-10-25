@@ -49,14 +49,14 @@
 
           <div class="form-group">
             <label for="password">{{ $t('password.label') }}</label>
-            <input type="password"  class="form-control" id="password" :placeholder="this.$i18n.t('password.placeholder')" v-model="user.password" name="password" v-validate="'min:6|max:255'" />
+            <input type="password"  class="form-control" id="password" :placeholder="this.$i18n.t('password.placeholder')" v-model="user.password" name="password" v-validate="'min:6|max:255|confirmed:confirm_password'" />
 
             <span v-show="errors.has('user.password')" class="invalid-feedback">{{ errors.first('user.password') }}</span>
           </div>
 
           <div class="form-group">
             <label for="confirm-password">{{ $t('confirmPassword.label') }}</label>
-            <input type="password"  class="form-control" id="confirm-password" :placeholder="this.$i18n.t('confirmPassword.placeholder')" v-model="confirmPassword" name="confirm_password" v-validate="'confirmed:password'" />
+            <input type="password"  class="form-control" id="confirm-password" :placeholder="this.$i18n.t('confirmPassword.placeholder')" v-model="confirmPassword" name="confirm_password" />
 
             <span v-show="errors.has('user.confirm_password')" class="invalid-feedback">{{ errors.first('user.confirm_password') }}</span>
           </div>
@@ -140,9 +140,6 @@ export default {
     const dict = {
       en: {
         custom: {
-          confirm_password: {
-            confirmed: 'The password confirmation does not match.'
-          },
           gender: {
             in: 'Select gender.'
           }
@@ -200,6 +197,8 @@ export default {
                   }
                 })
             }
+          } else if (error.response && error.response.status === 422) {
+            this.addNotification(this.$i18n.t('notifyLabel.uniqueEmail'))
           } else {
             this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
           }
@@ -239,6 +238,8 @@ export default {
                     window.$('#loginModal').off().on('hidden.bs.modal', function (e) {
                       this_.updateProfile()
                     })
+                  } else if (error.response && error.response.status === 422) {
+                    this.addNotification(this.$i18n.t('notifyLabel.validationError'))
                   } else {
                     this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
                   }

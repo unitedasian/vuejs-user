@@ -36,6 +36,8 @@
   "notifyLabel": {
     "cannotconnect": "Cannot connect to server",
     "cannotrefresh": "An error occurred. You may have been automatically logged-out. Please login.",
-    "updated": "Profile updated successfully."
+    "updated": "Profile updated successfully.",
+    "uniqueEmail": "The email has already been taken.",
+    "validationError": "Validation errors occurred."
   }
 }

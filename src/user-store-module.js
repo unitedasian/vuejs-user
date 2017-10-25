@@ -100,7 +100,7 @@ export default {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('id_token')
 
         axios.get('/user/me?includes[]=profile')
-          .then((response) =>{
+          .then((response) => {
             Vue.ls.set('profile', response.data.user.profile)
             delete response.data.user.profile
             Vue.ls.set('user', response.data.user)
