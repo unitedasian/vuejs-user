@@ -10,8 +10,8 @@
     "label": "Your password"
   },
   "notifyLabel": {
-    "unauthorized": "Invalid credentials",
     "cannotconnect": "Cannot connect to server",
+    "unauthorized": "Invalid credentials",
     "unknownError": "Sorry. An error occurred."
   },
   "loginWith": "Login with:"

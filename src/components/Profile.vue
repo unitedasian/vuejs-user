@@ -8,7 +8,7 @@
           <h6 class="modal-title" id="loginModalLabel">Looks like you have been logged out. Please login again:</h6>
         </div>
         <div class="modal-body">
-          <Login isInModal></Login>
+          <Login is-in-modal></Login>
         </div>
       </div>
     </div>
