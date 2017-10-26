@@ -11,7 +11,8 @@
   },
   "notifyLabel": {
     "unauthorized": "Invalid credentials",
-    "cannotconnect": "Cannot connect to server"
+    "cannotconnect": "Cannot connect to server",
+    "unknownError": "Sorry. An error occurred."
   },
   "loginWith": "Login with:"
 }

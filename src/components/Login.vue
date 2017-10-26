@@ -90,11 +90,13 @@ export default {
             .then(() => {
               this.$router.push('/')
             })
-            .catch((error) => {
-              console.log(error)
+            .catch(() => {
+              this.addNotification(this.$i18n.t('notifyLabel.unknownError'))
             })
         }, (error) => {
-          console.log('Cancelled.', error.message)
+          if (error.message === 'Network Error') {
+            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+          }
         })
     },
     onSubmit () {
