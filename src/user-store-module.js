@@ -23,14 +23,6 @@ Vue.use(Vuex)
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
 axios.defaults.withCredentials = true
 
-/*
-Vue.ls.on('access_token_expire', (newValue, oldValue, url) => {
-  if (newValue === null) {
-
-  }
-})
-*/
-
 export default {
   namespaced: true,
   state: {

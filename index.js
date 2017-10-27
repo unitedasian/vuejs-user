@@ -47,23 +47,26 @@ const VuePlugin = {
             query: { redirect: to.fullPath }
           })
         } else {
-          if (Vue.user.isTokenExpired()) {
+          if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
             Vue.user.refreshToken()
               .then(() => {
                 next()
               })
               .catch(() => {
-                next()
-                /* next({
-                  path: options.loginUrl,
-                  query: { redirect: to.fullPath }
-                }) */
+                if (to.matched.some(record => record.meta.redirectOnExpire)) {
+                  // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
+                  next({
+                    path: options.loginUrl,
+                    query: { redirect: to.fullPath }
+                  })
+                }
               })
           } else {
             next()
           }
         }
       } else {
+        // doesn't require any authentication such as home page, login page
         next()
       }
     })
