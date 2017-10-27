@@ -15,6 +15,14 @@ class User {
     return this.store.getters['user/isLoggedIn']
   }
 
+  isTokenExpired () {
+    return (this.store.getters['user/tokenExpireIn'] <= new Date().getTime())
+  }
+
+  isRefreshExpired () {
+    return this.store.getters['user/isRefreshExpired']
+  }
+
   login (credentials) {
     return this.store
       .dispatch('user/login', credentials)

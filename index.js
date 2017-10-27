@@ -47,7 +47,21 @@ const VuePlugin = {
             query: { redirect: to.fullPath }
           })
         } else {
-          next()
+          if (Vue.user.isTokenExpired()) {
+            Vue.user.refreshToken()
+              .then(() => {
+                next()
+              })
+              .catch(() => {
+                next()
+                /* next({
+                  path: options.loginUrl,
+                  query: { redirect: to.fullPath }
+                }) */
+              })
+          } else {
+            next()
+          }
         }
       } else {
         next()

@@ -15,16 +15,28 @@ const options = {
   namespace: '_user_'
 }
 
+const transmissionLagDuration = 60 * 1000 // in milliseconds
+
 Vue.use(LocalStorage, options)
 Vue.use(Vuex)
 
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('id_token')
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
 axios.defaults.withCredentials = true
+
+/*
+Vue.ls.on('access_token_expire', (newValue, oldValue, url) => {
+  if (newValue === null) {
+
+  }
+})
+*/
 
 export default {
   namespaced: true,
   state: {
-    isLoggedIn: !!Vue.ls.get('id_token'),
+    isLoggedIn: !!Vue.ls.get('access_token'),
+    tokenExpireIn: null,
+    isRefreshExpired: null,
     user: Vue.ls.get('user'),
     profile: Vue.ls.get('profile'),
     pending: false,
@@ -38,12 +50,16 @@ export default {
     },
     [LOGIN_SUCCESS] (state) {
       state.isLoggedIn = true
+      state.tokenExpireIn = Vue.ls.get('access_token_expire')
+      state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
       state.pending = false
       state.user = Vue.ls.get('user')
       state.profile = Vue.ls.get('profile')
     },
     [LOGOUT] (state) {
       state.isLoggedIn = false
+      state.tokenExpireIn = null
+      state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
       state.user = null
       state.profile = null
       state.data = null
@@ -68,9 +84,13 @@ export default {
       return new Promise((resolve, reject) => {
         axios.post('/login', credentials)
           .then((response) => {
-            Vue.ls.set('id_token', response.data.access_token)
+            let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
 
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('id_token')
+            Vue.ls.set('access_token_expire', expireUtcTime - transmissionLagDuration)
+            Vue.ls.set('access_token', response.data.access_token)
+            Vue.ls.set('is_refresh_expired', false)
+
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
 
             axios.all([
               axios.get('/user/me?includes[]=profile')
@@ -95,9 +115,9 @@ export default {
       commit(LOGIN)
 
       return new Promise((resolve, reject) => {
-        Vue.ls.set('id_token', accessToken)
+        Vue.ls.set('access_token', accessToken)
 
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('id_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
 
         axios.get('/user/me?includes[]=profile')
           .then((response) => {
@@ -120,12 +140,14 @@ export default {
         axios.defaults.headers.common['Authorization'] = ''
         axios.post('/login/refresh')
           .then((response) => {
-            Vue.ls.set('id_token', response.data.access_token)
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('id_token')
+            Vue.ls.set('access_token', response.data.access_token)
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
             commit(LOGIN_SUCCESS)
             resolve()
           }, (error) => {
             Vue.ls.clear()
+            Vue.ls.set('is_refresh_expired', true)
+
             commit(LOGOUT)
             reject(error)
           })
@@ -168,6 +190,12 @@ export default {
   getters: {
     isLoggedIn: state => {
       return state.isLoggedIn
+    },
+    tokenExpireIn: state => {
+      return state.tokenExpireIn
+    },
+    isRefreshExpired: state => {
+      return state.isRefreshExpired
     },
     locale: state => {
       return state.locale
