@@ -28,6 +28,11 @@ class User {
       .dispatch('user/login', credentials)
   }
 
+  /**
+   * @param {Object} token
+   * @param {string} token.access_token
+   * @param {number} token.expires_in The duration to expire in seconds
+   */
   loginWithToken (token) {
     return this.store
       .dispatch('user/loginWithToken', token)

@@ -15,7 +15,7 @@ const options = {
   namespace: '_user_'
 }
 
-const transmissionLagDuration = 60 * 1000 // in milliseconds
+const transmissionLagDuration = 500 // in milliseconds
 
 Vue.use(LocalStorage, options)
 Vue.use(Vuex)
@@ -103,11 +103,15 @@ export default {
           })
       })
     },
-    loginWithToken ({state, commit, rootState}, accessToken) {
+    loginWithToken ({state, commit, rootState}, token) {
       commit(LOGIN)
 
       return new Promise((resolve, reject) => {
-        Vue.ls.set('access_token', accessToken)
+        let expireUtcTime = new Date().getTime() + (token.expires_in * 1000) // in milliseconds
+
+        Vue.ls.set('access_token_expire', expireUtcTime - transmissionLagDuration)
+        Vue.ls.set('access_token', token.access_token)
+        Vue.ls.set('is_refresh_expired', false)
 
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
 
@@ -132,7 +136,12 @@ export default {
         axios.defaults.headers.common['Authorization'] = ''
         axios.post('/login/refresh')
           .then((response) => {
+            let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
+
+            Vue.ls.set('access_token_expire', expireUtcTime - transmissionLagDuration)
             Vue.ls.set('access_token', response.data.access_token)
+            Vue.ls.set('is_refresh_expired', false)
+
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
             commit(LOGIN_SUCCESS)
             resolve()

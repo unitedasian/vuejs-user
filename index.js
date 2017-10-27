@@ -59,6 +59,8 @@ const VuePlugin = {
                     path: options.loginUrl,
                     query: { redirect: to.fullPath }
                   })
+                } else {
+                  next()
                 }
               })
           } else {

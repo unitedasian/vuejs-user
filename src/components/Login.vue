@@ -86,7 +86,7 @@ export default {
 
       this.$auth.authenticate(provider)
         .then((authResponse) => {
-          this.$user.loginWithToken(authResponse.data.access_token)
+          this.$user.loginWithToken(authResponse.data)
             .then(() => {
               this.$router.push('/')
             })
