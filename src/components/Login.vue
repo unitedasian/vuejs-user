@@ -42,7 +42,7 @@ export default {
   mixins: [mixinNotification],
   props: {
     redirectTo: String,
-    isInModal: { // state to check if login form is inside a modal
+    noRedirect: { // if enabled, no redirect after successful login
       type: Boolean,
       default: false
     },
@@ -106,16 +106,14 @@ export default {
 
           this.$user.login(this.credentials)
             .then(() => {
-              if (this.isInModal) {
-                window.$('#loginModal').modal('hide')
+              this.$emit('login-success')
 
+              if (!this.noRedirect) {
                 if (this.redirectTo !== undefined) {
                   this.$router.push(this.redirectTo)
+                } else {
+                  this.$router.push('/')
                 }
-              } else if (this.redirectTo !== undefined) {
-                this.$router.push(this.redirectTo)
-              } else {
-                this.$router.push('/')
               }
             })
             .catch((error) => {

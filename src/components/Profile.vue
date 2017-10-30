@@ -1,18 +1,16 @@
 <template lang="html">
 <div>
-  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
-    aria-labelledby="loginModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h6 class="modal-title" id="loginModalLabel">Looks like you have been logged out. Please login again:</h6>
-        </div>
-        <div class="modal-body">
-          <Login is-in-modal></Login>
-        </div>
-      </div>
-    </div>
-   </div>
+  <b-modal ref="modalForUpdateUser" title="Looks like you have been logged out. Please login again:"
+    no-close-on-esc no-close-on-backdrop hide-header-close hide-footer lazy
+  >
+    <Login @login-success="hideModal('user')" no-redirect></Login>
+  </b-modal>
+
+  <b-modal ref="modalForUpdateProfile" title="Looks like you have been logged out. Please login again:"
+    no-close-on-esc no-close-on-backdrop hide-header-close hide-footer lazy
+  >
+    <Login @login-success="hideModal('profile')" no-redirect></Login>
+  </b-modal>
 
   <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
 
@@ -152,12 +150,12 @@ export default {
     let currentUser = this.$user.getCurrentUser()
     let profile = this.$user.getProfile()
 
-    this.user.username = currentUser.username
-    this.user.email = currentUser.email
+    this.user.username = currentUser && currentUser.username
+    this.user.email = currentUser && currentUser.email
 
-    this.profile.gender = String(profile.gender)
-    this.profile.firstname = profile.given_name
-    this.profile.surname = profile.surname
+    this.profile.gender = profile && String(profile.gender)
+    this.profile.firstname = profile && profile.given_name
+    this.profile.surname = profile && profile.surname
   },
   methods: {
     updateUser () {
@@ -185,13 +183,7 @@ export default {
                 })
                 .catch((error) => {
                   if (error.response.status === 401) {
-                    window.$('#loginModal').modal('show')
-
-                    let this_ = this
-
-                    window.$('#loginModal').off().on('hidden.bs.modal', function (e) {
-                      this_.updateUser()
-                    })
+                    this.$refs.modalForUpdateUser.show()
                   } else {
                     this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
                   }
@@ -231,20 +223,14 @@ export default {
                 })
                 .catch((error) => {
                   if (error.response.status === 401) {
-                    window.$('#loginModal').modal('show')
-
-                    let this_ = this
-
-                    window.$('#loginModal').off().on('hidden.bs.modal', function (e) {
-                      this_.updateProfile()
-                    })
-                  } else if (error.response && error.response.status === 422) {
-                    this.addNotification(this.$i18n.t('notifyLabel.validationError'))
+                    this.$refs.modalForUpdateProfile.show()
                   } else {
                     this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
                   }
                 })
             }
+          } else if (error.response && error.response.status === 422) {
+            this.addNotification(this.$i18n.t('notifyLabel.validationError'))
           } else {
             this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
           }
@@ -262,6 +248,17 @@ export default {
           }
         }
       })
+    },
+    hideModal (scope) {
+      if (scope === 'user') {
+        this.$refs.modalForUpdateUser.hide()
+        this.updateUser()
+      }
+
+      if (scope === 'profile') {
+        this.$refs.modalForUpdateProfile.hide()
+        this.updateProfile()
+      }
     }
   },
   i18n: {

@@ -87,13 +87,13 @@ Then you can render login component with various social login links by passing r
 
 ## For login form on modal dialog
 
-When refreshing token, if error occurs with 401 Unauthorized status, you can use `uam-login` component to login again.
+When refreshing token, if error occurs with 401 Unauthorized status, you can use `uam-login` component as modal body inside your modal.
 
-Make sure your modal element(such as `<div class="modal">`) has `id` attribute set to `loginModal`.
-Inside modal body, use `uam-login` with prop `isInModal` set.
+You can set `no-redirect` prop to remain on current page after logging through modal dialog.
+You can listen to `login-success` event and handle closing modal dialog, re-requesting endpoint etc. on your event handler.
 
 ```html
-<uam-login is-in-modal></uam-login>
+<uam-login @login-success="hideLoginModal" no-redirect></uam-login>
 ```
 
 ## Component Reference
@@ -102,11 +102,17 @@ Inside modal body, use `uam-login` with prop `isInModal` set.
 
 #### Properties
 
-| Property    | Description                 | Type    | Default Value |
-|:------------|:----------------------------|:--------|:--------------|
-| redirect-to | URL to redirect after login | String  |               |
-| is-in-modal | When used in modal body     | Boolean | `false`       |
-| facebook    | Facebook login button       | Boolean | `false`       |
-| github      | Github login button         | Boolean | `false`       |
-| google      | Google login button         | Boolean | `false`       |
-| linkedin    | Linkedin login button       | Boolean | `false`       |
+| Property    | Description                  | Type    | Default Value |
+|:------------|:-----------------------------|:--------|:--------------|
+| redirect-to | URL to redirect after login  | String  |               |
+| no-redirect | No redirect on login success | Boolean | `false`       |
+| facebook    | Facebook login button        | Boolean | `false`       |
+| github      | Github login button          | Boolean | `false`       |
+| google      | Google login button          | Boolean | `false`       |
+| linkedin    | Linkedin login button        | Boolean | `false`       |
+
+#### Events
+
+| Event         | Description                   |
+|:--------------|:------------------------------|
+| login-success | emits after successful login  |
