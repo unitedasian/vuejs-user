@@ -1,12 +1,12 @@
 <template lang="html">
 <div>
-  <b-modal ref="modalForUpdateUser" title="Looks like you have been logged out. Please login again:"
+  <b-modal ref="modalForUpdateUser" :title="this.$i18n.t('notifyLabel.loginAgain')"
     no-close-on-esc no-close-on-backdrop hide-header-close hide-footer lazy
   >
     <Login @login-success="hideModal('user')" no-redirect></Login>
   </b-modal>
 
-  <b-modal ref="modalForUpdateProfile" title="Looks like you have been logged out. Please login again:"
+  <b-modal ref="modalForUpdateProfile" :title="this.$i18n.t('notifyLabel.loginAgain')"
     no-close-on-esc no-close-on-backdrop hide-header-close hide-footer lazy
   >
     <Login @login-success="hideModal('profile')" no-redirect></Login>
