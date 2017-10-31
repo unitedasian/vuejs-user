@@ -20,7 +20,7 @@ const VuePlugin = {
 
     Vue._uam_user_vue_installed = true
 
-    options.loginUrl = options.loginUrl || '/login'
+    options.redirectRoute = options.redirectRoute || '/login'
 
     let store = options.store
 
@@ -43,7 +43,7 @@ const VuePlugin = {
         // if not, redirect to login page.
         if (!Vue.user.isLoggedIn()) {
           next({
-            path: options.loginUrl,
+            path: options.redirectRoute,
             query: { redirect: to.fullPath }
           })
         } else {
@@ -56,7 +56,7 @@ const VuePlugin = {
                 if (to.matched.some(record => record.meta.redirectOnExpire)) {
                   // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
                   next({
-                    path: options.loginUrl,
+                    path: options.redirectRoute,
                     query: { redirect: to.fullPath }
                   })
                 } else {

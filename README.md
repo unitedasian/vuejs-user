@@ -31,17 +31,24 @@ Install Vuejs user module as follows:
 
 import User from 'uam-vuejs-user'
 
-Vue.use(User, { store: store, router: router, loginUrl: '/login' })
+let userEndpoints = {
+  login: '/login',
+  refresh: '/login/refresh',
+  currentUser: '/user/me?includes[]=profile'
+}
+
+Vue.use(User, { store: store, router: router, redirectRoute: '/login', userEndpoints })
 ```
 
 ## Options
 
-| Option                 | Description                    | Type      | Default Value |
-|:-----------------------|:-------------------------------|:----------|:--------------|
-| store                  | The Vuex store to use          | Object    |               |
-| router                 | The registered router instance | Object    |               |
-| loginUrl               | The API login url              | String    | `'/login'`    |
-| vueAuthenticateOptions | Social login provider options  | Object    |               |
+| Option                 | Description                             | Type      | Default Value |
+|:-----------------------|:----------------------------------------|:----------|:--------------|
+| store                  | The Vuex store to use                   | Object    |               |
+| router                 | The registered router instance          | Object    |               |
+| redirectRoute          | Route to redirect to for authentication | String    | `'/login'`    |
+| vueAuthenticateOptions | Social login provider options           | Object    |               |
+| userEndpoints          | User auth related backend urls          | Object    |               |
 
 ## Social login
 
@@ -50,7 +57,7 @@ For social login, install and setup [vue-authenticate](https://github.com/dgrube
 ```js
 # main.js
 
-let vueAuthOptions = {
+let vueAuthenticateOptions = {
   baseUrl: process.env.API_BASE_URL, // API domain
 
   providers: {
@@ -73,7 +80,7 @@ let vueAuthOptions = {
   }
 }
 
-Vue.use(User, { store: store, router: router, loginUrl: '/login', vueAuthenticateOptions: vueAuthOptions })
+Vue.use(User, { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions })
 
 ```
 
