@@ -26,31 +26,38 @@ For Font Awesome icons, add following to `<head>` :
 
 Install Vuejs user module as follows:
 
-```
+```js
 # main.js
 
 import User from 'uam-vuejs-user'
 
-Vue.use(User, { store: store, router: router, loginUrl: '/login' })
+let userEndpoints = {
+  login: '/login',
+  refresh: '/login/refresh',
+  currentUser: '/user/me?includes[]=profile'
+}
+
+Vue.use(User, { store: store, router: router, redirectRoute: '/login', userEndpoints })
 ```
 
 ## Options
 
-| Option                 | Description                    | Default Value |
-|:-----------------------|:-------------------------------|:--------------|
-| store                  | The Vuex store to use          |               |
-| router                 | The registered router instance |               |
-| loginUrl               | The API login url              | `'/login'`    |
-| vueAuthenticateOptions | Social login provider options  |               |
+| Option                 | Description                             | Type      | Default Value |
+|:-----------------------|:----------------------------------------|:----------|:--------------|
+| store                  | The Vuex store to use                   | Object    |               |
+| router                 | The registered router instance          | Object    |               |
+| redirectRoute          | Route to redirect to for authentication | String    | `'/login'`    |
+| vueAuthenticateOptions | Social login provider options           | Object    |               |
+| userEndpoints          | User auth related backend urls          | Object    |               |
 
 ## Social login
 
 For social login, install and setup [vue-authenticate](https://github.com/dgrubelic/vue-authenticate#installation) in your app as follows:
 
-```
+```js
 # main.js
 
-let vueAuthOptions = {
+let vueAuthenticateOptions = {
   baseUrl: process.env.API_BASE_URL, // API domain
 
   providers: {
@@ -73,7 +80,7 @@ let vueAuthOptions = {
   }
 }
 
-Vue.use(User, { store: store, router: router, loginUrl: '/login', vueAuthenticateOptions: vueAuthOptions })
+Vue.use(User, { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions })
 
 ```
 
@@ -82,7 +89,18 @@ Configure client ID of each platform that you want to enable on `config/{environ
 Then you can render login component with various social login links by passing respective prop as follows:
 
 ```vue
-<uam-login facebook github google linkedin>
+<uam-login facebook github google linkedin></uam-login>
+```
+
+## For login form on modal dialog
+
+When refreshing token, if error occurs with 401 Unauthorized status, you can use `uam-login` component as modal body inside your modal.
+
+You can set `no-redirect` prop to remain on current page after logging through modal dialog.
+You can listen to `login-success` event and handle closing modal dialog, re-requesting endpoint etc. on your event handler.
+
+```html
+<uam-login @login-success="hideLoginModal" no-redirect></uam-login>
 ```
 
 ## Component Reference
@@ -91,10 +109,17 @@ Then you can render login component with various social login links by passing r
 
 #### Properties
 
-| Property    | Description                 | Type    | Default Value |
-|:------------|:----------------------------|:--------|:--------------|
-| redirect-to | URL to redirect after login | String  |               |
-| facebook    | Facebook login button       | Boolean | `false`       |
-| github      | Github login button         | Boolean | `false`       |
-| google      | Google login button         | Boolean | `false`       |
-| linkedin    | Linkedin login button       | Boolean | `false`       |
+| Property    | Description                  | Type    | Default Value |
+|:------------|:-----------------------------|:--------|:--------------|
+| redirect-to | URL to redirect after login  | String  |               |
+| no-redirect | No redirect on login success | Boolean | `false`       |
+| facebook    | Facebook login button        | Boolean | `false`       |
+| github      | Github login button          | Boolean | `false`       |
+| google      | Google login button          | Boolean | `false`       |
+| linkedin    | Linkedin login button        | Boolean | `false`       |
+
+#### Events
+
+| Event         | Description                   |
+|:--------------|:------------------------------|
+| login-success | emits after successful login  |

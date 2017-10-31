@@ -20,14 +20,14 @@ const VuePlugin = {
 
     Vue._uam_user_vue_installed = true
 
-    options.loginUrl = options.loginUrl || '/login'
+    options.redirectRoute = options.redirectRoute || '/login'
 
     let store = options.store
 
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
 
-    let user = new User(store)
+    let user = new User(store, options.userAuthEndpoints)
 
     Vue.user = user
     Vue.prototype.$user = user
@@ -43,13 +43,32 @@ const VuePlugin = {
         // if not, redirect to login page.
         if (!Vue.user.isLoggedIn()) {
           next({
-            path: options.loginUrl,
+            path: options.redirectRoute,
             query: { redirect: to.fullPath }
           })
         } else {
-          next()
+          if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
+            Vue.user.refreshToken()
+              .then(() => {
+                next()
+              })
+              .catch(() => {
+                if (to.matched.some(record => record.meta.redirectOnExpire)) {
+                  // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
+                  next({
+                    path: options.redirectRoute,
+                    query: { redirect: to.fullPath }
+                  })
+                } else {
+                  next()
+                }
+              })
+          } else {
+            next()
+          }
         }
       } else {
+        // doesn't require any authentication such as home page, login page
         next()
       }
     })
@@ -66,7 +85,7 @@ const VuePlugin = {
           return config
         }, (error) => {
           store.dispatch('user/updateSocialAuthPending', false)
-          return Promise.reject(error);
+          return Promise.reject(error)
         })
       },
 
@@ -76,13 +95,13 @@ const VuePlugin = {
           return response
         }, (error) => {
           store.dispatch('user/updateSocialAuthPending', false)
-          return Promise.reject(error);
+          return Promise.reject(error)
         })
       }
     }
 
     for (let name in axiosInterceptors) {
-      options.vueAuthenticateOptions[name] = axiosInterceptors[name];
+      options.vueAuthenticateOptions[name] = axiosInterceptors[name]
     }
 
     Vue.use(VueAuthenticate, options.vueAuthenticateOptions)
@@ -90,20 +109,20 @@ const VuePlugin = {
     // Axios request interceptor
     axios.interceptors.request.use((config) => {
       store.dispatch('user/updateRequestPending', true)
-      return config;
+      return config
     }, (error) => {
       store.dispatch('user/updateRequestPending', false)
-      return Promise.reject(error);
-    });
+      return Promise.reject(error)
+    })
 
     // Axios response interceptor
     axios.interceptors.response.use((response) => {
       store.dispatch('user/updateRequestPending', false)
-      return response;
+      return response
     }, (error) => {
       store.dispatch('user/updateRequestPending', false)
-      return Promise.reject(error);
-    });
+      return Promise.reject(error)
+    })
   }
 }
 

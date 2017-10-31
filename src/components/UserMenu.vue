@@ -1,40 +1,30 @@
 <template lang="html">
-<li class="nav-item dropdown">
-  <a
-    class="nav-link dropdown-toggle"
-    href="#"
-    id="navbarDropdownMenuLink"
-    data-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-     {{ $t('label.welcome') }} {{ $user.getCurrentUser().username }}
-  </a>
+  <b-nav-item-dropdown :right="right">
+    <template slot="button-content">
+      {{ $t('label.welcome') }} Roshan {{ $user.getCurrentUser().username }}
+    </template>
 
-  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-    <router-link class="dropdown-item" to="/profile">
+    <b-dropdown-item to="/profile">
       <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
       {{ $t('label.profile') }}
-    </router-link>
+    </b-dropdown-item>
 
     <slot></slot>
 
     <div class="dropdown-divider"></div>
 
-    <a class="dropdown-item" href="#" @click.prevent="logout()">
+    <b-dropdown-item href="#" @click.prevent="logout()">
       <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
       {{ $t('label.logout') }}
-    </a>
-  </div>
-</li>
+    </b-dropdown-item>
+  </b-nav-item-dropdown>
 </template>
 
 <script>
 export default {
   name: 'uam_user_menu',
   props: {
-    right: {
-      // Right align dowpdown menu (default is left align)
+    right: { // Right align dowpdown menu (default is left align)
       type: Boolean,
       default: false
     }

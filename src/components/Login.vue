@@ -42,6 +42,10 @@ export default {
   mixins: [mixinNotification],
   props: {
     redirectTo: String,
+    noRedirect: { // if enabled, no redirect after successful login
+      type: Boolean,
+      default: false
+    },
     facebook: { // facebook login
       type: Boolean,
       default: false
@@ -82,15 +86,17 @@ export default {
 
       this.$auth.authenticate(provider)
         .then((authResponse) => {
-          this.$user.loginWithToken(authResponse.data.access_token)
+          this.$user.loginWithToken(authResponse.data)
             .then(() => {
               this.$router.push('/')
             })
-            .catch((error) => {
-              console.log(error)
+            .catch(() => {
+              this.addNotification(this.$i18n.t('notifyLabel.unknownError'))
             })
         }, (error) => {
-          console.log('Cancelled.', error.message)
+          if (error.message === 'Network Error') {
+            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+          }
         })
     },
     onSubmit () {
@@ -100,10 +106,14 @@ export default {
 
           this.$user.login(this.credentials)
             .then(() => {
-              if (this.redirectTo !== undefined) {
-                this.$router.push(this.redirectTo)
-              } else {
-                this.$router.push('/')
+              this.$emit('login-success')
+
+              if (!this.noRedirect) {
+                if (this.redirectTo !== undefined) {
+                  this.$router.push(this.redirectTo)
+                } else {
+                  this.$router.push('/')
+                }
               }
             })
             .catch((error) => {
