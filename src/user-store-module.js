@@ -70,11 +70,11 @@ export default {
     }
   },
   actions: {
-    login ({state, commit, rootState}, credentials) {
+    login ({state, commit, rootState}, payload) {
       commit(LOGIN)
 
       return new Promise((resolve, reject) => {
-        axios.post('/login', credentials)
+        axios.post(payload.loginUrl, payload.credentials)
           .then((response) => {
             let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
 
@@ -85,7 +85,7 @@ export default {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
 
             axios.all([
-              axios.get('/user/me?includes[]=profile')
+              axios.get(payload.currentUserUrl)
             ])
               .then(([
                        { data: userResponse }
@@ -103,19 +103,19 @@ export default {
           })
       })
     },
-    loginWithToken ({state, commit, rootState}, token) {
+    loginWithToken ({state, commit, rootState}, payload) {
       commit(LOGIN)
 
       return new Promise((resolve, reject) => {
-        let expireUtcTime = new Date().getTime() + (token.expires_in * 1000) // in milliseconds
+        let expireUtcTime = new Date().getTime() + (payload.token.expires_in * 1000) // in milliseconds
 
         Vue.ls.set('access_token_expire', expireUtcTime - transmissionLagDuration)
-        Vue.ls.set('access_token', token.access_token)
+        Vue.ls.set('access_token', payload.token.access_token)
         Vue.ls.set('is_refresh_expired', false)
 
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
 
-        axios.get('/user/me?includes[]=profile')
+        axios.get(payload.currentUserUrl)
           .then((response) => {
             Vue.ls.set('profile', response.data.user.profile)
             delete response.data.user.profile
@@ -129,12 +129,12 @@ export default {
           })
       })
     },
-    refreshToken ({commit}) {
+    refreshToken ({commit}, payload) {
       commit(LOGIN)
 
       return new Promise((resolve, reject) => {
         axios.defaults.headers.common['Authorization'] = ''
-        axios.post('/login/refresh')
+        axios.post(payload.refreshUrl)
           .then((response) => {
             let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
 

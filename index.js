@@ -27,7 +27,7 @@ const VuePlugin = {
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
 
-    let user = new User(store)
+    let user = new User(store, options.userAuthEndpoints)
 
     Vue.user = user
     Vue.prototype.$user = user
