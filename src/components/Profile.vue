@@ -16,20 +16,9 @@
 
   <i v-if="isRequestPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
 
-  <div class="card" v-else>
-    <div class="card-header">
-      <ul class="nav nav-tabs card-header-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" id="credentials-tab" data-toggle="tab" href="#credentials" role="tab" aria-controls="credentials" aria-expanded="true">Credentials</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="you-tab" data-toggle="tab" href="#you" role="tab" aria-controls="you" aria-expanded="false">You</a>
-        </li>
-      </ul>
-    </div>
-
-    <div class="tab-content card-body">
-      <div class="tab-pane fade show active" id="credentials" role="tabpanel" aria-labelledby="credentials-tab">
+  <b-card no-body v-else>
+    <b-tabs ref="tabs" card>
+      <b-tab :title="this.$i18n.t('tabLabel.credentials')" active>
         <form @submit.prevent="onSubmit('user')" data-vv-scope="user">
           <div class="form-group">
             <label for="username">{{ $t('username.label') }}</label>
@@ -61,9 +50,8 @@
 
           <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
         </form>
-      </div>
-
-      <div class="tab-pane fade" id="you" role="tabpanel" aria-labelledby="you-tab">
+      </b-tab>
+      <b-tab :title="this.$i18n.t('tabLabel.you')">
         <form @submit.prevent="onSubmit('profile')" data-vv-scope="profile">
           <div class="form-group">
             <div><label>{{ $t('gender.label') }}</label></div>
@@ -92,9 +80,9 @@
 
           <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
         </form>
-      </div>
-    </div>
-  </div>
+      </b-tab>
+    </b-tabs>
+  </b-card>
 </div>
 </template>
 
