@@ -9,6 +9,17 @@ class User {
     }
 
     Object.assign(this.userEndpoints, userEndpoints)
+
+    let states = ['id', 'username', 'email', 'profile', 'roles']
+    let this_ = this
+
+    states.forEach(function(state) {
+      Object.defineProperty(
+        this_,
+        state,
+        { get () { return this.getCurrentUser()[state] } }
+      )
+    })
   }
 
   getCurrentUser () {

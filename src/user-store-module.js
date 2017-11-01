@@ -30,7 +30,7 @@ export default {
     tokenExpireIn: null,
     isRefreshExpired: null,
     user: Vue.ls.get('user'),
-    profile: Vue.ls.get('profile'),
+    // profile: Vue.ls.get('profile'),
     pending: false,
     locale: 'en',
     isSocialAuthPending: false,
@@ -46,21 +46,21 @@ export default {
       state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
       state.pending = false
       state.user = Vue.ls.get('user')
-      state.profile = Vue.ls.get('profile')
+      state.user['profile'] = Vue.ls.get('profile')
     },
     [LOGOUT] (state) {
       state.isLoggedIn = false
       state.tokenExpireIn = null
       state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
       state.user = null
-      state.profile = null
+      // state.profile = null
       state.data = null
     },
     [UPDATE_USER] (state, user) {
       state.user = user
     },
     [UPDATE_PROFILE] (state, profile) {
-      state.profile = profile
+      state.user['profile'] = profile
     },
     [UPDATE_SOCIAL_AUTH_PENDING] (state, payload) {
       state.isSocialAuthPending = payload.isSocialAuthPending
@@ -205,7 +205,7 @@ export default {
       return state.user
     },
     profile: state => {
-      return state.profile
+      return state.user && state.user.profile
     },
     isSocialAuthPending: state => {
       return state.isSocialAuthPending
