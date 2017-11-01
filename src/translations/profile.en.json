@@ -40,5 +40,9 @@
     "uniqueEmail": "The email has already been taken.",
     "updated": "Profile updated successfully.",
     "validationError": "Validation errors occurred."
+  },
+  "tabLabel": {
+    "credentials": "Credentials",
+    "you": "You"
   }
 }
