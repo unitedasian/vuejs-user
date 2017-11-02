@@ -1,5 +1,5 @@
 class User {
-  constructor (store, userEndpoints) {
+  constructor (store, userEndpoints, state) {
     this.store = store
 
     this.userEndpoints = {
@@ -10,16 +10,7 @@ class User {
 
     Object.assign(this.userEndpoints, userEndpoints)
 
-    let states = ['id', 'username', 'email', 'profile', 'roles']
-    let this_ = this
-
-    states.forEach(function(state) {
-      Object.defineProperty(
-        this_,
-        state,
-        { get () { return this.getCurrentUser()[state] } }
-      )
-    })
+    this.state = JSON.parse(JSON.stringify(state))
   }
 
   getCurrentUser () {

@@ -27,14 +27,76 @@ const VuePlugin = {
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
 
-    let user = new User(store, options.userEndpoints)
+    let state = {
+      user: {
+        id: null,
+        username: null,
+        email: null
+      },
+      profile: {
+        gender: null,
+        given_name: null,
+        surname: null
+      }
+    }
+
+    let user = new User(store, options.userEndpoints, state)
+
+    /*
+      property name is used in backend (such as on axios)
+      property value is used in front-end (such as v-model on form)
+    */
+    let userState = {
+      id: 'id', username: 'username', email: 'email'
+    }
+
+    for (let property in userState) {
+      if (userState.hasOwnProperty(property)) {
+        Object.defineProperty(
+          user,
+          userState[property], // property of User object used in front-end
+          {
+            get () {
+              return user.isLoggedIn() ? user.getCurrentUser()[property] : null
+            },
+            set (value) {
+              user.state.user[property] = value
+            }
+          }
+        )
+      }
+    }
+
+    let profileState = {
+      gender: 'gender', given_name: 'firstname', surname: 'surname'
+    }
+
+    for (let property in profileState) {
+      if (profileState.hasOwnProperty(property)) {
+        console.log(profileState[property], 'on frontend')
+        Object.defineProperty(
+          user,
+          'profile_' + profileState[property],
+          {
+            get () {
+              return user.isLoggedIn() ? user.getCurrentUser().profile[property] : null
+            },
+            set (value) {
+              user.state.profile[property] = value
+            }
+          }
+        )
+      }
+    }
 
     Vue.user = user
     Vue.prototype.$user = user
 
     // Register global components
     for (let component in components) {
-      Vue.component(component, components[component])
+      if (components.hasOwnProperty(component)) {
+        Vue.component(component, components[component])
+      }
     }
 
     options.router.beforeEach((to, from, next) => {
