@@ -97,38 +97,41 @@ const VuePlugin = {
     }
 
     options.router.beforeEach((to, from, next) => {
-      if (to.matched.some(record => record.meta.requiresAuth)) {
-        // this route requires authenticated user, check if logged in
-        // if not, redirect to login page.
-        if (!Vue.user.isLoggedIn()) {
-          next({
-            path: options.redirectRoute,
-            query: { redirect: to.fullPath }
-          })
-        } else {
-          if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
-            Vue.user.refreshToken()
-              .then(() => {
-                next()
-              })
-              .catch(() => {
-                if (to.matched.some(record => record.meta.redirectOnExpire)) {
-                  // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
-                  next({
-                    path: options.redirectRoute,
-                    query: { redirect: to.fullPath }
-                  })
-                } else {
-                  next()
-                }
-              })
+      if (to.matched.length) {
+        if (to.matched.some(record => record.meta.requiresAuth)) {
+          // this route requires authenticated user, check if logged in
+          // if not, redirect to login page.
+          if (!Vue.user.isLoggedIn()) {
+            next({
+              path: options.redirectRoute,
+              query: { redirect: to.fullPath }
+            })
           } else {
-            next()
+            if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
+              Vue.user.refreshToken()
+                .then(() => {
+                  next()
+                })
+                .catch(() => {
+                  if (to.matched.some(record => record.meta.redirectOnExpire)) {
+                  // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
+                    next({
+                      path: options.redirectRoute,
+                      query: { redirect: to.fullPath }
+                    })
+                  } else {
+                    next()
+                  }
+                })
+            } else {
+              next()
+            }
           }
+        } else { // doesn't require any authentication such as home page, login page
+          next()
         }
-      } else {
-        // doesn't require any authentication such as home page, login page
-        next()
+      } else { // when url path doesn't match with any registered route
+        window.location = window.location.origin
       }
     })
 
