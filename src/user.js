@@ -1,5 +1,5 @@
 class User {
-  constructor (store, userEndpoints, state) {
+  constructor (store, userEndpoints) {
     this.store = store
 
     this.userEndpoints = {
@@ -9,8 +9,6 @@ class User {
     }
 
     Object.assign(this.userEndpoints, userEndpoints)
-
-    this.state = JSON.parse(JSON.stringify(state))
   }
 
   getCurrentUser () {
