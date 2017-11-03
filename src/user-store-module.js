@@ -52,7 +52,6 @@ export default {
       state.tokenExpireIn = null
       state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
       state.user = null
-      // state.profile = null
       state.data = null
     },
     [UPDATE_USER] (state, user) {
