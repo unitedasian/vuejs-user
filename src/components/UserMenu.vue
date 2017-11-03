@@ -1,7 +1,7 @@
 <template lang="html">
   <b-nav-item-dropdown :right="right">
     <template slot="button-content">
-      {{ $t('label.welcome') }} {{ $user.username }}
+      {{ buttonContent }}
     </template>
 
     <b-dropdown-item v-if="!noProfile" :to="profileRoute">
@@ -24,6 +24,7 @@
 export default {
   name: 'uam_user_menu',
   props: {
+    buttonContent: String,
     right: { // Right align dowpdown menu (default is left align)
       type: Boolean,
       default: false
