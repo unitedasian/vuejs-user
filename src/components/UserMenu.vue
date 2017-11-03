@@ -1,7 +1,7 @@
 <template lang="html">
   <b-nav-item-dropdown :right="right">
     <template slot="button-content">
-      {{ $t('label.welcome') }} {{ $user.getCurrentUser().username }}
+      {{ $t('label.welcome') }} {{ $user.username }}
     </template>
 
     <b-dropdown-item to="/profile">

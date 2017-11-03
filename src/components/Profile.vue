@@ -1,17 +1,5 @@
 <template lang="html">
 <div>
-  <b-modal ref="modalForUpdateUser" :title="this.$i18n.t('notifyLabel.loginAgain')"
-    no-close-on-esc no-close-on-backdrop hide-header-close hide-footer lazy
-  >
-    <Login @login-success="hideModal('user')" no-redirect></Login>
-  </b-modal>
-
-  <b-modal ref="modalForUpdateProfile" :title="this.$i18n.t('notifyLabel.loginAgain')"
-    no-close-on-esc no-close-on-backdrop hide-header-close hide-footer lazy
-  >
-    <Login @login-success="hideModal('profile')" no-redirect></Login>
-  </b-modal>
-
   <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
 
   <i v-if="isRequestPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
@@ -66,7 +54,7 @@
 
           <div class="form-group">
             <label for="firstname">{{ $t('firstName.label') }}</label>
-            <input type="text"  class="form-control" id="firstname" :placeholder="this.$i18n.t('firstName.placeholder')" v-model="profile.firstname" name="firstname" v-validate="'required|min:2|max:255'" required/>
+            <input type="text"  class="form-control" id="firstname" :placeholder="this.$i18n.t('firstName.placeholder')" v-model="firstname" name="firstname" v-validate="'required|min:2|max:255'" required/>
 
             <span v-show="errors.has('profile.firstname')" class="invalid-feedback">{{ errors.first('profile.firstname') }}</span>
           </div>
@@ -101,8 +89,8 @@ export default {
   data () {
     return {
       user: {
-        username: '',
-        email: '',
+        username: this.$user.username,
+        email: this.$user.email,
         password: ''
       },
       genderOptions: [
@@ -110,9 +98,9 @@ export default {
         { text: this.$i18n.t('gender.options.male'), value: 2 }
       ],
       profile: {
-        gender: null,
-        firstname: '',
-        surname: ''
+        gender: this.$user.profile_gender,
+        given_name: this.$user.profile_firstname,
+        surname: this.$user.profile_surname
       },
       confirmPassword: ''
     }
@@ -120,6 +108,14 @@ export default {
   computed: {
     isRequestPending () {
       return this.$store.getters['user/isRequestPending']
+    },
+    firstname: {
+      get () {
+        return this.profile.given_name
+      },
+      set (newValue) {
+        this.profile.given_name = newValue
+      }
     }
   },
   created () {
@@ -134,22 +130,12 @@ export default {
     }
 
     this.$validator.updateDictionary(dict)
-
-    let currentUser = this.$user.getCurrentUser()
-    let profile = this.$user.getProfile()
-
-    this.user.username = currentUser && currentUser.username
-    this.user.email = currentUser && currentUser.email
-
-    this.profile.gender = profile && String(profile.gender)
-    this.profile.firstname = profile && profile.given_name
-    this.profile.surname = profile && profile.surname
   },
   methods: {
     updateUser () {
       this.clearNotifications()
 
-      axios.put(this.updateUrl + this.$user.getCurrentUser().id, { user: this.user })
+      axios.put(this.updateUrl + this.$user.id, { user: this.user })
         .then((response) => {
           this.$user.updateUser(response.data)
             .then(() => {
@@ -161,7 +147,7 @@ export default {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
               this.$user.refreshToken()
                 .then(() => {
-                  axios.put(this.updateUrl + this.$user.getCurrentUser().id, { user: this.user })
+                  axios.put(this.updateUrl + this.$user.id, { user: this.user })
                     .then((response) => {
                       this.$user.updateUser(response.data)
                         .then(() => {
@@ -171,7 +157,7 @@ export default {
                 })
                 .catch((error) => {
                   if (error.response.status === 401) {
-                    this.$refs.modalForUpdateUser.show()
+                    this.$emit('unauthorized-error')
                   } else {
                     this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
                   }
@@ -187,9 +173,7 @@ export default {
     updateProfile () {
       this.clearNotifications()
 
-      this.profile.given_name = this.profile.firstname
-
-      axios.put(this.updateUrl + this.$user.getCurrentUser().id, { profile: this.profile })
+      axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
         .then((response) => {
           this.$user.updateProfile(response.data.profile)
             .then(() => {
@@ -201,7 +185,7 @@ export default {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
               this.$user.refreshToken()
                 .then(() => {
-                  axios.put(this.updateUrl + this.$user.getCurrentUser().id, { profile: this.profile })
+                  axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
                     .then((response) => {
                       this.$user.updateProfile(response.data.profile)
                         .then(() => {
@@ -211,7 +195,7 @@ export default {
                 })
                 .catch((error) => {
                   if (error.response.status === 401) {
-                    this.$refs.modalForUpdateProfile.show()
+                    this.$emit('unauthorized-error')
                   } else {
                     this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
                   }
@@ -236,17 +220,6 @@ export default {
           }
         }
       })
-    },
-    hideModal (scope) {
-      if (scope === 'user') {
-        this.$refs.modalForUpdateUser.hide()
-        this.updateUser()
-      }
-
-      if (scope === 'profile') {
-        this.$refs.modalForUpdateProfile.hide()
-        this.updateProfile()
-      }
     }
   },
   i18n: {

@@ -42,10 +42,10 @@ const VuePlugin = {
 
     let user = new User(store, options.userEndpoints, state)
 
-    /*
-      property name is used in backend (such as on axios)
-      property value is used in front-end (such as v-model on form)
-    */
+    /**
+     * property name is used in backend (such as on axios)
+     * property value is used in front-end (such as v-model on form)
+     */
     let userState = {
       id: 'id', username: 'username', email: 'email'
     }
@@ -73,7 +73,6 @@ const VuePlugin = {
 
     for (let property in profileState) {
       if (profileState.hasOwnProperty(property)) {
-        console.log(profileState[property], 'on frontend')
         Object.defineProperty(
           user,
           'profile_' + profileState[property],
@@ -94,9 +93,7 @@ const VuePlugin = {
 
     // Register global components
     for (let component in components) {
-      if (components.hasOwnProperty(component)) {
-        Vue.component(component, components[component])
-      }
+      Vue.component(component, components[component])
     }
 
     options.router.beforeEach((to, from, next) => {

@@ -56,7 +56,7 @@ export default {
       state.data = null
     },
     [UPDATE_USER] (state, user) {
-      state.user = user
+      state.user = Object.assign({}, state.user, user)
     },
     [UPDATE_PROFILE] (state, profile) {
       state.user.profile = profile
