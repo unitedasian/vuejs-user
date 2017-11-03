@@ -7,7 +7,7 @@
   <b-card no-body v-else>
     <b-tabs ref="tabs" card>
       <b-tab :title="this.$i18n.t('tabLabel.credentials')" active>
-        <form @submit.prevent="onSubmit('user')" data-vv-scope="user">
+        <form @submit.prevent="onSubmit('user')" :data-vv-scope="scope.credentials">
           <div class="form-group">
             <label for="username">{{ $t('username.label') }}</label>
             <input type="text"  class="form-control" id="username" :placeholder="this.$i18n.t('username.placeholder')" v-model="user.username" name="username" v-validate="'required|min:2|max:255'" required/>
@@ -40,7 +40,7 @@
         </form>
       </b-tab>
       <b-tab :title="this.$i18n.t('tabLabel.you')">
-        <form @submit.prevent="onSubmit('profile')" data-vv-scope="profile">
+        <form @submit.prevent="onSubmit('profile')" :data-vv-scope="scope.profile">
           <div class="form-group">
             <div><label>{{ $t('gender.label') }}</label></div>
             <label class="custom-control custom-radio" v-for="option in genderOptions" :key="option.value">
@@ -84,6 +84,10 @@ export default {
   props: ['update-url'],
   data () {
     return {
+      scope: {
+        credentials: 'user',
+        profile: 'profile'
+      },
       user: {
         username: this.$user.username,
         email: this.$user.email,
@@ -207,11 +211,11 @@ export default {
     onSubmit (scope) {
       this.$validator.validateAll(scope).then(result => {
         if (result) {
-          if (scope === 'user') {
+          if (scope === this.scope.credentials) {
             this.updateUser()
           }
 
-          if (scope === 'profile') {
+          if (scope === this.scope.profile) {
             this.updateProfile()
           }
         }
