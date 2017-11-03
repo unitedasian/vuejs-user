@@ -77,15 +77,11 @@
 <script>
 import axios from 'axios'
 import mixinNotification from '../mixins/MixinNotification.vue'
-import Login from './Login.vue'
 
 export default {
   name: 'uam_profile',
-  components: {
-    Login
-  },
   mixins: [mixinNotification],
-  props: ['get-url', 'update-url'],
+  props: ['update-url'],
   data () {
     return {
       user: {
