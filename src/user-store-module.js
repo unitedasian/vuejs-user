@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
+// import axios from 'axios'
 import LocalStorage from 'vue-ls'
 
 const LOGIN = 'LOGIN'
@@ -16,6 +16,8 @@ const options = {
 }
 
 const transmissionLagDuration = 500 // in milliseconds
+
+var axios = Vue.axios
 
 Vue.use(LocalStorage, options)
 Vue.use(Vuex)

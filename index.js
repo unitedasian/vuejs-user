@@ -2,7 +2,7 @@ import * as components from './src/components'
 import User from './src/user'
 import userModule from './src/user-store-module'
 
-import axios from 'axios'
+// import axios from 'axios'
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
 
@@ -23,6 +23,11 @@ const VuePlugin = {
     options.redirectRoute = options.redirectRoute || '/login'
 
     let store = options.store
+
+    Vue.axios = options.axios
+    Vue.prototype.$axios = options.axios
+
+    var axios = Vue.axios
 
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
