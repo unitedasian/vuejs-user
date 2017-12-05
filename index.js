@@ -1,8 +1,7 @@
 import * as components from './src/components'
 import User from './src/user'
-import userModule from './src/user-store-module'
+import userModuleFunction from './src/user-store-module'
 
-// import axios from 'axios'
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
 
@@ -27,7 +26,9 @@ const VuePlugin = {
     Vue.axios = options.axios
     Vue.prototype.$axios = options.axios
 
-    var axios = Vue.axios
+    let axios = Vue.axios
+
+    let userModule = userModuleFunction({ axios })
 
     // register `user` module to store dynamically
     store.registerModule('user', userModule)

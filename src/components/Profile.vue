@@ -75,7 +75,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import Vue from 'vue'
 import mixinNotification from '../mixins/MixinNotification.vue'
 
@@ -136,7 +135,7 @@ export default {
     updateUser () {
       this.clearNotifications()
 
-      Vue.axios.put(this.updateUrl + this.$user.id, { user: this.user })
+      this.$axios.put(this.updateUrl + this.$user.id, { user: this.user })
         .then((response) => {
           this.$user.updateUser(response.data)
             .then(() => {
@@ -148,7 +147,7 @@ export default {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
               this.$user.refreshToken()
                 .then(() => {
-                  Vue.axios.put(this.updateUrl + this.$user.id, { user: this.user })
+                  this.$axios.put(this.updateUrl + this.$user.id, { user: this.user })
                     .then((response) => {
                       this.$user.updateUser(response.data)
                         .then(() => {
@@ -174,7 +173,7 @@ export default {
     updateProfile () {
       this.clearNotifications()
 
-      Vue.axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
+      this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
         .then((response) => {
           this.$user.updateProfile(response.data.profile)
             .then(() => {
@@ -186,7 +185,7 @@ export default {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
               this.$user.refreshToken()
                 .then(() => {
-                  Vue.axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
+                  this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
                     .then((response) => {
                       this.$user.updateProfile(response.data.profile)
                         .then(() => {

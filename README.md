@@ -37,18 +37,19 @@ let userEndpoints = {
   currentUser: '/user/me?includes[]=profile'
 }
 
-Vue.use(User, { store: store, router: router, redirectRoute: '/login', userEndpoints })
+Vue.use(User, { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions, axios })
 ```
 
 ## Options
 
 | Option                 | Description                                  | Type      | Default Value |
 |:-----------------------|:---------------------------------------------|:----------|:--------------|
-| store                  | The Vuex store to use                        | Object    |               |
-| router                 | The registered router instance               | Object    |               |
+| axios                  | The instance of axios used by app            | Object    |               |
 | redirectRoute          | vue route to redirect to, for authentication | String    | `'/login'`    |
-| vueAuthenticateOptions | Social login provider options                | Object    |               |
+| router                 | The registered router instance               | Object    |               |
+| store                  | The Vuex store to use                        | Object    |               |
 | userEndpoints          | User auth related backend urls               | Object    |               |
+| vueAuthenticateOptions | Social login provider options                | Object    |               |
 
 ## Social login
 
@@ -80,7 +81,7 @@ let vueAuthenticateOptions = {
   }
 }
 
-Vue.use(User, { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions })
+Vue.use(User, { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions, axios })
 
 ```
 
@@ -145,7 +146,7 @@ You can listen to `login-success` event and handle closing modal dialog, re-requ
 | Property       | Description                    | Type    | Default Value |
 |:---------------|:-------------------------------|:--------|:--------------|
 | button-content | Content to show on menu button | String  |               |
-| right          | Right align dowpdown menu      | Boolean | `false`       |
 | no-divider     | Do not show divider            | Boolean | `false`       |
 | no-profile     | Do not show profile menu item  | Boolean | `false`       |
 | profile-route  | vue route for profile          | String  | `'/profile'`  |
+| right          | Right align dowpdown menu      | Boolean | `false`       |

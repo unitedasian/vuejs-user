@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const path = require('path')
-// const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   entry: path.resolve(__dirname + '/index.js'),
@@ -40,30 +39,13 @@ module.exports = {
     ]
   },
   externals: {
-    bootstrap: 'bootstrap',
-    bootstrapVue: 'bootstrap-vue',
-    veeValidate: 'vee-validate',
-    vueAuthenticate: 'vue-authenticate',
-    vueAxios: 'vue-axios',
-    vueI18n: 'vue-i18n',
-    vueLs: 'vue-ls',
-    vuex: 'vuex',
-    vue: {
-      var:'vue',
-      commonjs: 'vue',
-      commonjs2: 'vue',
-      amd: 'vue'
-    }
+    'vue-authenticate': 'vue-authenticate',
+    'vue-axios': 'vue-axios',
+    'vue-ls': 'vue-ls',
+    'vuex': 'vuex',
+    'vue': 'vue'
   },
   plugins: [
-    /* new UglifyJSPlugin({
-      uglifyOptions: {
-        compress: {
-          warnings: false
-        },
-      },
-      sourceMap: true
-    }),*/
     new webpack.optimize.UglifyJsPlugin( {
       minimize : true,
       sourceMap : false,
