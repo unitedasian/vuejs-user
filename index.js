@@ -2,6 +2,7 @@ import * as components from './src/components'
 import User from './src/user'
 import userModuleFunction from './src/user-store-module'
 
+import { Validator } from 'vee-validate';
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
 
@@ -132,6 +133,16 @@ const VuePlugin = {
       store.dispatch('user/updateRequestPending', false)
       return Promise.reject(error)
     })
+
+    const dictionary = {
+      custom: {
+        gender: {
+          in: () => 'Select gender.'
+        }
+      }
+    }
+
+    Validator.localize('en', dictionary)
   }
 }
 

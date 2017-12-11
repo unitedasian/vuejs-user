@@ -118,19 +118,6 @@ export default {
       }
     }
   },
-  created () {
-    const dict = {
-      en: {
-        custom: {
-          gender: {
-            in: 'Select gender.'
-          }
-        }
-      }
-    }
-
-    this.$validator.updateDictionary(dict)
-  },
   methods: {
     updateUser () {
       this.clearNotifications()

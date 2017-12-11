@@ -39,6 +39,7 @@ module.exports = {
     ]
   },
   externals: {
+    'vee-validate': 'vee-validate',
     'vue-authenticate': 'vue-authenticate',
     'vue-axios': 'vue-axios',
     'vue-ls': 'vue-ls',
