@@ -1,8 +1,8 @@
 import * as components from './src/components'
 import User from './src/user'
-import userModule from './src/user-store-module'
+import userModuleFunction from './src/user-store-module'
 
-import axios from 'axios'
+import { Validator } from 'vee-validate';
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
 
@@ -24,6 +24,13 @@ const VuePlugin = {
 
     let store = options.store
 
+    Vue.axios = options.axios
+    Vue.prototype.$axios = options.axios
+
+    let axios = Vue.axios
+
+    let userModule = userModuleFunction({ axios })
+
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
 
@@ -38,38 +45,41 @@ const VuePlugin = {
     }
 
     options.router.beforeEach((to, from, next) => {
-      if (to.matched.some(record => record.meta.requiresAuth)) {
-        // this route requires authenticated user, check if logged in
-        // if not, redirect to login page.
-        if (!Vue.user.isLoggedIn()) {
-          next({
-            path: options.redirectRoute,
-            query: { redirect: to.fullPath }
-          })
-        } else {
-          if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
-            Vue.user.refreshToken()
-              .then(() => {
-                next()
-              })
-              .catch(() => {
-                if (to.matched.some(record => record.meta.redirectOnExpire)) {
-                  // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
-                  next({
-                    path: options.redirectRoute,
-                    query: { redirect: to.fullPath }
-                  })
-                } else {
-                  next()
-                }
-              })
+      if (to.matched.length) {
+        if (to.matched.some(record => record.meta.requiresAuth)) {
+          // this route requires authenticated user, check if logged in
+          // if not, redirect to login page.
+          if (!Vue.user.isLoggedIn()) {
+            next({
+              path: options.redirectRoute,
+              query: { redirect: to.fullPath }
+            })
           } else {
-            next()
+            if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
+              Vue.user.refreshToken()
+                .then(() => {
+                  next()
+                })
+                .catch(() => {
+                  if (to.matched.some(record => record.meta.redirectOnExpire)) {
+                  // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
+                    next({
+                      path: options.redirectRoute,
+                      query: { redirect: to.fullPath }
+                    })
+                  } else {
+                    next()
+                  }
+                })
+            } else {
+              next()
+            }
           }
+        } else { // doesn't require any authentication such as home page, login page
+          next()
         }
-      } else {
-        // doesn't require any authentication such as home page, login page
-        next()
+      } else { // when url path doesn't match with any registered route
+        window.location = window.location.origin
       }
     })
 
@@ -123,6 +133,16 @@ const VuePlugin = {
       store.dispatch('user/updateRequestPending', false)
       return Promise.reject(error)
     })
+
+    const dictionary = {
+      custom: {
+        gender: {
+          in: () => 'Select gender.'
+        }
+      }
+    }
+
+    Validator.localize('en', dictionary)
   }
 }
 
