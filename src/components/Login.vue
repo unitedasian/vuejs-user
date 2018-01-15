@@ -88,7 +88,7 @@ export default {
         .then((authResponse) => {
           this.$user.loginWithToken(authResponse.data)
             .then(() => {
-              this.$router.push('/')
+              this.$router.push({ name: 'home_page' })
             })
             .catch(() => {
               this.addNotification(this.$i18n.t('notifyLabel.unknownError'))
@@ -112,7 +112,7 @@ export default {
                 if (this.redirectTo !== undefined) {
                   this.$router.push(this.redirectTo)
                 } else {
-                  this.$router.push('/')
+                  this.$router.push({ name: 'home_page' })
                 }
               }
             })
