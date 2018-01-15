@@ -108,6 +108,8 @@ You can listen to `login-success` event and handle closing modal dialog, re-requ
 
 ### `<uam-login>`
 
+**Note:** App using `uam-login` component should have vue route named `home_page`. After successful login, page redirects to `home_page` route.
+
 #### Properties
 
 | Property    | Description                           | Type    | Default Value |
@@ -126,6 +128,8 @@ You can listen to `login-success` event and handle closing modal dialog, re-requ
 | login-success | emits after successful login  |
 
 ### `<uam-profile>`
+
+**Note:** App using `uam-profile` component should have vue route named `login`. After successful logout, page redirects to `login` route.
 
 #### Properties
 
