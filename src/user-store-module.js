@@ -29,8 +29,8 @@ export default function (options) {
     namespaced: true,
     state: {
       isLoggedIn: !!Vue.ls.get('access_token'),
-      tokenExpireIn: null,
-      isRefreshExpired: null,
+      tokenExpireIn: Vue.ls.get('access_token_expire'),
+      isRefreshExpired: Vue.ls.get('is_refresh_expired'),
       user: Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }),
       pending: false,
       locale: 'en',
