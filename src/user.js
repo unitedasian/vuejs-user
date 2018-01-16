@@ -55,24 +55,11 @@ class User {
       .dispatch('user/logout')
   }
 
-  refreshToken (callback, args = []) {
-    if (callback === undefined) {
-      return this.store.dispatch(
-        'user/refreshToken',
-        { refreshUrl: this.userEndpoints.refresh }
-      )
-    } else {
-      this.store.dispatch(
-        'user/refreshToken',
-        { refreshUrl: this.userEndpoints.refresh }
-      ).then(() => {
-          if (callback) {
-            callback(...args)
-          }
-        }).catch((error) => {
-          throw error
-        })
-    }
+  refreshToken () {
+    return this.store.dispatch(
+      'user/refreshToken',
+      { refreshUrl: this.userEndpoints.refresh }
+    )
   }
 
   updateUser (user) {
