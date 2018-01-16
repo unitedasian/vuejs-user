@@ -133,16 +133,6 @@ const VuePlugin = {
       store.dispatch('user/updateRequestPending', false)
       return Promise.reject(error)
     })
-
-    const dictionary = {
-      custom: {
-        gender: {
-          in: () => 'Select gender.'
-        }
-      }
-    }
-
-    Validator.localize('en', dictionary)
   }
 }
 
