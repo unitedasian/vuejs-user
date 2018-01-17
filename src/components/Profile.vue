@@ -123,8 +123,8 @@ export default {
         profile: 'profile'
       },
       user: {
-        username: this.$user.username,
-        email: this.$user.email,
+        username: this.$token.username,
+        email: this.$token.email,
         password: ''
       },
       genderOptions: [
@@ -132,9 +132,9 @@ export default {
         { text: this.$i18n.t('gender.options.male'), value: 2 }
       ],
       profile: {
-        gender: this.$user.profile_gender,
-        given_name: this.$user.profile_firstname,
-        surname: this.$user.profile_surname
+        gender: this.$token.profile_gender,
+        given_name: this.$token.profile_firstname,
+        surname: this.$token.profile_surname
       },
       confirmPassword: ''
     }
@@ -156,9 +156,9 @@ export default {
     updateUser () {
       this.clearNotifications()
 
-      this.$axios.put(this.updateUrl + this.$user.id, { user: this.user })
+      this.$axios.put(this.updateUrl + this.$token.id, { user: this.user })
         .then((response) => {
-          this.$user.updateUser(response.data)
+          this.$token.updateUser(response.data)
             .then(() => {
               this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
             })
@@ -166,11 +166,11 @@ export default {
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$user.refreshToken()
+              this.$token.refreshToken()
                 .then(() => {
-                  this.$axios.put(this.updateUrl + this.$user.id, { user: this.user })
+                  this.$axios.put(this.updateUrl + this.$token.id, { user: this.user })
                     .then((response) => {
-                      this.$user.updateUser(response.data)
+                      this.$token.updateUser(response.data)
                         .then(() => {
                           this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                         })
@@ -194,9 +194,9 @@ export default {
     updateProfile () {
       this.clearNotifications()
 
-      this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
+      this.$axios.put(this.updateUrl + this.$token.id, { profile: this.profile })
         .then((response) => {
-          this.$user.updateProfile(response.data.profile)
+          this.$token.updateProfile(response.data.profile)
             .then(() => {
               this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
             })
@@ -204,11 +204,11 @@ export default {
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$user.refreshToken()
+              this.$token.refreshToken()
                 .then(() => {
-                  this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
+                  this.$axios.put(this.updateUrl + this.$token.id, { profile: this.profile })
                     .then((response) => {
-                      this.$user.updateProfile(response.data.profile)
+                      this.$token.updateProfile(response.data.profile)
                         .then(() => {
                           this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                         })

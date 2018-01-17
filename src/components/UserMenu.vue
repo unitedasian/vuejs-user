@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     logout () {
-      this.$user.logout()
+      this.$token.logout()
         .then(() => {
           this.$router.push({ name: 'login' })
         })

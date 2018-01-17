@@ -1,8 +1,7 @@
 import * as components from './src/components'
-import User from './src/user'
+import Token from './src/token'
 import userModuleFunction from './src/user-store-module'
 
-import { Validator } from 'vee-validate';
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
 
@@ -34,10 +33,10 @@ const VuePlugin = {
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
 
-    let user = new User(store, options.userEndpoints)
+    let token = new Token(store, options.userEndpoints)
 
-    Vue.user = user
-    Vue.prototype.$user = user
+    Vue.token = token
+    Vue.prototype.$token = token
 
     // Register global components
     for (let component in components) {
@@ -49,14 +48,14 @@ const VuePlugin = {
         if (to.matched.some(record => record.meta.requiresAuth)) {
           // this route requires authenticated user, check if logged in
           // if not, redirect to login page.
-          if (!Vue.user.isLoggedIn()) {
+          if (!Vue.token.isLoggedIn()) {
             next({
               path: options.redirectRoute,
               query: { redirect: to.fullPath }
             })
           } else {
-            if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
-              Vue.user.refreshToken()
+            if (Vue.token.isTokenExpired()) { // check if access token expired on client side (offline auth)
+              Vue.token.refreshToken()
                 .then(() => {
                   next()
                 })
@@ -143,5 +142,5 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default VuePlugin
 
 export {
-  User
+  Token
 }

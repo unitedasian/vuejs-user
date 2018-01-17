@@ -1,4 +1,4 @@
-class User {
+class Token {
   constructor (store, userEndpoints) {
     this.store = store
 
@@ -73,4 +73,4 @@ class User {
   }
 }
 
-export default User
+export default Token
