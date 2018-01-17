@@ -22,11 +22,11 @@ class Profile {
     this.state.gender = gender
   }
 
-  get givenName () {
+  get given_name () {
     return this.state.given_name
   }
 
-  set givenName (givenName) {
+  set given_name (givenName) {
     this.state.given_name = givenName
   }
 

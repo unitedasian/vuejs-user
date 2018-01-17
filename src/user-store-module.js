@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import LocalStorage from 'vue-ls'
 
+import Profile from './Models/Profile'
+import User from './Models/User'
+
 const LOGIN = 'LOGIN'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGOUT = 'LOGOUT'
@@ -31,7 +34,7 @@ export default function (options) {
       isLoggedIn: !!Vue.ls.get('access_token'),
       tokenExpireIn: Vue.ls.get('access_token_expire'),
       isRefreshExpired: Vue.ls.get('is_refresh_expired'),
-      user: Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }),
+      user: new User(Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') })),
       pending: false,
       locale: 'en',
       isSocialAuthPending: false,
@@ -46,8 +49,8 @@ export default function (options) {
         state.tokenExpireIn = Vue.ls.get('access_token_expire')
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.pending = false
-        state.user = Vue.ls.get('user')
-        state.user.profile = Vue.ls.get('profile')
+        state.user = new User(Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }))
+        // state.user.profile = Vue.ls.get('profile')
       },
       [LOGOUT] (state) {
         state.isLoggedIn = false
@@ -57,10 +60,10 @@ export default function (options) {
         state.data = null
       },
       [UPDATE_USER] (state, user) {
-        state.user = Object.assign({}, state.user, user)
+        state.user.state = Object.assign({}, state.user.state, user)
       },
       [UPDATE_PROFILE] (state, profile) {
-        state.user.profile = profile
+        state.user.profile = new Profile(profile)
       },
       [UPDATE_SOCIAL_AUTH_PENDING] (state, payload) {
         state.isSocialAuthPending = payload.isSocialAuthPending

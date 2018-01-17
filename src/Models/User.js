@@ -1,4 +1,4 @@
-import Profile from 'Profile'
+import Profile from './Profile'
 
 class User {
   constructor (state) {
@@ -41,6 +41,14 @@ class User {
 
   set password (password) {
     this.state.password = password
+  }
+
+  get profile () {
+    return this.state.profile
+  }
+
+  set profile (profile) {
+    this.state.profile = profile
   }
 
   get username () {
