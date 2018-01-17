@@ -11,7 +11,7 @@ class Token {
     Object.assign(this.userEndpoints, userEndpoints)
   }
 
-  getCurrentUser () {
+  get user () {
     return this.store.getters['user/user']
   }
 
@@ -23,12 +23,12 @@ class Token {
     return this.store.getters['user/isLoggedIn']
   }
 
-  isTokenExpired () {
-    return (this.store.getters['user/tokenExpireIn'] <= new Date().getTime())
-  }
-
   isRefreshExpired () {
     return this.store.getters['user/isRefreshExpired']
+  }
+
+  isTokenExpired () {
+    return (this.store.getters['user/tokenExpireIn'] <= new Date().getTime())
   }
 
   login (credentials) {
@@ -62,14 +62,14 @@ class Token {
     )
   }
 
-  updateUser (user) {
-    return this.store
-      .dispatch('user/updateUser', user)
-  }
-
   updateProfile (profile) {
     return this.store
       .dispatch('user/updateProfile', profile)
+  }
+
+  updateUser (user) {
+    return this.store
+      .dispatch('user/updateUser', user)
   }
 }
 

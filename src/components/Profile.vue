@@ -103,8 +103,11 @@ import mixinNotification from '../mixins/MixinNotification.vue'
 
 export default {
   name: 'uam_profile',
+
   mixins: [mixinNotification],
+
   props: ['update-url'],
+
   created () {
     const dictionary = {
       custom: {
@@ -116,6 +119,7 @@ export default {
 
     this.$validator.localize('en', dictionary);
   },
+
   data () {
     return {
       scope: {
@@ -123,8 +127,8 @@ export default {
         profile: 'profile'
       },
       user: {
-        username: this.$token.username,
-        email: this.$token.email,
+        username: this.$token.user.username,
+        email: this.$token.user.email,
         password: ''
       },
       genderOptions: [
@@ -132,13 +136,14 @@ export default {
         { text: this.$i18n.t('gender.options.male'), value: 2 }
       ],
       profile: {
-        gender: this.$token.profile_gender,
-        given_name: this.$token.profile_firstname,
-        surname: this.$token.profile_surname
+        gender: this.$token.user.profile.gender,
+        given_name: this.$token.user.profile.givenName,
+        surname: this.$token.user.profile.surname
       },
       confirmPassword: ''
     }
   },
+
   computed: {
     isRequestPending () {
       return this.$store.getters['user/isRequestPending']
@@ -152,11 +157,12 @@ export default {
       }
     }
   },
+
   methods: {
     updateUser () {
       this.clearNotifications()
 
-      this.$axios.put(this.updateUrl + this.$token.id, { user: this.user })
+      this.$axios.put(this.updateUrl + this.$token.user.id, { user: this.user })
         .then((response) => {
           this.$token.updateUser(response.data)
             .then(() => {
@@ -168,7 +174,7 @@ export default {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
               this.$token.refreshToken()
                 .then(() => {
-                  this.$axios.put(this.updateUrl + this.$token.id, { user: this.user })
+                  this.$axios.put(this.updateUrl + this.$token.user.id, { user: this.user })
                     .then((response) => {
                       this.$token.updateUser(response.data)
                         .then(() => {
@@ -191,10 +197,11 @@ export default {
           }
         })
     },
+
     updateProfile () {
       this.clearNotifications()
 
-      this.$axios.put(this.updateUrl + this.$token.id, { profile: this.profile })
+      this.$axios.put(this.updateUrl + this.$token.user.id, { profile: this.profile })
         .then((response) => {
           this.$token.updateProfile(response.data.profile)
             .then(() => {
@@ -206,7 +213,7 @@ export default {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
               this.$token.refreshToken()
                 .then(() => {
-                  this.$axios.put(this.updateUrl + this.$token.id, { profile: this.profile })
+                  this.$axios.put(this.updateUrl + this.$token.user.id, { profile: this.profile })
                     .then((response) => {
                       this.$token.updateProfile(response.data.profile)
                         .then(() => {
@@ -229,6 +236,7 @@ export default {
           }
         })
     },
+
     onSubmit (scope) {
       this.$validator.validateAll(scope).then(result => {
         if (result) {
@@ -243,6 +251,7 @@ export default {
       })
     }
   },
+
   i18n: {
     messages: {
       'en': require('../translations/profile.en.json')
