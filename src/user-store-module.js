@@ -50,7 +50,6 @@ export default function (options) {
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.pending = false
         state.user = new User(Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }))
-        // state.user.profile = Vue.ls.get('profile')
       },
       [LOGOUT] (state) {
         state.isLoggedIn = false

@@ -22,7 +22,23 @@
 
 <script>
 export default {
+  i18n: {
+    messages: {
+      'en': require('../translations/user-menu.json')
+    }
+  },
+
+  methods: {
+    logout () {
+      this.$token.logout()
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
+    }
+  },
+
   name: 'uam_user_menu',
+
   props: {
     buttonContent: String,
     right: { // Right align dowpdown menu (default is left align)
@@ -40,19 +56,6 @@ export default {
     profileRoute: {
       type: String,
       default: '/profile'
-    }
-  },
-  methods: {
-    logout () {
-      this.$token.logout()
-        .then(() => {
-          this.$router.push({ name: 'login' })
-        })
-    }
-  },
-  i18n: {
-    messages: {
-      'en': require('../translations/user-menu.json')
     }
   }
 }

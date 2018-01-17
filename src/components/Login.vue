@@ -38,30 +38,13 @@
 import mixinNotification from '../mixins/MixinNotification.vue'
 
 export default {
-  name: 'uam_login',
-  mixins: [mixinNotification],
-  props: {
-    redirectTo: String,
-    noRedirect: { // if enabled, no redirect after successful login
-      type: Boolean,
-      default: false
+  computed: {
+    isSocialAuthPending () {
+      return this.$store.getters['user/isSocialAuthPending']
     },
-    facebook: { // facebook login
-      type: Boolean,
-      default: false
-    },
-    github: { // github login
-      type: Boolean,
-      default: false
-    },
-    google: { // google login
-      type: Boolean,
-      default: false
-    },
-    linkedin: { // linkedin login
-      type: Boolean,
-      default: false
-    },
+    isRequestPending () {
+      return this.$store.getters['user/isRequestPending']
+    }
   },
 
   data () {
@@ -72,14 +55,13 @@ export default {
       }
     }
   },
-  computed: {
-    isSocialAuthPending () {
-      return this.$store.getters['user/isSocialAuthPending']
-    },
-    isRequestPending () {
-      return this.$store.getters['user/isRequestPending']
+
+  i18n: {
+    messages: {
+      'en': require('../translations/login.en.json')
     }
   },
+
   methods: {
     authenticate (provider) {
       this.clearNotifications()
@@ -99,6 +81,7 @@ export default {
           }
         })
     },
+
     onSubmit () {
       this.$validator.validateAll().then((result) => {
         if (result) {
@@ -128,10 +111,33 @@ export default {
       })
     }
   },
-  i18n: {
-    messages: {
-      'en': require('../translations/login.en.json')
-    }
+
+  mixins: [mixinNotification],
+
+  name: 'uam_login',
+
+  props: {
+    noRedirect: { // if enabled, no redirect after successful login
+      type: Boolean,
+      default: false
+    },
+    redirectTo: String,
+    facebook: { // facebook login
+      type: Boolean,
+      default: false
+    },
+    github: { // github login
+      type: Boolean,
+      default: false
+    },
+    google: { // google login
+      type: Boolean,
+      default: false
+    },
+    linkedin: { // linkedin login
+      type: Boolean,
+      default: false
+    },
   }
 }
 </script>
@@ -167,6 +173,11 @@ a.fa-facebook {
     color: white;
 }
 
+a.fa-github {
+  background: #222;
+  color: white;
+}
+
 a.fa-google {
     background: #dd4b39;
     color: white;
@@ -174,11 +185,6 @@ a.fa-google {
 
 a.fa-linkedin {
     background: #007bb5;
-    color: white;
-}
-
-a.fa-github {
-    background: #222;
     color: white;
 }
 </style>
