@@ -2,6 +2,9 @@ import * as components from './src/components'
 import Token from './src/token'
 import userModuleFunction from './src/user-store-module'
 
+import Profile from './src/Models/Profile'
+import User from './src/Models/User'
+
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
 
@@ -142,5 +145,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default VuePlugin
 
 export {
-  Token
+  Profile,
+  Token,
+  User
 }
