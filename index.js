@@ -31,17 +31,23 @@ const VuePlugin = {
 
     let axios = Vue.axios
 
-    let userModule = userStoreModuleFunction({ axios })
+    let user = options.user || new uamUser({})
+
+    Vue.user = user
+    Vue.prototype.$user = user
+
+    let userModule = userStoreModuleFunction({ axios, user })
 
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
 
     let authenticator = options.authenticator || new Authenticator(store, options.userEndpoints)
 
-    let user = options.user || new uamUser(store.getters['user/user'], authenticator)
+    // let user = options.user || new uamUser(store.getters['user/user'], authenticator)
 
-    Vue.user = user
-    Vue.prototype.$user = user
+    Vue.user.init(store.getters['user/user'])
+
+    Vue.user.authenticator = authenticator
 
     // Register global components
     for (let component in components) {
