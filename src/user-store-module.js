@@ -43,21 +43,21 @@ export default function (options) {
         state.pending = true
       },
       [LOGIN_SUCCESS] (state) {
-        state.isLoggedIn = true
         state.tokenExpiresAt = Vue.ls.get('access_token_expire')
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.pending = false
         state.user = Vue.ls.get('user')
         state.user.profile = Vue.ls.get('profile')
         vueGlobalUser.state = state.user
+        state.isLoggedIn = true
       },
       [LOGOUT] (state) {
-        state.isLoggedIn = false
         state.tokenExpiresAt = null
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.user = null
         state.data = null
         vueGlobalUser.state = state.user
+        state.isLoggedIn = false
       },
       [UPDATE_USER] (state, user) {
         state.user = Object.assign({}, state.user, user)

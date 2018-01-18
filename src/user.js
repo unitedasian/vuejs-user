@@ -21,14 +21,6 @@ class User extends BaseUser {
 
   login (credentials) {
     return this.authenticator.login(credentials)
-      .then(
-        () => {
-          this.state = this.authenticator.getUserFromStore()
-        },
-        (error) => {
-          throw error
-        }
-      )
   }
 
   /**
@@ -38,64 +30,22 @@ class User extends BaseUser {
    */
   loginWithToken (token) {
     return this.authenticator.loginWithToken(token)
-      .then(
-        () => {
-          this.state = this.authenticator.getUserFromStore()
-        },
-        (error) => {
-          throw error
-        }
-      )
   }
 
   logout () {
     return this.authenticator.logout()
-      .then(
-        () => {
-          this.state = null
-        },
-        (error) => {
-          throw error
-        }
-      )
   }
 
   refreshToken () {
     return this.authenticator.refreshToken()
-      .then(
-        () => {
-          this.state = this.authenticator.getUserFromStore()
-        },
-        (error) => {
-          this.state = null
-
-          throw error
-        }
-      )
   }
 
   updateProfile (profile) {
     return this.authenticator.updateProfile(profile)
-      .then(
-        () => {
-          this.state.profile = this.authenticator.getProfileFromStore()
-        },
-        (error) => {
-          throw error
-        }
-      )
   }
 
   updateUser (user) {
     return this.authenticator.updateUser(user)
-      .then(
-        () => {
-          this.state = this.authenticator.getUserFromStore()
-        },
-        (error) => {
-          throw error
-        }
-      )
   }
 }
 

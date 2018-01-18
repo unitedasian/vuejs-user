@@ -41,7 +41,7 @@ const VuePlugin = {
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
 
-    let authenticator = options.authenticator || new Authenticator(store, options.userEndpoints)
+    let authenticator = new Authenticator(store, options.userEndpoints)
 
     // let user = options.user || new uamUser(store.getters['user/user'], authenticator)
 
@@ -153,7 +153,6 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default VuePlugin
 
 export {
-  Authenticator,
   uamProfileModel,
   uamUser,
   uamUserModel
