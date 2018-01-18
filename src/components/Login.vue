@@ -68,7 +68,7 @@ export default {
 
       this.$auth.authenticate(provider)
         .then((authResponse) => {
-          this.$token.loginWithToken(authResponse.data)
+          this.$user.loginWithToken(authResponse.data)
             .then(() => {
               this.$router.push({ name: 'home_page' })
             })
@@ -87,7 +87,7 @@ export default {
         if (result) {
           this.clearNotifications()
 
-          this.$token.login(this.credentials)
+          this.$user.login(this.credentials)
             .then(() => {
               this.$emit('login-success')
 

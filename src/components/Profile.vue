@@ -137,12 +137,12 @@ export default {
         { text: this.$i18n.t('gender.options.female'), value: 1 },
         { text: this.$i18n.t('gender.options.male'), value: 2 }
       ],
-      profile: new Profile(this.$token.user.profile.state),
+      profile: new Profile(this.$user.profile.state),
       scope: {
         credentials: 'user',
         profile: 'profile'
       },
-      user: new User(this.$token.user.state)
+      user: new User(this.$user.state)
     }
   },
 
@@ -170,9 +170,9 @@ export default {
     updateProfile () {
       this.clearNotifications()
 
-      this.$axios.put(this.updateUrl + this.$token.user.id, { profile: this.profile.state })
+      this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile.state })
         .then((response) => {
-          this.$token.updateProfile(response.data.profile)
+          this.$user.updateProfile(response.data.profile)
             .then(() => {
               this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
             })
@@ -180,11 +180,11 @@ export default {
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$token.refreshToken()
+              this.$user.refreshToken()
                 .then(() => {
-                  this.$axios.put(this.updateUrl + this.$token.user.id, { profile: this.profile.state })
+                  this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile.state })
                     .then((response) => {
-                      this.$token.updateProfile(response.data.profile)
+                      this.$user.updateProfile(response.data.profile)
                         .then(() => {
                           this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                         })
@@ -209,9 +209,9 @@ export default {
     updateUser () {
       this.clearNotifications()
 
-      this.$axios.put(this.updateUrl + this.$token.user.id, { user: this.user.state })
+      this.$axios.put(this.updateUrl + this.$user.id, { user: this.user.state })
         .then((response) => {
-          this.$token.updateUser(response.data)
+          this.$user.updateUser(response.data)
             .then(() => {
               this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
             })
@@ -219,11 +219,11 @@ export default {
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$token.refreshToken()
+              this.$user.refreshToken()
                 .then(() => {
-                  this.$axios.put(this.updateUrl + this.$token.user.id, { user: this.user.state })
+                  this.$axios.put(this.updateUrl + this.$user.id, { user: this.user.state })
                     .then((response) => {
-                      this.$token.updateUser(response.data)
+                      this.$user.updateUser(response.data)
                         .then(() => {
                           this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                         })

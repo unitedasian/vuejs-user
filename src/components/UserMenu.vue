@@ -30,7 +30,7 @@ export default {
 
   methods: {
     logout () {
-      this.$token.logout()
+      this.$user.logout()
         .then(() => {
           this.$router.push({ name: 'login' })
         })

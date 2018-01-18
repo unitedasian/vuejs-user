@@ -1,9 +1,9 @@
 import * as components from './src/components'
-import Token from './src/token'
-import userModuleFunction from './src/user-store-module'
-
-import Profile from './src/models/Profile'
-import User from './src/models/User'
+import Authenticator from './src/authenticator'
+import uamProfileModel from './src/models/Profile'
+import uamUser from './src/user'
+import uamUserModel from './src/models/User'
+import userStoreModuleFunction from './src/user-store-module'
 
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
@@ -31,19 +31,17 @@ const VuePlugin = {
 
     let axios = Vue.axios
 
-    let userModule = userModuleFunction({ axios })
+    let userModule = userStoreModuleFunction({ axios })
 
     // register `user` module to store dynamically
     store.registerModule('user', userModule)
 
-    let token = new Token(store, options.userEndpoints)
+    let authenticator = options.authenticator || new Authenticator(store, options.userEndpoints)
 
-    Vue.token = token
-    Vue.prototype.$token = token
+    let user = options.user || new uamUser(store.getters['user/user'], authenticator)
 
-    Vue.prototype.$user = () => {
-      return token.user;
-    }
+    Vue.user = user
+    Vue.prototype.$user = user
 
     // Register global components
     for (let component in components) {
@@ -55,14 +53,14 @@ const VuePlugin = {
         if (to.matched.some(record => record.meta.requiresAuth)) {
           // this route requires authenticated user, check if logged in
           // if not, redirect to login page.
-          if (!Vue.token.isLoggedIn()) {
+          if (!Vue.user.isLoggedIn()) {
             next({
               path: options.redirectRoute,
               query: { redirect: to.fullPath }
             })
           } else {
-            if (Vue.token.isTokenExpired()) { // check if access token expired on client side (offline auth)
-              Vue.token.refreshToken()
+            if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
+              Vue.user.refreshToken()
                 .then(() => {
                   next()
                 })
@@ -149,7 +147,8 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default VuePlugin
 
 export {
-  Profile,
-  Token,
-  User
+  Authenticator,
+  uamProfileModel,
+  uamUser,
+  uamUserModel
 }

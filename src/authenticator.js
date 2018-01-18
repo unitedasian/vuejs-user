@@ -1,4 +1,4 @@
-class Token {
+class Authenticator {
   constructor (store, userEndpoints) {
     this.store = store
 
@@ -11,12 +11,12 @@ class Token {
     Object.assign(this.userEndpoints, userEndpoints)
   }
 
-  get user () {
-    return this.store.getters['user/user']
+  getProfileFromStore () {
+    return this.store.getters['user/profile']
   }
 
-  getProfile () {
-    return this.store.getters['user/profile']
+  getUserFromStore () {
+    return this.store.getters['user/user']
   }
 
   isLoggedIn () {
@@ -28,7 +28,7 @@ class Token {
   }
 
   isTokenExpired () {
-    return (this.store.getters['user/tokenExpireIn'] <= new Date().getTime())
+    return (this.store.getters['user/tokenExpiresAt'] <= new Date().getTime())
   }
 
   login (credentials) {
@@ -73,4 +73,4 @@ class Token {
   }
 }
 
-export default Token
+export default Authenticator

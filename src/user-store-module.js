@@ -2,9 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import LocalStorage from 'vue-ls'
 
-import Profile from './models/Profile'
-import User from './models/User'
-
 const LOGIN = 'LOGIN'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGOUT = 'LOGOUT'
@@ -32,9 +29,9 @@ export default function (options) {
     namespaced: true,
     state: {
       isLoggedIn: !!Vue.ls.get('access_token'),
-      tokenExpireIn: Vue.ls.get('access_token_expire'),
+      tokenExpiresAt: Vue.ls.get('access_token_expire'),
       isRefreshExpired: Vue.ls.get('is_refresh_expired'),
-      user: new User(Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') })),
+      user: Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }),
       pending: false,
       locale: 'en',
       isSocialAuthPending: false,
@@ -46,23 +43,24 @@ export default function (options) {
       },
       [LOGIN_SUCCESS] (state) {
         state.isLoggedIn = true
-        state.tokenExpireIn = Vue.ls.get('access_token_expire')
+        state.tokenExpiresAt = Vue.ls.get('access_token_expire')
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.pending = false
-        state.user = new User(Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }))
+        state.user = Vue.ls.get('user')
+        state.user.profile = Vue.ls.get('profile')
       },
       [LOGOUT] (state) {
         state.isLoggedIn = false
-        state.tokenExpireIn = null
+        state.tokenExpiresAt = null
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.user = null
         state.data = null
       },
       [UPDATE_USER] (state, user) {
-        state.user.state = Object.assign({}, state.user.state, user)
+        state.user = Object.assign({}, state.user, user)
       },
       [UPDATE_PROFILE] (state, profile) {
-        state.user.profile = new Profile(profile)
+        state.user.profile = profile
       },
       [UPDATE_SOCIAL_AUTH_PENDING] (state, payload) {
         state.isSocialAuthPending = payload.isSocialAuthPending
@@ -194,8 +192,8 @@ export default function (options) {
       isLoggedIn: state => {
         return state.isLoggedIn
       },
-      tokenExpireIn: state => {
-        return state.tokenExpireIn
+      tokenExpiresAt: state => {
+        return state.tokenExpiresAt
       },
       isRefreshExpired: state => {
         return state.isRefreshExpired
