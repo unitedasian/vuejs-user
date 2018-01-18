@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import LocalStorage from 'vue-ls'
 
-import Profile from './Models/Profile'
-import User from './Models/User'
+import Profile from './models/Profile'
+import User from './models/User'
 
 const LOGIN = 'LOGIN'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'

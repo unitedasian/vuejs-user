@@ -2,8 +2,8 @@ import * as components from './src/components'
 import Token from './src/token'
 import userModuleFunction from './src/user-store-module'
 
-import Profile from './src/Models/Profile'
-import User from './src/Models/User'
+import Profile from './src/models/Profile'
+import User from './src/models/User'
 
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
@@ -40,6 +40,10 @@ const VuePlugin = {
 
     Vue.token = token
     Vue.prototype.$token = token
+
+    Vue.prototype.$user = () => {
+      return token.user;
+    }
 
     // Register global components
     for (let component in components) {

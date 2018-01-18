@@ -108,8 +108,8 @@
 
 <script>
 import mixinNotification from '../mixins/MixinNotification.vue'
-import Profile from '../Models/Profile'
-import User from '../Models/User'
+import Profile from '../models/Profile'
+import User from '../models/User'
 
 export default {
   computed: {
