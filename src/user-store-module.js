@@ -31,7 +31,8 @@ export default function (options) {
       isLoggedIn: !!Vue.ls.get('access_token'),
       tokenExpiresAt: Vue.ls.get('access_token_expire'),
       isRefreshExpired: Vue.ls.get('is_refresh_expired'),
-      user: Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }),
+      // user: Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }),
+      user : Vue.ls.get('user'),
       pending: false,
       locale: 'en',
       isSocialAuthPending: false,
@@ -46,7 +47,7 @@ export default function (options) {
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.pending = false
         state.user = Vue.ls.get('user')
-        state.user.profile = Vue.ls.get('profile')
+        // state.user.profile = Vue.ls.get('profile')
         state.isLoggedIn = true
       },
       [LOGOUT] (state) {
@@ -90,8 +91,8 @@ export default function (options) {
                 .then(([
                          { data: userResponse }
                        ]) => {
-                  Vue.ls.set('profile', userResponse.user.profile)
-                  delete userResponse.user.profile
+                  // Vue.ls.set('profile', userResponse.user.profile)
+                  // delete userResponse.user.profile
                   Vue.ls.set('user', userResponse.user)
 
                   commit(LOGIN_SUCCESS)
@@ -117,8 +118,8 @@ export default function (options) {
 
           axios.get(payload.currentUserUrl)
             .then((response) => {
-              Vue.ls.set('profile', response.data.user.profile)
-              delete response.data.user.profile
+              // Vue.ls.set('profile', response.data.user.profile)
+              // delete response.data.user.profile
               Vue.ls.set('user', response.data.user)
 
               commit(LOGIN_SUCCESS)
@@ -157,12 +158,19 @@ export default function (options) {
       logout ({commit}) {
         return new Promise(resolve => {
           Vue.ls.clear()
+
+          axios.defaults.headers.common['Authorization'] = ''
+
           commit(LOGOUT)
           resolve()
         })
       },
       updateUser ({commit}, user) {
         return new Promise(resolve => {
+          if (!user.profile) {
+            user.profile = Vue.ls.get('user').profile
+          }
+
           Vue.ls.set('user', user)
           commit(UPDATE_USER, user)
           resolve()
@@ -170,7 +178,11 @@ export default function (options) {
       },
       updateProfile ({commit}, profile) {
         return new Promise(resolve => {
-          Vue.ls.set('profile', profile)
+          let user = Vue.ls.get('user')
+
+          user.profile = profile
+
+          Vue.ls.set('user', user)
           commit(UPDATE_PROFILE, profile)
           resolve()
         })

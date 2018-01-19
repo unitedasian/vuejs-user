@@ -1,6 +1,6 @@
 import ProfileModel from './models/Profile'
 
-class ProfileFromStore extends ProfileModel{
+class ProfileFromStore extends ProfileModel {
   constructor (authenticator) {
     super()
 
