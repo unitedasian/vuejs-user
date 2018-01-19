@@ -6,17 +6,19 @@ class User {
   }
 
   init (state) {
-    this.state = Object.assign(
-      {
-        email: null,
-        id: null,
-        password: null,
-        username: null
-      },
-      state
-    )
+    if (state !== undefined) {
+      this.state = Object.assign(
+        {
+          email: null,
+          id: null,
+          password: null,
+          username: null
+        },
+        state
+      )
 
-    this.profile = state.profile ? new Profile(state.profile) : new Profile()
+      this.profile = state.profile ? new Profile(state.profile) : new Profile()
+    }
   }
 
   get email () {

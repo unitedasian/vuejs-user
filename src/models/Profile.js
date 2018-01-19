@@ -4,14 +4,16 @@ class Profile {
   }
 
   init (state) {
-    this.state = Object.assign(
-      {
-        gender: null,
-        given_name: null,
-        surname: null
-      },
-      state
-    )
+    if (state !== undefined) {
+      this.state = Object.assign(
+        {
+          gender: null,
+          given_name: null,
+          surname: null
+        },
+        state
+      )
+    }
   }
 
   get gender () {

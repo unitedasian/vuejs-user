@@ -1,5 +1,5 @@
 class Authenticator {
-  constructor (store, userEndpoints) {
+  constructor (store, userEndpoints, namespace) {
     this.store = store
 
     this.userEndpoints = {
@@ -9,31 +9,33 @@ class Authenticator {
     }
 
     Object.assign(this.userEndpoints, userEndpoints)
+
+    this.namespace = namespace ? namespace : 'user' // namespace of store module
   }
 
   getProfileFromStore () {
-    return this.store.getters['user/profile']
+    return this.store.getters[this.namespace + '/profile']
   }
 
   getUserFromStore () {
-    return this.store.getters['user/user']
+    return this.store.getters[this.namespace + '/user']
   }
 
   isLoggedIn () {
-    return this.store.getters['user/isLoggedIn']
+    return this.store.getters[this.namespace + '/isLoggedIn']
   }
 
   isRefreshExpired () {
-    return this.store.getters['user/isRefreshExpired']
+    return this.store.getters[this.namespace + '/isRefreshExpired']
   }
 
   isTokenExpired () {
-    return (this.store.getters['user/tokenExpiresAt'] <= new Date().getTime())
+    return (this.store.getters[this.namespace + '/tokenExpiresAt'] <= new Date().getTime())
   }
 
   login (credentials) {
     return this.store.dispatch(
-      'user/login',
+      this.namespace + '/login',
       { credentials, loginUrl: this.userEndpoints.login, currentUserUrl: this.userEndpoints.currentUser }
     )
   }
@@ -45,31 +47,31 @@ class Authenticator {
    */
   loginWithToken (token) {
     return this.store.dispatch(
-      'user/loginWithToken',
+      this.namespace + '/loginWithToken',
       { token, currentUserUrl: this.userEndpoints.currentUser }
     )
   }
 
   logout () {
     return this.store
-      .dispatch('user/logout')
+      .dispatch(this.namespace + '/logout')
   }
 
   refreshToken () {
     return this.store.dispatch(
-      'user/refreshToken',
+      this.namespace + '/refreshToken',
       { refreshUrl: this.userEndpoints.refresh }
     )
   }
 
   updateProfile (profile) {
     return this.store
-      .dispatch('user/updateProfile', profile)
+      .dispatch(this.namespace + '/updateProfile', profile)
   }
 
   updateUser (user) {
     return this.store
-      .dispatch('user/updateUser', user)
+      .dispatch(this.namespace + '/updateUser', user)
   }
 }
 

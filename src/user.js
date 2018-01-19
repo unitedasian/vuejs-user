@@ -1,10 +1,37 @@
-import BaseUser from './models/User'
+import UserModel from './models/User'
+import ProfileFromStore from './profileFromStore'
 
-class User extends BaseUser {
-  constructor (state, authenticator) {
-    super(state)
+class User extends UserModel {
+  constructor (authenticator) {
+    super()
 
     this.authenticator = authenticator ? authenticator : null
+
+    this.profileFromStore = new ProfileFromStore(this.authenticator)
+  }
+
+  get email () {
+    return this.authenticator.getUserFromStore().email
+  }
+
+  get id () {
+    return this.authenticator.getUserFromStore().id
+  }
+
+  get password () {
+    return this.authenticator.getUserFromStore().password
+  }
+
+  get profile () {
+    return this.profileFromStore
+  }
+
+  get username () {
+    return this.authenticator.getUserFromStore().username
+  }
+
+  get state () {
+    return this.authenticator.getUserFromStore()
   }
 
   isLoggedIn () {

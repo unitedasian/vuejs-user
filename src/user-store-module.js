@@ -21,7 +21,6 @@ Vue.use(Vuex)
 
 export default function (options) {
   let axios = options.axios
-  let vueGlobalUser = options.user
 
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
   axios.defaults.withCredentials = true
@@ -48,7 +47,6 @@ export default function (options) {
         state.pending = false
         state.user = Vue.ls.get('user')
         state.user.profile = Vue.ls.get('profile')
-        vueGlobalUser.state = state.user
         state.isLoggedIn = true
       },
       [LOGOUT] (state) {
@@ -56,16 +54,13 @@ export default function (options) {
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.user = null
         state.data = null
-        vueGlobalUser.state = state.user
         state.isLoggedIn = false
       },
       [UPDATE_USER] (state, user) {
         state.user = Object.assign({}, state.user, user)
-        vueGlobalUser.state = state.user
       },
       [UPDATE_PROFILE] (state, profile) {
         state.user.profile = profile
-        vueGlobalUser.state.profile = state.user.profile
       },
       [UPDATE_SOCIAL_AUTH_PENDING] (state, payload) {
         state.isSocialAuthPending = payload.isSocialAuthPending

@@ -1,8 +1,9 @@
 import * as components from './src/components'
 import Authenticator from './src/authenticator'
-import uamProfileModel from './src/models/Profile'
-import uamUser from './src/user'
-import uamUserModel from './src/models/User'
+import UAMProfileFromStore from './src/profileFromStore'
+import UAMProfileModel from './src/models/Profile'
+import UAMUser from './src/user'
+import UAMUserModel from './src/models/User'
 import userStoreModuleFunction from './src/user-store-module'
 
 import VueAuthenticate from 'vue-authenticate'
@@ -31,23 +32,29 @@ const VuePlugin = {
 
     let axios = Vue.axios
 
-    let user = options.user || new uamUser({})
+    let userModule = userStoreModuleFunction({ axios })
+
+    // Registered store module is namespaced based on the path(module name) the module is registered at
+    const moduleName = 'user'
+    const moduleNamespace = moduleName
+
+    // register `user` module to store dynamically
+    store.registerModule(moduleName, userModule)
+
+    let authenticator = new Authenticator(store, options.userEndpoints, moduleNamespace)
+
+    let user
+
+    if (options.user !== undefined) {
+      user = options.user
+
+      user.authenticator = authenticator
+    } else {
+      user = new UAMUser(authenticator)
+    }
 
     Vue.user = user
     Vue.prototype.$user = user
-
-    let userModule = userStoreModuleFunction({ axios, user })
-
-    // register `user` module to store dynamically
-    store.registerModule('user', userModule)
-
-    let authenticator = new Authenticator(store, options.userEndpoints)
-
-    // let user = options.user || new uamUser(store.getters['user/user'], authenticator)
-
-    Vue.user.init(store.getters['user/user'])
-
-    Vue.user.authenticator = authenticator
 
     // Register global components
     for (let component in components) {
@@ -101,20 +108,20 @@ const VuePlugin = {
     let axiosInterceptors = {
       bindRequestInterceptor: function () {
         socialAuthAxiosInstance.interceptors.request.use((config) => {
-          store.dispatch('user/updateSocialAuthPending', true)
+          store.dispatch(moduleNamespace + '/updateSocialAuthPending', true)
           return config
         }, (error) => {
-          store.dispatch('user/updateSocialAuthPending', false)
+          store.dispatch(moduleNamespace + '/updateSocialAuthPending', false)
           return Promise.reject(error)
         })
       },
 
       bindResponseInterceptor: function () {
         socialAuthAxiosInstance.interceptors.response.use((response) => {
-          store.dispatch('user/updateSocialAuthPending', false)
+          store.dispatch(moduleNamespace + '/updateSocialAuthPending', false)
           return response
         }, (error) => {
-          store.dispatch('user/updateSocialAuthPending', false)
+          store.dispatch(moduleNamespace + '/updateSocialAuthPending', false)
           return Promise.reject(error)
         })
       }
@@ -128,19 +135,19 @@ const VuePlugin = {
 
     // Axios request interceptor
     axios.interceptors.request.use((config) => {
-      store.dispatch('user/updateRequestPending', true)
+      store.dispatch(moduleNamespace + '/updateRequestPending', true)
       return config
     }, (error) => {
-      store.dispatch('user/updateRequestPending', false)
+      store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return Promise.reject(error)
     })
 
     // Axios response interceptor
     axios.interceptors.response.use((response) => {
-      store.dispatch('user/updateRequestPending', false)
+      store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return response
     }, (error) => {
-      store.dispatch('user/updateRequestPending', false)
+      store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return Promise.reject(error)
     })
   }
@@ -153,7 +160,8 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default VuePlugin
 
 export {
-  uamProfileModel,
-  uamUser,
-  uamUserModel
+  UAMProfileFromStore,
+  UAMProfileModel,
+  UAMUser,
+  UAMUserModel
 }
