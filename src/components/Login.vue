@@ -68,7 +68,7 @@ export default {
 
       this.$auth.authenticate(provider)
         .then((authResponse) => {
-          this.$uam_auth.loginWithToken(authResponse.data)
+          this.$uamAuth.loginWithToken(authResponse.data)
             .then(() => {
               this.$router.push({ name: 'home_page' })
             })
@@ -87,7 +87,7 @@ export default {
         if (result) {
           this.clearNotifications()
 
-          this.$uam_auth.login(this.credentials)
+          this.$uamAuth.login(this.credentials)
             .then(() => {
               this.$emit('login-success')
 

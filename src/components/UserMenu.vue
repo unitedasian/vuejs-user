@@ -30,7 +30,7 @@ export default {
 
   methods: {
     logout () {
-      this.$uam_auth.logout()
+      this.$uamAuth.logout()
         .then(() => {
           this.$router.push({ name: 'login' })
         })

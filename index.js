@@ -59,8 +59,8 @@ const VuePlugin = {
       user = new UAMUser(authenticator)
     }*/
 
-    Vue.uam_auth = authenticator
-    Vue.prototype.$uam_auth = authenticator
+    Vue.uamAuth = authenticator
+    Vue.prototype.$uamAuth = authenticator
 
     // Register global components
     for (let component in components) {
@@ -72,14 +72,14 @@ const VuePlugin = {
         if (to.matched.some(record => record.meta.requiresAuth)) {
           // this route requires authenticated user, check if logged in
           // if not, redirect to login page.
-          if (!Vue.uam_auth.isLoggedIn()) {
+          if (!Vue.uamAuth.isLoggedIn()) {
             next({
               path: options.redirectRoute,
               query: { redirect: to.fullPath }
             })
           } else {
-            if (Vue.uam_auth.isTokenExpired()) { // check if access token expired on client side (offline auth)
-              Vue.uam_auth.refreshToken()
+            if (Vue.uamAuth.isTokenExpired()) { // check if access token expired on client side (offline auth)
+              Vue.uamAuth.refreshToken()
                 .then(() => {
                   next()
                 })
