@@ -13,14 +13,12 @@ class User {
       username: null
     }
 
-    if (state !== undefined) {
-      this.state = Object.assign(
-        defaultState,
-        state
-      )
+    this.state = Object.assign(
+      defaultState,
+      state
+    )
 
-      this.profile = state.profile ? new Profile(state.profile) : new Profile()
-    }
+    this.profile = state && state.profile ? new Profile(state.profile) : new Profile()
   }
 
   get email () {

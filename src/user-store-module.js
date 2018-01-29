@@ -155,7 +155,7 @@ export default function (options) {
         return new Promise(resolve => {
           Vue.ls.clear()
 
-          axios.defaults.headers.common['Authorization'] = ''
+          delete axios.defaults.headers.common['Authorization']
 
           commit(LOGOUT)
           resolve()

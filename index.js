@@ -30,8 +30,8 @@ const VuePlugin = {
 
     let axios = Vue.axios
 
-    let profileModel = options.profileModel || new UAMProfile();
-    let userModel = options.userModel || new UAMUser();
+    let profileModel = options.profileModel || new UAMProfile()
+    let userModel = options.userModel || new UAMUser()
 
     let userModule = userStoreModuleFunction({ axios, userModel, profileModel })
 

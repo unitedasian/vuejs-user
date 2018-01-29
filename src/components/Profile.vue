@@ -127,7 +127,7 @@ export default {
       }
     }
 
-    this.$validator.localize('en', dictionary);
+    this.$validator.localize('en', dictionary)
   },
 
   data () {

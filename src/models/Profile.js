@@ -11,12 +11,10 @@ class Profile {
       address: 'suraj'
     }
 
-    if (state !== undefined) {
-      this.state = Object.assign(
-        defaultState,
-        state
-      )
-    }
+    this.state = Object.assign(
+      defaultState,
+      state
+    )
   }
 
   get gender () {
