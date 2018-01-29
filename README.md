@@ -29,27 +29,39 @@ Install Vuejs user module as follows:
 ```js
 # main.js
 
-import User from 'uam-vuejs-user'
+import Profile from './models/Profile'
+import User from './models/User'
+
+import userPlugin from 'uam-vuejs-user'
 
 let userEndpoints = {
   login: '/login',
+  logout: '/logout',
   refresh: '/login/refresh',
   currentUser: '/user/me?includes[]=profile'
 }
 
-Vue.use(User, { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions, axios })
+let profileModel = new Profile()
+let userModel = new User()
+
+Vue.use(
+  userPlugin,
+  { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions, axios, profileModel, userModel }
+)
 ```
 
 ## Options
 
-| Option                 | Description                                  | Type      | Default Value |
-|:-----------------------|:---------------------------------------------|:----------|:--------------|
-| axios                  | The instance of axios used by app            | Object    |               |
-| redirectRoute          | vue route to redirect to, for authentication | String    | `'/login'`    |
-| router                 | The registered router instance               | Object    |               |
-| store                  | The Vuex store to use                        | Object    |               |
-| userEndpoints          | User auth related backend urls               | Object    |               |
-| vueAuthenticateOptions | Social login provider options                | Object    |               |
+| Option                 | Description                                  | Type      | Default Value       |
+|:-----------------------|:---------------------------------------------|:----------|:--------------------|
+| axios                  | The instance of axios used by app            | Object    |                     |
+| profileModel           | The stub instance of profile model           | Object    | `UAMProfile` object |
+| redirectRoute          | vue route to redirect to, for authentication | String    | `'/login'`          |
+| router                 | The registered router instance               | Object    |                     |
+| store                  | The Vuex store to use                        | Object    |                     |
+| userEndpoints          | User auth related backend urls               | Object    |                     |
+| userModel              | The stub instance of user model              | Object    | `UAMUser` object    |
+| vueAuthenticateOptions | Social login provider options                | Object    |                     |
 
 ## Social login
 
