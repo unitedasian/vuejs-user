@@ -6,14 +6,16 @@ class User {
   }
 
   init (state) {
+    let defaultState = {
+      email: null,
+      id: null,
+      password: null,
+      username: null
+    }
+
     if (state !== undefined) {
       this.state = Object.assign(
-        {
-          email: null,
-          id: null,
-          password: null,
-          username: null
-        },
+        defaultState,
         state
       )
 

@@ -6,6 +6,9 @@ import UAMUser from './src/user'
 import UAMUserModel from './src/models/User'
 import userStoreModuleFunction from './src/user-store-module'
 
+import Profile from './src/models/Profile'
+import User from './src/models/User'
+
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
 
@@ -32,7 +35,10 @@ const VuePlugin = {
 
     let axios = Vue.axios
 
-    let userModule = userStoreModuleFunction({ axios })
+    let userModel = options.userModel || new User();
+    let profileModel = options.profileModel || new Profile();
+
+    let userModule = userStoreModuleFunction({ axios, userModel, profileModel })
 
     // Registered store module is namespaced based on the path(module name) the module is registered at
     const moduleName = 'user'

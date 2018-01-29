@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import LocalStorage from 'vue-ls'
 
-import Profile from './models/Profile'
-import User from './models/User'
+// import Profile from './models/Profile'
+// import User from './models/User'
 
 const LOGIN = 'LOGIN'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -24,6 +24,8 @@ Vue.use(Vuex)
 
 export default function (options) {
   let axios = options.axios
+  let userModel = options.userModel
+  let profileModel = options.profileModel
 
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
   axios.defaults.withCredentials = true
@@ -217,10 +219,14 @@ export default function (options) {
         return state.locale
       },
       user: state => {
-        return new User(state.user)
+        userModel.init(state.user)
+
+        return userModel
       },
       profile: state => {
-        return state.user && new Profile(state.user.profile)
+        profileModel.init(state.user && state.user.profile)
+
+        return profileModel
       },
       isSocialAuthPending: state => {
         return state.isSocialAuthPending

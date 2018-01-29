@@ -4,13 +4,16 @@ class Profile {
   }
 
   init (state) {
+    let defaultState = {
+      gender: null,
+      given_name: null,
+      surname: null,
+      address: 'suraj'
+    }
+
     if (state !== undefined) {
       this.state = Object.assign(
-        {
-          gender: null,
-          given_name: null,
-          surname: null
-        },
+        defaultState,
         state
       )
     }
