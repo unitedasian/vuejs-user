@@ -137,12 +137,12 @@ export default {
         { text: this.$i18n.t('gender.options.female'), value: 1 },
         { text: this.$i18n.t('gender.options.male'), value: 2 }
       ],
-      profile: new Profile(this.$user.profile.state),
+      profile: new Profile(this.$uam_auth.profile.state),
       scope: {
         credentials: 'user',
         profile: 'profile'
       },
-      user: new User(this.$user.state)
+      user: new User(this.$uam_auth.user.state)
     }
   },
 
@@ -170,9 +170,9 @@ export default {
     updateProfile () {
       this.clearNotifications()
 
-      this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile.state })
+      this.$axios.put(this.updateUrl + this.$uam_auth.user.id, { profile: this.profile.state })
         .then((response) => {
-          this.$user.updateProfile(response.data.profile)
+          this.$uam_auth.updateProfile(response.data.profile)
             .then(() => {
               this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
             })
@@ -180,11 +180,11 @@ export default {
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$user.refreshToken()
+              this.$uam_auth.refreshToken()
                 .then(() => {
-                  this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile.state })
+                  this.$axios.put(this.updateUrl + this.$uam_auth.user.id, { profile: this.profile.state })
                     .then((response) => {
-                      this.$user.updateProfile(response.data.profile)
+                      this.$uam_auth.updateProfile(response.data.profile)
                         .then(() => {
                           this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                         })
@@ -209,9 +209,9 @@ export default {
     updateUser () {
       this.clearNotifications()
 
-      this.$axios.put(this.updateUrl + this.$user.id, { user: this.user.state })
+      this.$axios.put(this.updateUrl + this.$uam_auth.user.id, { user: this.user.state })
         .then((response) => {
-          this.$user.updateUser(response.data)
+          this.$uam_auth.updateUser(response.data)
             .then(() => {
               this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
             })
@@ -219,11 +219,11 @@ export default {
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$user.refreshToken()
+              this.$uam_auth.refreshToken()
                 .then(() => {
-                  this.$axios.put(this.updateUrl + this.$user.id, { user: this.user.state })
+                  this.$axios.put(this.updateUrl + this.$uam_auth.user.id, { user: this.user.state })
                     .then((response) => {
-                      this.$user.updateUser(response.data)
+                      this.$uam_auth.updateUser(response.data)
                         .then(() => {
                           this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
                         })
