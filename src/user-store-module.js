@@ -151,14 +151,24 @@ export default function (options) {
             })
         })
       },
-      logout ({commit}) {
+      logout ({commit}, payload) {
         return new Promise(resolve => {
-          Vue.ls.clear()
+          axios.post(payload.logoutUrl)
+            .then((response) => {
+              Vue.ls.clear()
 
-          delete axios.defaults.headers.common['Authorization']
+              delete axios.defaults.headers.common['Authorization']
 
-          commit(LOGOUT)
-          resolve()
+              commit(LOGOUT)
+              resolve()
+            },(error) => {
+              Vue.ls.clear()
+
+              delete axios.defaults.headers.common['Authorization']
+
+              commit(LOGOUT)
+              reject(error)
+            })
         })
       },
       updateUser ({commit}, user) {

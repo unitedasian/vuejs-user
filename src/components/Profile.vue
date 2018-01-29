@@ -179,25 +179,23 @@ export default {
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
-            if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$uamAuth.refreshToken()
-                .then(() => {
-                  this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { profile: this.profile.state })
-                    .then((response) => {
-                      this.$uamAuth.updateProfile(response.data.profile)
-                        .then(() => {
-                          this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-                        })
-                    })
-                })
-                .catch((error) => {
-                  if (error.response.status === 401) {
-                    this.$emit('unauthorized-error')
-                  } else {
-                    this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
-                  }
-                })
-            }
+            this.$uamAuth.refreshToken()
+              .then(() => {
+                this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { profile: this.profile.state })
+                  .then((response) => {
+                    this.$uamAuth.updateProfile(response.data.profile)
+                      .then(() => {
+                        this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+                      })
+                  })
+              })
+              .catch((error) => {
+                if (error.response.status === 401) {
+                  this.$emit('unauthorized-error')
+                } else {
+                  this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
+                }
+              })
           } else if (error.response && error.response.status === 422) {
             this.addNotification(this.$i18n.t('notifyLabel.validationError'))
           } else {
@@ -218,25 +216,23 @@ export default {
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
-            if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$uamAuth.refreshToken()
-                .then(() => {
-                  this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { user: this.user.state })
-                    .then((response) => {
-                      this.$uamAuth.updateUser(response.data)
-                        .then(() => {
-                          this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-                        })
-                    })
-                })
-                .catch((error) => {
-                  if (error.response.status === 401) {
-                    this.$emit('unauthorized-error')
-                  } else {
-                    this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
-                  }
-                })
-            }
+            this.$uamAuth.refreshToken()
+              .then(() => {
+                this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { user: this.user.state })
+                  .then((response) => {
+                    this.$uamAuth.updateUser(response.data)
+                      .then(() => {
+                        this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+                      })
+                  })
+              })
+              .catch((error) => {
+                if (error.response.status === 401) {
+                  this.$emit('unauthorized-error')
+                } else {
+                  this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
+                }
+              })
           } else if (error.response && error.response.status === 422) {
             this.addNotification(this.$i18n.t('notifyLabel.uniqueEmail'))
           } else {

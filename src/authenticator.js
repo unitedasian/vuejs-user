@@ -4,6 +4,7 @@ class Authenticator {
 
     this.userEndpoints = {
       login: '/login',
+      logout: '/logout',
       refresh: '/login/refresh',
       currentUser: '/user/me?includes[]=profile'
     }
@@ -49,8 +50,10 @@ class Authenticator {
   }
 
   logout () {
-    return this.store
-      .dispatch(this.namespace + '/logout')
+    return this.store.dispatch(
+      this.namespace + '/logout',
+      { logoutUrl: this.userEndpoints.logout }
+    )
   }
 
   refreshToken () {
