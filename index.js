@@ -1,13 +1,8 @@
 import * as components from './src/components'
 import Authenticator from './src/authenticator'
-import UAMProfileFromStore from './src/profileFromStore'
-import UAMProfileModel from './src/models/Profile'
-import UAMUser from './src/user'
-import UAMUserModel from './src/models/User'
+import UAMProfile from './src/models/Profile'
+import UAMUser from './src/models/User'
 import userStoreModuleFunction from './src/user-store-module'
-
-import Profile from './src/models/Profile'
-import User from './src/models/User'
 
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
@@ -35,8 +30,8 @@ const VuePlugin = {
 
     let axios = Vue.axios
 
-    let userModel = options.userModel || new User();
-    let profileModel = options.profileModel || new Profile();
+    let profileModel = options.profileModel || new UAMProfile();
+    let userModel = options.userModel || new UAMUser();
 
     let userModule = userStoreModuleFunction({ axios, userModel, profileModel })
 
@@ -48,16 +43,6 @@ const VuePlugin = {
     store.registerModule(moduleName, userModule)
 
     let authenticator = new Authenticator(store, options.userEndpoints, moduleNamespace)
-
-    /*let user
-
-    if (options.user !== undefined) {
-      user = options.user
-
-      user.authenticator = authenticator
-    } else {
-      user = new UAMUser(authenticator)
-    }*/
 
     Vue.uamAuth = authenticator
     Vue.prototype.$uamAuth = authenticator
@@ -166,8 +151,6 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default VuePlugin
 
 export {
-  UAMProfileFromStore,
-  UAMProfileModel,
-  UAMUser,
-  UAMUserModel
+  UAMProfile,
+  UAMUser
 }

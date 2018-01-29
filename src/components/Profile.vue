@@ -137,7 +137,7 @@ export default {
         { text: this.$i18n.t('gender.options.female'), value: 1 },
         { text: this.$i18n.t('gender.options.male'), value: 2 }
       ],
-      profile: new Profile(this.$uamAuth.profile.state),
+      profile: new Profile(this.$uamAuth.user.profile.state),
       scope: {
         credentials: 'user',
         profile: 'profile'

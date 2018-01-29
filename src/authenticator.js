@@ -13,19 +13,7 @@ class Authenticator {
     this.namespace = namespace ? namespace : 'user' // namespace of store module
   }
 
-  get profile () {
-    return this.store.getters[this.namespace + '/profile']
-  }
-
   get user () {
-    return this.store.getters[this.namespace + '/user']
-  }
-
-  getProfileFromStore () {
-    return this.store.getters[this.namespace + '/profile']
-  }
-
-  getUserFromStore () {
     return this.store.getters[this.namespace + '/user']
   }
 

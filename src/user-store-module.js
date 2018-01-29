@@ -2,9 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import LocalStorage from 'vue-ls'
 
-// import Profile from './models/Profile'
-// import User from './models/User'
-
 const LOGIN = 'LOGIN'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGOUT = 'LOGOUT'
@@ -24,8 +21,8 @@ Vue.use(Vuex)
 
 export default function (options) {
   let axios = options.axios
-  let userModel = options.userModel
   let profileModel = options.profileModel
+  let userModel = options.userModel
 
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
   axios.defaults.withCredentials = true
@@ -36,7 +33,6 @@ export default function (options) {
       isLoggedIn: !!Vue.ls.get('access_token'),
       tokenExpiresAt: Vue.ls.get('access_token_expire'),
       isRefreshExpired: Vue.ls.get('is_refresh_expired'),
-      // user: Object.assign({}, Vue.ls.get('user'), { profile: Vue.ls.get('profile') }),
       user : Vue.ls.get('user'),
       pending: false,
       locale: 'en',
@@ -52,7 +48,6 @@ export default function (options) {
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
         state.pending = false
         state.user = Vue.ls.get('user')
-        // state.user.profile = Vue.ls.get('profile')
         state.isLoggedIn = true
       },
       [LOGOUT] (state) {
@@ -96,8 +91,6 @@ export default function (options) {
                 .then(([
                          { data: userResponse }
                        ]) => {
-                  // Vue.ls.set('profile', userResponse.user.profile)
-                  // delete userResponse.user.profile
                   Vue.ls.set('user', userResponse.user)
 
                   commit(LOGIN_SUCCESS)
@@ -123,8 +116,6 @@ export default function (options) {
 
           axios.get(payload.currentUserUrl)
             .then((response) => {
-              // Vue.ls.set('profile', response.data.user.profile)
-              // delete response.data.user.profile
               Vue.ls.set('user', response.data.user)
 
               commit(LOGIN_SUCCESS)
