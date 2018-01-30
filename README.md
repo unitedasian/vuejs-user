@@ -5,7 +5,7 @@
 ### via npm
 
 ```bash
-npm install --save-dev uam-vuejs-user
+npm install uam-vuejs-user
 ```
 
 ### via yarn
