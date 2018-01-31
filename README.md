@@ -120,7 +120,7 @@ You can listen to `login-success` event and handle closing modal dialog, re-requ
 
 ### `<uam-login>`
 
-**Note:** App using `uam-login` component should have vue route named `home_page`. After successful login, page redirects to `home_page` route.
+**Note:** App using `uam-login` component should have vue route named `home`. After successful login, page redirects to `home` route.
 
 #### Properties
 
