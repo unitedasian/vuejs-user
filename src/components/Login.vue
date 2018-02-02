@@ -89,7 +89,7 @@ export default {
 
               if (!this.noRedirect) {
                 if (this.redirectTo !== undefined) {
-                  this.$router.push(this.redirectTo)
+                  this.$router.push({ name: this.redirectTo })
                 } else {
                   this.$router.push({ name: 'home' })
                 }

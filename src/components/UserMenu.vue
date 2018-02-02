@@ -4,7 +4,7 @@
       {{ buttonContent }}
     </template>
 
-    <b-dropdown-item v-if="!noProfile" :to="profileRoute">
+    <b-dropdown-item v-if="!noProfile" :to="{ name: profileRoute }">
       <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
       {{ $t('label.profile') }}
     </b-dropdown-item>
@@ -55,7 +55,7 @@ export default {
     },
     profileRoute: {
       type: String,
-      default: '/profile'
+      default: 'profile'
     }
   }
 }

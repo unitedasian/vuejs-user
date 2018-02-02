@@ -7,8 +7,7 @@ class Profile {
     let defaultState = {
       gender: null,
       given_name: null,
-      surname: null,
-      address: 'suraj'
+      surname: null
     }
 
     this.state = Object.assign(

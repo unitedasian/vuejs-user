@@ -26,3 +26,9 @@
   class User extends UAMUser {
   }
   ```
+
+- Redirect route option when using plugin takes name of the route instead of path.
+
+  ```javascript
+  Vue.use(User, { store, router, redirectRoute: 'login' })
+  ```

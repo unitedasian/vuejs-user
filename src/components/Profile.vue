@@ -9,11 +9,11 @@
       <b-tab :title="this.$i18n.t('tabLabel.credentials')" active>
         <form @submit.prevent="onSubmit('user')" :data-vv-scope="scope.credentials">
           <div class="form-group">
-            <label for="username">{{ $t('username.label') }}</label>
+            <label for="uam_username">{{ $t('username.label') }}</label>
             <input
               :placeholder="this.$i18n.t('username.placeholder')"
               v-model="user.username" v-validate="'required|min:2|max:255'" required
-              type="text"  class="form-control" id="username" name="username"
+              type="text"  class="form-control" id="uam_username" name="username"
             />
 
             <span v-show="errors.has('user.username')" class="invalid-feedback">{{ errors.first('user.username') }}</span>
@@ -31,11 +31,11 @@
           </div>
 
           <div class="form-group">
-            <label for="password">{{ $t('password.label') }}</label>
+            <label for="uam_password">{{ $t('password.label') }}</label>
             <input
               :placeholder="this.$i18n.t('password.placeholder')"
               v-model="user.password" v-validate="'min:6|max:255|confirmed:confirm_password'"
-              type="password"  class="form-control" id="password" name="password"
+              type="password"  class="form-control" id="uam_password" name="password"
             />
 
             <span v-show="errors.has('user.password')" class="invalid-feedback">{{ errors.first('user.password') }}</span>

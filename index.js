@@ -21,7 +21,7 @@ const VuePlugin = {
 
     Vue._uam_user_vue_installed = true
 
-    options.redirectRoute = options.redirectRoute || '/login'
+    options.redirectRoute = options.redirectRoute || 'login'
 
     let store = options.store
 
@@ -59,8 +59,8 @@ const VuePlugin = {
           // if not, redirect to login page.
           if (!Vue.uamAuth.isLoggedIn()) {
             next({
-              path: options.redirectRoute,
-              query: { redirect: to.fullPath }
+              name: options.redirectRoute,
+              query: { redirect: to.name }
             })
           } else {
             if (Vue.uamAuth.isTokenExpired()) { // check if access token expired on client side (offline auth)
@@ -72,8 +72,8 @@ const VuePlugin = {
                   if (to.matched.some(record => record.meta.redirectOnExpire)) {
                   // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
                     next({
-                      path: options.redirectRoute,
-                      query: { redirect: to.fullPath }
+                      name: options.redirectRoute,
+                      query: { redirect: to.name }
                     })
                   } else {
                     next()

@@ -52,16 +52,16 @@ Vue.use(
 
 ## Options
 
-| Option                 | Description                                  | Type      | Default Value       |
-|:-----------------------|:---------------------------------------------|:----------|:--------------------|
-| axios                  | The instance of axios used by app            | Object    |                     |
-| profileModel           | The stub instance of profile model           | Object    | `UAMProfile` object |
-| redirectRoute          | vue route to redirect to, for authentication | String    | `'/login'`          |
-| router                 | The registered router instance               | Object    |                     |
-| store                  | The Vuex store to use                        | Object    |                     |
-| userEndpoints          | User auth related backend urls               | Object    |                     |
-| userModel              | The stub instance of user model              | Object    | `UAMUser` object    |
-| vueAuthenticateOptions | Social login provider options                | Object    |                     |
+| Option                 | Description                                   | Type     | Default Value       |
+|:-----------------------|:----------------------------------------------|:---------|:--------------------|
+| axios                  | The instance of axios used by app             | Object   |                     |
+| profileModel           | The stub instance of profile model            | Object   | `UAMProfile` object |
+| redirectRoute          | Route name to redirect to, for authentication | String   | `'login'`           |
+| router                 | The registered router instance                | Object   |                     |
+| store                  | The Vuex store to use                         | Object   |                     |
+| userEndpoints          | User auth related backend urls                | Object   |                     |
+| userModel              | The stub instance of user model               | Object   | `UAMUser` object    |
+| vueAuthenticateOptions | Social login provider options                 | Object   |                     |
 
 ## Social login
 
@@ -93,7 +93,7 @@ let vueAuthenticateOptions = {
   }
 }
 
-Vue.use(User, { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions, axios })
+Vue.use(User, { store, router, redirectRoute: 'login', userEndpoints, vueAuthenticateOptions, axios })
 
 ```
 
@@ -164,5 +164,5 @@ You can listen to `login-success` event and handle closing modal dialog, re-requ
 | button-content | Content to show on menu button | String  |               |
 | no-divider     | Do not show divider            | Boolean | `false`       |
 | no-profile     | Do not show profile menu item  | Boolean | `false`       |
-| profile-route  | vue route for profile          | String  | `'/profile'`  |
+| profile-route  | Vue route name for profile     | String  | `'profile'`  |
 | right          | Right align dowpdown menu      | Boolean | `false`       |
