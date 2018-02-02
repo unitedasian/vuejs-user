@@ -1,8 +1,9 @@
 import * as components from './src/components'
-import User from './src/user'
-import userModuleFunction from './src/user-store-module'
+import Authenticator from './src/authenticator'
+import UAMProfile from './src/models/Profile'
+import UAMUser from './src/models/User'
+import userStoreModuleFunction from './src/user-store-module'
 
-import { Validator } from 'vee-validate';
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
 
@@ -20,7 +21,7 @@ const VuePlugin = {
 
     Vue._uam_user_vue_installed = true
 
-    options.redirectRoute = options.redirectRoute || '/login'
+    options.redirectRoute = options.redirectRoute || 'login'
 
     let store = options.store
 
@@ -29,15 +30,22 @@ const VuePlugin = {
 
     let axios = Vue.axios
 
-    let userModule = userModuleFunction({ axios })
+    let profileModel = options.profileModel || new UAMProfile()
+    let userModel = options.userModel || new UAMUser()
+
+    let userModule = userStoreModuleFunction({ axios, userModel, profileModel })
+
+    // Registered store module is namespaced based on the path(module name) the module is registered at
+    const moduleName = 'user'
+    const moduleNamespace = moduleName
 
     // register `user` module to store dynamically
-    store.registerModule('user', userModule)
+    store.registerModule(moduleName, userModule)
 
-    let user = new User(store, options.userEndpoints)
+    let authenticator = new Authenticator(store, options.userEndpoints, moduleNamespace)
 
-    Vue.user = user
-    Vue.prototype.$user = user
+    Vue.uamAuth = authenticator
+    Vue.prototype.$uamAuth = authenticator
 
     // Register global components
     for (let component in components) {
@@ -49,14 +57,14 @@ const VuePlugin = {
         if (to.matched.some(record => record.meta.requiresAuth)) {
           // this route requires authenticated user, check if logged in
           // if not, redirect to login page.
-          if (!Vue.user.isLoggedIn()) {
+          if (!Vue.uamAuth.isLoggedIn()) {
             next({
-              path: options.redirectRoute,
-              query: { redirect: to.fullPath }
+              name: options.redirectRoute,
+              query: { redirect: to.name }
             })
           } else {
-            if (Vue.user.isTokenExpired()) { // check if access token expired on client side (offline auth)
-              Vue.user.refreshToken()
+            if (Vue.uamAuth.isTokenExpired()) { // check if access token expired on client side (offline auth)
+              Vue.uamAuth.refreshToken()
                 .then(() => {
                   next()
                 })
@@ -64,8 +72,8 @@ const VuePlugin = {
                   if (to.matched.some(record => record.meta.redirectOnExpire)) {
                   // at-least one of child routes or parent route record have meta field `redirectOnExpire` set to true
                     next({
-                      path: options.redirectRoute,
-                      query: { redirect: to.fullPath }
+                      name: options.redirectRoute,
+                      query: { redirect: to.name }
                     })
                   } else {
                     next()
@@ -91,20 +99,20 @@ const VuePlugin = {
     let axiosInterceptors = {
       bindRequestInterceptor: function () {
         socialAuthAxiosInstance.interceptors.request.use((config) => {
-          store.dispatch('user/updateSocialAuthPending', true)
+          store.dispatch(moduleNamespace + '/updateSocialAuthPending', true)
           return config
         }, (error) => {
-          store.dispatch('user/updateSocialAuthPending', false)
+          store.dispatch(moduleNamespace + '/updateSocialAuthPending', false)
           return Promise.reject(error)
         })
       },
 
       bindResponseInterceptor: function () {
         socialAuthAxiosInstance.interceptors.response.use((response) => {
-          store.dispatch('user/updateSocialAuthPending', false)
+          store.dispatch(moduleNamespace + '/updateSocialAuthPending', false)
           return response
         }, (error) => {
-          store.dispatch('user/updateSocialAuthPending', false)
+          store.dispatch(moduleNamespace + '/updateSocialAuthPending', false)
           return Promise.reject(error)
         })
       }
@@ -118,31 +126,21 @@ const VuePlugin = {
 
     // Axios request interceptor
     axios.interceptors.request.use((config) => {
-      store.dispatch('user/updateRequestPending', true)
+      store.dispatch(moduleNamespace + '/updateRequestPending', true)
       return config
     }, (error) => {
-      store.dispatch('user/updateRequestPending', false)
+      store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return Promise.reject(error)
     })
 
     // Axios response interceptor
     axios.interceptors.response.use((response) => {
-      store.dispatch('user/updateRequestPending', false)
+      store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return response
     }, (error) => {
-      store.dispatch('user/updateRequestPending', false)
+      store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return Promise.reject(error)
     })
-
-    const dictionary = {
-      custom: {
-        gender: {
-          in: () => 'Select gender.'
-        }
-      }
-    }
-
-    Validator.localize('en', dictionary)
   }
 }
 
@@ -151,3 +149,8 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 export default VuePlugin
+
+export {
+  UAMProfile,
+  UAMUser
+}
