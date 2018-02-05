@@ -25,11 +25,11 @@
       "male": "Mr"
     }
   },
-  "firstName": {
-    "label": "First name:",
-    "placeholder": "Enter first name"
+  "givenName": {
+    "label": "Given name:",
+    "placeholder": "Enter given name"
   },
-  "surName": {
+  "surname": {
     "label": "Surname:",
     "placeholder": "Enter surname"
   },

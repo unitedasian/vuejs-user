@@ -4,7 +4,7 @@
       {{ buttonContent }}
     </template>
 
-    <b-dropdown-item v-if="!noProfile" :to="profileRoute">
+    <b-dropdown-item v-if="!noProfile" :to="{ name: profileRoute }">
       <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
       {{ $t('label.profile') }}
     </b-dropdown-item>
@@ -22,7 +22,23 @@
 
 <script>
 export default {
+  i18n: {
+    messages: {
+      'en': require('../translations/user-menu.json')
+    }
+  },
+
+  methods: {
+    logout () {
+      this.$uamAuth.logout()
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
+    }
+  },
+
   name: 'uam_user_menu',
+
   props: {
     buttonContent: String,
     right: { // Right align dowpdown menu (default is left align)
@@ -39,20 +55,7 @@ export default {
     },
     profileRoute: {
       type: String,
-      default: '/profile'
-    }
-  },
-  methods: {
-    logout () {
-      this.$user.logout()
-        .then(() => {
-          this.$router.push({ name: 'login' })
-        })
-    }
-  },
-  i18n: {
-    messages: {
-      'en': require('../translations/user-menu.json')
+      default: 'profile'
     }
   }
 }

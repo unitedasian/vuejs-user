@@ -9,31 +9,48 @@
       <b-tab :title="this.$i18n.t('tabLabel.credentials')" active>
         <form @submit.prevent="onSubmit('user')" :data-vv-scope="scope.credentials">
           <div class="form-group">
-            <label for="username">{{ $t('username.label') }}</label>
-            <input type="text"  class="form-control" id="username" :placeholder="this.$i18n.t('username.placeholder')" v-model="user.username" name="username" v-validate="'required|min:2|max:255'" required/>
+            <label for="uam_username">{{ $t('username.label') }}</label>
+            <input
+              :placeholder="this.$i18n.t('username.placeholder')"
+              v-model="user.username" v-validate="'required|min:2|max:255'" required
+              type="text"  class="form-control" id="uam_username" name="username"
+            />
 
             <span v-show="errors.has('user.username')" class="invalid-feedback">{{ errors.first('user.username') }}</span>
           </div>
 
           <div class="form-group">
             <label for="email">{{ $t('email.label') }}</label>
-            <input type="email"  class="form-control" id="email" :placeholder="this.$i18n.t('email.placeholder')" v-model="user.email" name="email" v-validate="'required|email'" required/>
+            <input
+              :placeholder="this.$i18n.t('email.placeholder')" name="email"
+              v-model="user.email" v-validate="'required|email'" required
+              type="email"  class="form-control" id="email"
+            />
 
             <span v-show="errors.has('user.email')" class="invalid-feedback">{{ errors.first('user.email') }}</span>
           </div>
 
           <div class="form-group">
-            <label for="password">{{ $t('password.label') }}</label>
-            <input type="password"  class="form-control" id="password" :placeholder="this.$i18n.t('password.placeholder')" v-model="user.password" name="password" v-validate="'min:6|max:255|confirmed:confirm_password'" />
+            <label for="uam_password">{{ $t('password.label') }}</label>
+            <input
+              :placeholder="this.$i18n.t('password.placeholder')"
+              v-model="user.password" v-validate="'min:6|max:255|confirmed:confirm_password'"
+              type="password"  class="form-control" id="uam_password" name="password"
+            />
 
             <span v-show="errors.has('user.password')" class="invalid-feedback">{{ errors.first('user.password') }}</span>
           </div>
 
           <div class="form-group">
             <label for="confirm-password">{{ $t('confirmPassword.label') }}</label>
-            <input type="password"  class="form-control" id="confirm-password" :placeholder="this.$i18n.t('confirmPassword.placeholder')" v-model="confirmPassword" name="confirm_password" />
+            <input
+              :placeholder="this.$i18n.t('confirmPassword.placeholder')" v-model="confirmPassword"
+              type="password"  class="form-control" id="confirm-password" name="confirm_password"
+            />
 
-            <span v-show="errors.has('user.confirm_password')" class="invalid-feedback">{{ errors.first('user.confirm_password') }}</span>
+            <span v-show="errors.has('user.confirm_password')" class="invalid-feedback">
+              {{ errors.first('user.confirm_password') }}
+            </span>
           </div>
 
           <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
@@ -42,28 +59,43 @@
       <b-tab :title="this.$i18n.t('tabLabel.you')">
         <form @submit.prevent="onSubmit('profile')" :data-vv-scope="scope.profile">
           <div class="form-group">
-            <div><label>{{ $t('gender.label') }}</label></div>
-            <label class="custom-control custom-radio" v-for="option in genderOptions" :key="option.value">
-              <input name="gender" type="radio" class="custom-control-input" :value="option.value" v-model="profile.gender"  v-validate="'required|in:1,2'">
-              <span class="custom-control-indicator"></span>
-              <span class="custom-control-description">{{ option.text }}</span>
-            </label>
+            <div class="form-check form-check-inline" v-for="option in genderOptions" :key="option.value">
+              <input
+                :id="'gender_' + option.value" :value="option.value"
+                v-model="profile.gender" v-validate="'required|in:1,2'"
+                class="form-check-input" type="radio" name="gender"
+              />
+              <label class="form-check-label" :for="'gender_' + option.value">{{ option.text }}</label>
+            </div>
 
-            <span v-show="errors.has('profile.gender')" class="invalid-feedback">{{ errors.first('profile.gender') }}</span>
+            <span v-show="errors.has('profile.gender')" class="invalid-feedback">
+              {{ errors.first('profile.gender') }}
+            </span>
           </div>
 
           <div class="form-group">
-            <label for="firstname">{{ $t('firstName.label') }}</label>
-            <input type="text"  class="form-control" id="firstname" :placeholder="this.$i18n.t('firstName.placeholder')" v-model="firstname" name="firstname" v-validate="'required|min:2|max:255'" required/>
+            <label for="given_name">{{ $t('givenName.label') }}</label>
+            <input
+              v-model="profile.givenName" name="given_name" v-validate="'required|min:2|max:255'"
+              :placeholder="this.$i18n.t('givenName.placeholder')"
+              type="text"  class="form-control" id="given_name" required
+            />
 
-            <span v-show="errors.has('profile.firstname')" class="invalid-feedback">{{ errors.first('profile.firstname') }}</span>
+            <span v-show="errors.has('profile.given_name')" class="invalid-feedback">
+              {{ errors.first('profile.given_name') }}
+            </span>
           </div>
 
           <div class="form-group">
-            <label for="surname">{{ $t('surName.label') }}</label>
-            <input type="text"  class="form-control" id="surname" :placeholder="this.$i18n.t('surName.placeholder')" v-model="profile.surname" name="surname" v-validate="'required|min:2|max:255'" required/>
+            <label for="surname">{{ $t('surname.label') }}</label>
+            <input
+              v-model="profile.surname" name="surname" v-validate="'required|min:2|max:255'" required
+              type="text"  class="form-control" id="surname" :placeholder="this.$i18n.t('surname.placeholder')"
+            />
 
-            <span v-show="errors.has('profile.surname')" class="invalid-feedback">{{ errors.first('profile.surname') }}</span>
+            <span v-show="errors.has('profile.surname')" class="invalid-feedback">
+              {{ errors.first('profile.surname') }}
+            </span>
           </div>
 
           <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
@@ -75,126 +107,52 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import mixinNotification from '../mixins/MixinNotification.vue'
+import Profile from '../models/Profile'
+import User from '../models/User'
 
 export default {
-  name: 'uam_profile',
-  mixins: [mixinNotification],
-  props: ['update-url'],
+  computed: {
+    isRequestPending () {
+      return this.$store.getters['user/isRequestPending']
+    }
+  },
+
+  created () {
+    const dictionary = {
+      custom: {
+        gender: {
+          required: () => 'Select gender.'
+        }
+      }
+    }
+
+    this.$validator.localize('en', dictionary)
+  },
+
   data () {
     return {
-      scope: {
-        credentials: 'user',
-        profile: 'profile'
-      },
-      user: {
-        username: this.$user.username,
-        email: this.$user.email,
-        password: ''
-      },
+      confirmPassword: '',
       genderOptions: [
         { text: this.$i18n.t('gender.options.female'), value: 1 },
         { text: this.$i18n.t('gender.options.male'), value: 2 }
       ],
-      profile: {
-        gender: this.$user.profile_gender,
-        given_name: this.$user.profile_firstname,
-        surname: this.$user.profile_surname
+      profile: new Profile(this.$uamAuth.user.profile.state),
+      scope: {
+        credentials: 'user',
+        profile: 'profile'
       },
-      confirmPassword: ''
+      user: new User(this.$uamAuth.user.state)
     }
   },
-  computed: {
-    isRequestPending () {
-      return this.$store.getters['user/isRequestPending']
-    },
-    firstname: {
-      get () {
-        return this.profile.given_name
-      },
-      set (newValue) {
-        this.profile.given_name = newValue
-      }
+
+  i18n: {
+    messages: {
+      'en': require('../translations/profile.en.json')
     }
   },
+
   methods: {
-    updateUser () {
-      this.clearNotifications()
-
-      this.$axios.put(this.updateUrl + this.$user.id, { user: this.user })
-        .then((response) => {
-          this.$user.updateUser(response.data)
-            .then(() => {
-              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-            })
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 401) {
-            if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$user.refreshToken()
-                .then(() => {
-                  this.$axios.put(this.updateUrl + this.$user.id, { user: this.user })
-                    .then((response) => {
-                      this.$user.updateUser(response.data)
-                        .then(() => {
-                          this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-                        })
-                    })
-                })
-                .catch((error) => {
-                  if (error.response.status === 401) {
-                    this.$emit('unauthorized-error')
-                  } else {
-                    this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
-                  }
-                })
-            }
-          } else if (error.response && error.response.status === 422) {
-            this.addNotification(this.$i18n.t('notifyLabel.uniqueEmail'))
-          } else {
-            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
-          }
-        })
-    },
-    updateProfile () {
-      this.clearNotifications()
-
-      this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
-        .then((response) => {
-          this.$user.updateProfile(response.data.profile)
-            .then(() => {
-              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-            })
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 401) {
-            if (error.response.headers['www-authenticate'] === 'Bearer') {
-              this.$user.refreshToken()
-                .then(() => {
-                  this.$axios.put(this.updateUrl + this.$user.id, { profile: this.profile })
-                    .then((response) => {
-                      this.$user.updateProfile(response.data.profile)
-                        .then(() => {
-                          this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
-                        })
-                    })
-                })
-                .catch((error) => {
-                  if (error.response.status === 401) {
-                    this.$emit('unauthorized-error')
-                  } else {
-                    this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
-                  }
-                })
-            }
-          } else if (error.response && error.response.status === 422) {
-            this.addNotification(this.$i18n.t('notifyLabel.validationError'))
-          } else {
-            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
-          }
-        })
-    },
     onSubmit (scope) {
       this.$validator.validateAll(scope).then(result => {
         if (result) {
@@ -207,13 +165,88 @@ export default {
           }
         }
       })
+    },
+
+    updateProfile () {
+      this.clearNotifications()
+
+      this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { profile: this.profile.state })
+        .then((response) => {
+          this.$uamAuth.updateProfile(response.data.profile)
+            .then(() => {
+              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+            })
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            this.$uamAuth.refreshToken()
+              .then(() => {
+                this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { profile: this.profile.state })
+                  .then((response) => {
+                    this.$uamAuth.updateProfile(response.data.profile)
+                      .then(() => {
+                        this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+                      })
+                  })
+              })
+              .catch((error) => {
+                if (error.response.status === 401) {
+                  this.$emit('unauthorized-error')
+                } else {
+                  this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
+                }
+              })
+          } else if (error.response && error.response.status === 422) {
+            this.addNotification(this.$i18n.t('notifyLabel.validationError'))
+          } else {
+            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+          }
+        })
+    },
+
+    updateUser () {
+      this.clearNotifications()
+
+      this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { user: this.user.state })
+        .then((response) => {
+          this.$uamAuth.updateUser(response.data)
+            .then(() => {
+              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+            })
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            this.$uamAuth.refreshToken()
+              .then(() => {
+                this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { user: this.user.state })
+                  .then((response) => {
+                    this.$uamAuth.updateUser(response.data)
+                      .then(() => {
+                        this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+                      })
+                  })
+              })
+              .catch((error) => {
+                if (error.response.status === 401) {
+                  this.$emit('unauthorized-error')
+                } else {
+                  this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
+                }
+              })
+          } else if (error.response && error.response.status === 422) {
+            this.addNotification(this.$i18n.t('notifyLabel.uniqueEmail'))
+          } else {
+            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+          }
+        })
     }
   },
-  i18n: {
-    messages: {
-      'en': require('../translations/profile.en.json')
-    }
-  }
+
+  mixins: [mixinNotification],
+
+  name: 'uam_profile',
+
+  props: ['update-url']
 }
 </script>
 
