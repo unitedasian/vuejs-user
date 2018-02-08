@@ -10,16 +10,17 @@ const UPDATE_PROFILE = 'UPDATE_PROFILE'
 const UPDATE_SOCIAL_AUTH_PENDING = 'UPDATE_SOCIAL_AUTH_PENDING'
 const UPDATE_REQUEST_PENDING = 'UPDATE_REQUEST_PENDING'
 
-const storageOptions = {
-  namespace: '_user_'
-}
-
 const transmissionLagDuration = 500 // in milliseconds
 
-Vue.use(LocalStorage, storageOptions)
 Vue.use(Vuex)
 
 export default function (options) {
+  const storageOptions = {
+    namespace: options.localStorageNamespace
+  }
+
+  Vue.use(LocalStorage, storageOptions)
+
   let axios = options.axios
   let profileModel = options.profileModel
   let userModel = options.userModel

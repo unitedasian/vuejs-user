@@ -55,6 +55,7 @@ Vue.use(
 | Option                 | Description                                   | Type     | Default Value       |
 |:-----------------------|:----------------------------------------------|:---------|:--------------------|
 | axios                  | The instance of axios used by app             | Object   |                     |
+| localStorageNamespace  | Namespace(prefix) for local storage keys      | String   | `'_user_'`          |
 | profileModel           | The stub instance of profile model            | Object   | `UAMProfile` object |
 | redirectRoute          | Route name to redirect to, for authentication | String   | `'login'`           |
 | router                 | The registered router instance                | Object   |                     |
