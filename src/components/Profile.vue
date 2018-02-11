@@ -148,7 +148,7 @@ export default {
 
   i18n: {
     messages: {
-      'en': require('../translations/profile.en.json')
+      'en': require('../i18n/profile.en.json')
     }
   },
 

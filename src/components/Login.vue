@@ -74,7 +74,7 @@ export default {
 
   i18n: {
     messages: {
-      'en': require('../translations/login.en.json')
+      'en': require('../i18n/login.en.json')
     }
   },
 

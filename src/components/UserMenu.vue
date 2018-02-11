@@ -1,33 +1,34 @@
 <template>
   <b-nav>
     <template v-if="!isLoggedIn">
-      <b-nav-item href="#" @click="login">
-        {{ $t('user.menu.login') }}
+      <b-nav-item @click="login">
+        {{ $t(loginRoute.label || 'user.menu.login') }}
       </b-nav-item>
-      <b-nav-item href="#" @click="signup">
-        {{ $t('user.menu.signup') }}
+      <b-nav-item @click="signup" v-if="signupRoute">
+        {{ $t(signupRoute.label || 'user.menu.signup') }}
       </b-nav-item>
     </template>
     <template v-else>
       <b-nav-item-dropdown :right="right">
         <template slot="button-content">
-          {{ welcome ?
-              welcome :
-              $t('user.menu.welcome', { user: $uamAuth.user.username  }) }}
+          {{ $t(
+              welcome ? welcome : 'user.menu.welcome',
+              { user: $uamAuth.user.username  }
+            ) }}
         </template>
 
-        <b-dropdown-item v-if="!noProfile" :to="{ name: profileRoute }">
+        <b-dropdown-item  @click="profile" v-if="profileRoute">
           <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
-          {{ $t('user.menu.profile') }}
+          {{ $t(profileRoute.label || 'user.menu.profile') }}
         </b-dropdown-item>
 
         <slot></slot>
 
-        <div v-if="!noDivider" class="dropdown-divider"></div>
+        <div v-if="divider" class="dropdown-divider"></div>
 
-        <b-dropdown-item href="#" @click.prevent="logout()">
+        <b-dropdown-item href="#" @click.prevent="logout">
           <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
-          {{ $t('user.menu.logout') }}
+          {{ $t(logoutRoute.label || 'user.menu.logout') }}
         </b-dropdown-item>
       </b-nav-item-dropdown>
     </template>
@@ -42,34 +43,48 @@ export default {
     },
 
     loginRoute () {
-      return this.$uamAuth.userEndpoints.login
+      return this.$uamAuth.routes.login
+    },
+
+    logoutRoute () {
+      return this.$uamAuth.routes.logout
+    },
+
+    profileRoute () {
+      return this.$uamAuth.routes.profile
     },
 
     signupRoute () {
-      return this.$uamAuth.userEndpoints.signup
+      return this.$uamAuth.routes.signup
     }
   },
 
   i18n: {
     messages: {
-      'en': require('../translations/user-menu.json')
+      'en': require('../i18n/user-menu.json')
     }
   },
 
   methods: {
     login () {
-      this.$router.push({ name: this.$uamAuth.userEndpoints.login })
+      this.$router.push({ name: this.loginRoutes.name })
     },
 
     logout () {
       this.$uamAuth.logout()
         .then(() => {
-          this.$router.push({ name: 'login' })
+          this.$router.push({ name: this.logoutRoute.name })
         })
     },
 
+    profile () {
+      this.$router.push({ name: this.profileRoute.name })
+    },
+
     signup () {
-      this.$router.push({ name: this.$uamAuth.userEndpoints.login })
+      if (this.$uamAuth.doSignup) {
+        this.$router.push({ name: this.signupRoute.name })
+      }
     }
   },
 
@@ -81,18 +96,11 @@ export default {
       type: Boolean,
       default: false
     },
-    noDivider: {
+    divider: {
       type: Boolean,
-      default: false
+      default: true
     },
-    noProfile: {
-      type: Boolean,
-      default: false
-    },
-    profileRoute: {
-      type: String,
-      default: 'profile'
-    }
+    welcome: String
   }
 }
 </script>
