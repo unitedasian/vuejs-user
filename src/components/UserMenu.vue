@@ -67,7 +67,7 @@ export default {
 
   methods: {
     login () {
-      this.$router.push({ name: this.loginRoutes.name })
+      this.$router.push({ name: this.loginRoute.name })
     },
 
     logout () {
