@@ -1,6 +1,11 @@
 {
-  "label": {
-    "logout": "Logout",
-    "profile": "My profile"
+  "user": {
+    "menu": {
+      "login": "Login",
+      "logout": "Logout",
+      "profile": "My profile",
+      "signup": "Signup",
+      "welcome": "Welcome {user}"
+    }
   }
 }
