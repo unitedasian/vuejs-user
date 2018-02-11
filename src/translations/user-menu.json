@@ -3,7 +3,7 @@
     "menu": {
       "login": "Login",
       "logout": "Logout",
-      "profile": "My profile",
+      "profile": "Profile",
       "signup": "Signup",
       "welcome": "Welcome {user}"
     }

@@ -1,15 +1,17 @@
 class Authenticator {
-  constructor (store, userEndpoints, namespace) {
+  constructor (store, routes, apiRoutes, namespace) {
     this.store = store
 
-    this.userEndpoints = {
+    this.routes = routes
+
+    this.apiRoutes = {
       login: '/login',
       logout: '/logout',
       refresh: '/login/refresh',
       currentUser: '/user/me?includes[]=profile'
     }
 
-    Object.assign(this.userEndpoints, userEndpoints)
+    Object.assign(this.apiRoutes, apiRoutes)
 
     this.namespace = namespace ? namespace : 'user' // namespace of store module
   }
@@ -33,7 +35,11 @@ class Authenticator {
   login (credentials) {
     return this.store.dispatch(
       this.namespace + '/login',
-      { credentials, loginUrl: this.userEndpoints.login, currentUserUrl: this.userEndpoints.currentUser }
+      {
+        credentials,
+        loginUrl: this.apiRoutes.login,
+        currentUserUrl: this.apiRoutes.currentUser
+      }
     )
   }
 
@@ -45,21 +51,28 @@ class Authenticator {
   loginWithToken (token) {
     return this.store.dispatch(
       this.namespace + '/loginWithToken',
-      { token, currentUserUrl: this.userEndpoints.currentUser }
+      {
+        token,
+        currentUserUrl: this.apiRoutes.currentUser
+      }
     )
   }
 
   logout () {
     return this.store.dispatch(
       this.namespace + '/logout',
-      { logoutUrl: this.userEndpoints.logout }
+      {
+        logoutUrl: this.apiRoutes.logout
+      }
     )
   }
 
   refreshToken () {
     return this.store.dispatch(
       this.namespace + '/refreshToken',
-      { refreshUrl: this.userEndpoints.refresh }
+      {
+        refreshUrl: this.apiRoutes.refresh
+      }
     )
   }
 
