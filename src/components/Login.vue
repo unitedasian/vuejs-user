@@ -1,33 +1,52 @@
-<template lang="html">
-<div>
-  <i v-if="isRequestPending || isSocialAuthPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
+<template>
+  <div class="login">
+    <main>
+      <h1>
+        {{ title ? title : $t('login.title') }}
+      </h1>
 
-  <div v-else>
-    <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
+      <i v-if="isRequestPending || isSocialAuthPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
 
-    <form @submit.prevent="onSubmit" class="login-form">
-      <div class="form-group">
-        <label for="username">{{ $t('username.label') }}</label>
-        <input type="email"  class="form-control" id="username" :placeholder="this.$i18n.t('username.label')" v-model="credentials.email" name="email" required/>
+      <div v-else>
+        <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
+
+        <form @submit.prevent="onSubmit" class="login-form">
+          <div class="form-group">
+            <label for="email">{{ $t('login.username.label') }}</label>
+            <input
+              :placeholder="this.$i18n.t('login.username.placeholder')"
+              class="form-control"
+              id="username"
+              name="email"
+              type="text"
+              v-model="credentials.email"
+              required />
+          </div>
+          <div class="form-group">
+            <label for="password">{{ $t('login.password.label') }}</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password" :placeholder="this.$i18n.t('login.password.placeholder')" v-model="credentials.password"
+              name="password"
+              required />
+          </div>
+          <button class="btn btn-primary" type="submit">
+            {{ $t('login.submit') }}
+          </button>
+        </form>
+
+        <div v-if="facebook || github || google || linkedin" class="social-login">
+          <p>{{ $t('login.with') }}</p>
+
+          <a v-if="facebook" @click="authenticate('facebook')" class="fa fa-facebook" />
+          <a v-if="google" @click="authenticate('google')" class="fa fa-google" />
+          <a v-if="linkedin" @click="authenticate('linkedin')" class="fa fa-linkedin" />
+          <a v-if="github" @click="authenticate('github')" class="fa fa-github" />
+        </div>
       </div>
-
-      <div class="form-group">
-        <label for="password">{{ $t('password.label') }}</label>
-        <input type="password"  class="form-control" id="password" :placeholder="this.$i18n.t('password.label')" v-model="credentials.password" name="password" required/>
-      </div>
-      <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
-    </form>
-
-    <div v-if="facebook || github || google || linkedin" class="social-login">
-      <p>{{ $t('loginWith') }}</p>
-
-      <a v-if="facebook" @click="authenticate('facebook')" class="fa fa-facebook"></a>
-      <a v-if="google" @click="authenticate('google')" class="fa fa-google"></a>
-      <a v-if="linkedin" @click="authenticate('linkedin')" class="fa fa-linkedin"></a>
-      <a v-if="github" @click="authenticate('github')" class="fa fa-github"></a>
-    </div>
+    </main>
   </div>
-</div>
 </template>
 
 <script>
@@ -38,6 +57,7 @@ export default {
     isSocialAuthPending () {
       return this.$store.getters['user/isSocialAuthPending']
     },
+
     isRequestPending () {
       return this.$store.getters['user/isRequestPending']
     }
@@ -54,7 +74,7 @@ export default {
 
   i18n: {
     messages: {
-      'en': require('../translations/login.en.json')
+      'en': require('../i18n/login.en.json')
     }
   },
 
@@ -117,19 +137,26 @@ export default {
       type: Boolean,
       default: false
     },
+
     redirectTo: String,
+
+    title: String,
+
     facebook: { // facebook login
       type: Boolean,
       default: false
     },
+
     github: { // github login
       type: Boolean,
       default: false
     },
+
     google: { // google login
       type: Boolean,
       default: false
     },
+
     linkedin: { // linkedin login
       type: Boolean,
       default: false
@@ -139,48 +166,60 @@ export default {
 </script>
 
 <style scoped>
-.invalid-feedback {
-    display: block;
+.login {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 3rem 0;
 }
 
-.social-login {
-    margin-top: 30px;
+.login main {
+  width: 20rem;
+}
+
+.login .invalid-feedback {
+  display: block;
+}
+
+.login .social-login {
+  margin-top: 30px;
 }
 
 /* Style all font awesome icons */
-a.fa {
-    cursor: pointer;
-    padding: 10px;
-    font-size: 30px;
-    width: 50px;
-    text-align: center;
-    text-decoration: none;
-    margin: 5px;
+.login a.fa {
+  cursor: pointer;
+  padding: 10px;
+  font-size: 30px;
+  width: 50px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px;
 }
 
-a.fa:hover {
-    opacity: 0.8;
-    color: white;
+.login a.fa:hover {
+  opacity: 0.8;
+  color: white;
 }
 
 /* Set a specific color for each social platform */
-a.fa-facebook {
-    background: #3B5998;
-    color: white;
+.login a.fa-facebook {
+  background: #3B5998;
+  color: white;
 }
 
-a.fa-github {
+.login a.fa-github {
   background: #222;
   color: white;
 }
 
-a.fa-google {
-    background: #dd4b39;
-    color: white;
+.login a.fa-google {
+  background: #dd4b39;
+  color: white;
 }
 
-a.fa-linkedin {
-    background: #007bb5;
-    color: white;
+.login a.fa-linkedin {
+  background: #007bb5;
+  color: white;
 }
 </style>

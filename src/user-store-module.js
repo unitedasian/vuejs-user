@@ -30,6 +30,7 @@ export default function (options) {
 
   return {
     namespaced: true,
+
     state: {
       isLoggedIn: !!Vue.ls.get('access_token'),
       tokenExpiresAt: Vue.ls.get('access_token_expire'),
@@ -40,10 +41,12 @@ export default function (options) {
       isSocialAuthPending: false,
       isRequestPending: false
     },
+
     mutations: {
       [LOGIN] (state) {
         state.pending = true
       },
+
       [LOGIN_SUCCESS] (state) {
         state.tokenExpiresAt = Vue.ls.get('access_token_expire')
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
@@ -51,6 +54,7 @@ export default function (options) {
         state.user = Vue.ls.get('user')
         state.isLoggedIn = true
       },
+
       [LOGOUT] (state) {
         state.tokenExpiresAt = null
         state.isRefreshExpired = Vue.ls.get('is_refresh_expired')
@@ -58,19 +62,24 @@ export default function (options) {
         state.data = null
         state.isLoggedIn = false
       },
+
       [UPDATE_USER] (state, user) {
         state.user = Object.assign({}, state.user, user)
       },
+
       [UPDATE_PROFILE] (state, profile) {
         state.user.profile = profile
       },
+
       [UPDATE_SOCIAL_AUTH_PENDING] (state, payload) {
         state.isSocialAuthPending = payload.isSocialAuthPending
       },
+
       [UPDATE_REQUEST_PENDING] (state, payload) {
         state.isRequestPending = payload.isRequestPending
       }
     },
+
     actions: {
       login ({state, commit, rootState}, payload) {
         commit(LOGIN)
@@ -103,6 +112,7 @@ export default function (options) {
             })
         })
       },
+
       loginWithToken ({state, commit, rootState}, payload) {
         commit(LOGIN)
 
@@ -127,6 +137,28 @@ export default function (options) {
             })
         })
       },
+
+      logout ({commit}, payload) {
+        return new Promise(resolve => {
+          axios.post(payload.logoutUrl)
+            .then((response) => {
+              Vue.ls.clear()
+
+              delete axios.defaults.headers.common['Authorization']
+
+              commit(LOGOUT)
+              resolve()
+            },(error) => {
+              Vue.ls.clear()
+
+              delete axios.defaults.headers.common['Authorization']
+
+              commit(LOGOUT)
+              reject(error)
+            })
+        })
+      },
+
       refreshToken ({commit}, payload) {
         commit(LOGIN)
 
@@ -152,37 +184,7 @@ export default function (options) {
             })
         })
       },
-      logout ({commit}, payload) {
-        return new Promise(resolve => {
-          axios.post(payload.logoutUrl)
-            .then((response) => {
-              Vue.ls.clear()
 
-              delete axios.defaults.headers.common['Authorization']
-
-              commit(LOGOUT)
-              resolve()
-            },(error) => {
-              Vue.ls.clear()
-
-              delete axios.defaults.headers.common['Authorization']
-
-              commit(LOGOUT)
-              reject(error)
-            })
-        })
-      },
-      updateUser ({commit}, user) {
-        return new Promise(resolve => {
-          if (!user.profile) {
-            user.profile = Vue.ls.get('user').profile
-          }
-
-          Vue.ls.set('user', user)
-          commit(UPDATE_USER, user)
-          resolve()
-        })
-      },
       updateProfile ({commit}, profile) {
         return new Promise(resolve => {
           let user = Vue.ls.get('user')
@@ -194,45 +196,67 @@ export default function (options) {
           resolve()
         })
       },
+
+      updateRequestPending ({commit}, isRequestPending) {
+        return new Promise(resolve => {
+          commit(UPDATE_REQUEST_PENDING, { isRequestPending })
+          resolve()
+        })
+      },
+
       updateSocialAuthPending ({commit}, isSocialAuthPending) {
         return new Promise(resolve => {
           commit(UPDATE_SOCIAL_AUTH_PENDING, { isSocialAuthPending })
           resolve()
         })
       },
-      updateRequestPending ({commit}, isRequestPending) {
+
+      updateUser ({commit}, user) {
         return new Promise(resolve => {
-          commit(UPDATE_REQUEST_PENDING, { isRequestPending })
+          if (!user.profile) {
+            user.profile = Vue.ls.get('user').profile
+          }
+
+          Vue.ls.set('user', user)
+          commit(UPDATE_USER, user)
           resolve()
         })
       }
     },
+
     getters: {
       isLoggedIn: state => {
         return state.isLoggedIn
       },
+
       tokenExpiresAt: state => {
         return state.tokenExpiresAt
       },
+
       isRefreshExpired: state => {
         return state.isRefreshExpired
       },
+
       locale: state => {
         return state.locale
       },
+
       user: state => {
         userModel.init(state.user)
 
         return userModel
       },
+
       profile: state => {
         profileModel.init(state.user && state.user.profile)
 
         return profileModel
       },
+
       isSocialAuthPending: state => {
         return state.isSocialAuthPending
       },
+
       isRequestPending: state => {
         return state.isRequestPending
       }
