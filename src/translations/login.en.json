@@ -1,18 +1,20 @@
 {
-  "title": "Login",
-  "submit": {
-    "label": "Login"
-  },
-  "username": {
-    "label": "Your email"
-  },
-  "password": {
-    "label": "Your password"
+  "login": {
+    "password": {
+      "label": "Password",
+      "placeholder": "Your password"
+    },
+    "submit": "Login",
+    "title": "Login",
+    "username": {
+      "label": "Username",
+      "placeholder": "Your username or email"
+    },
+    "with": "Login with"
   },
   "notifyLabel": {
     "cannotconnect": "Cannot connect to server",
     "unauthorized": "Invalid credentials",
     "unknownError": "Sorry. An error occurred."
-  },
-  "loginWith": "Login with:"
+  }
 }
