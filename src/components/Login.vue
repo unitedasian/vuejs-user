@@ -2,7 +2,7 @@
   <div class="login">
     <main>
       <h1>
-        {{ title ? title : $t('login.title') }}
+        {{ title ? title : $t('user.login.title') }}
       </h1>
 
       <i v-if="isRequestPending || isSocialAuthPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
@@ -12,9 +12,9 @@
 
         <form @submit.prevent="onSubmit" class="login-form">
           <div class="form-group">
-            <label for="email">{{ $t('login.username.label') }}</label>
+            <label for="email">{{ $t('user.login.username.label') }}</label>
             <input
-              :placeholder="this.$i18n.t('login.username.placeholder')"
+              :placeholder="this.$i18n.t('user.user.login.username.placeholder')"
               class="form-control"
               id="username"
               name="email"
@@ -23,16 +23,16 @@
               required />
           </div>
           <div class="form-group">
-            <label for="password">{{ $t('login.password.label') }}</label>
+            <label for="password">{{ $t('user.login.password.label') }}</label>
             <input
               type="password"
               class="form-control"
-              id="password" :placeholder="this.$i18n.t('login.password.placeholder')" v-model="credentials.password"
+              id="password" :placeholder="this.$i18n.t('user.login.password.placeholder')" v-model="credentials.password"
               name="password"
               required />
           </div>
           <button class="btn btn-primary" type="submit">
-            {{ $t('login.submit') }}
+            {{ $t('user.login.submit') }}
           </button>
         </form>
 
@@ -69,12 +69,6 @@ export default {
         email: '',
         password: ''
       }
-    }
-  },
-
-  i18n: {
-    messages: {
-      'en': require('../i18n/login.en.json')
     }
   },
 
