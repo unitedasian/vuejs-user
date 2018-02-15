@@ -14,7 +14,7 @@
           <div class="form-group">
             <label for="email">{{ $t('user.login.username.label') }}</label>
             <input
-              :placeholder="this.$i18n.t('user.user.login.username.placeholder')"
+              :placeholder="this.$i18n.t('user.login.username.placeholder')"
               class="form-control"
               id="username"
               name="email"
