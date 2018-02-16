@@ -1,0 +1,77 @@
+{
+  "user": {
+    "login": {
+      "notifyLabel": {
+        "cannotconnect": "Cannot connect to server",
+        "unauthorized": "Invalid credentials",
+        "unknownError": "Sorry. An error occurred."
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Your password"
+      },
+      "submit": "Login",
+      "title": "Login",
+      "username": {
+        "label": "Username",
+        "placeholder": "Your username or email"
+      },
+      "with": "Login with"
+    },
+    "menu": {
+      "login": "Login",
+      "logout": "Logout",
+      "profile": "Profile",
+      "signup": "Signup",
+      "welcome": "Welcome {user}"
+    },
+    "profile": {
+      "confirmPassword": {
+        "label": "Confirm Password:",
+        "placeholder": "Confirm password"
+      },
+      "email": {
+        "label": "Email address:",
+        "placeholder": "Enter email"
+      },
+      "gender": {
+        "label": "Gender:",
+        "options": {
+          "female": "Mrs",
+          "male": "Mr"
+        }
+      },
+      "givenName": {
+        "label": "Given name:",
+        "placeholder": "Enter given name"
+      },
+      "notifyLabel": {
+        "cannotconnect": "Cannot connect to server",
+        "cannotrefresh": "An error occurred. You may have been automatically logged-out. Please login.",
+        "loginAgain": "Looks like you have been logged out. Please login again:",
+        "uniqueEmail": "The email has already been taken.",
+        "updated": "Profile updated successfully.",
+        "validationError": "Validation errors occurred."
+      },
+      "password": {
+        "label": "Password:",
+        "placeholder": "Enter password"
+      },
+      "submit": {
+        "label": "Save"
+      },
+      "surname": {
+        "label": "Surname:",
+        "placeholder": "Enter surname"
+      },
+      "tabLabel": {
+        "credentials": "Credentials",
+        "you": "You"
+      },
+      "username": {
+        "label": "Username:",
+        "placeholder": "Enter username"
+      }
+    }
+  }
+}
