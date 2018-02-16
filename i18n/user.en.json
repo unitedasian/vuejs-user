@@ -1,6 +1,11 @@
 {
   "user": {
     "login": {
+      "notifyLabel": {
+        "cannotconnect": "Cannot connect to server",
+        "unauthorized": "Invalid credentials",
+        "unknownError": "Sorry. An error occurred."
+      },
       "password": {
         "label": "Password",
         "placeholder": "Your password"
@@ -20,30 +25,14 @@
       "signup": "Signup",
       "welcome": "Welcome {user}"
     },
-    "notifyLabel": {
-      "cannotconnect": "Cannot connect to server",
-      "unauthorized": "Invalid credentials",
-      "unknownError": "Sorry. An error occurred."
-    },
     "profile": {
-      "submit": {
-        "label": "Save"
-      },
-      "username": {
-        "label": "Username:",
-        "placeholder": "Enter username"
+      "confirmPassword": {
+        "label": "Confirm Password:",
+        "placeholder": "Confirm password"
       },
       "email": {
         "label": "Email address:",
         "placeholder": "Enter email"
-      },
-      "password": {
-        "label": "Password:",
-        "placeholder": "Enter password"
-      },
-      "confirmPassword": {
-        "label": "Confirm Password:",
-        "placeholder": "Confirm password"
       },
       "gender": {
         "label": "Gender:",
@@ -56,10 +45,6 @@
         "label": "Given name:",
         "placeholder": "Enter given name"
       },
-      "surname": {
-        "label": "Surname:",
-        "placeholder": "Enter surname"
-      },
       "notifyLabel": {
         "cannotconnect": "Cannot connect to server",
         "cannotrefresh": "An error occurred. You may have been automatically logged-out. Please login.",
@@ -68,9 +53,24 @@
         "updated": "Profile updated successfully.",
         "validationError": "Validation errors occurred."
       },
+      "password": {
+        "label": "Password:",
+        "placeholder": "Enter password"
+      },
+      "submit": {
+        "label": "Save"
+      },
+      "surname": {
+        "label": "Surname:",
+        "placeholder": "Enter surname"
+      },
       "tabLabel": {
         "credentials": "Credentials",
         "you": "You"
+      },
+      "username": {
+        "label": "Username:",
+        "placeholder": "Enter username"
       }
     }
   }

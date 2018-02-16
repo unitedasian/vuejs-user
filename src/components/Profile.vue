@@ -6,12 +6,12 @@
 
   <b-card no-body v-else>
     <b-tabs ref="tabs" card>
-      <b-tab :title="this.$i18n.t('tabLabel.credentials')" active>
+      <b-tab :title="this.$i18n.t('user.profile.tabLabel.credentials')" active>
         <form @submit.prevent="onSubmit('user')" :data-vv-scope="scope.credentials">
           <div class="form-group">
-            <label for="uam_username">{{ $t('username.label') }}</label>
+            <label for="uam_username">{{ $t('user.profile.username.label') }}</label>
             <input
-              :placeholder="this.$i18n.t('username.placeholder')"
+              :placeholder="this.$i18n.t('user.profile.username.placeholder')"
               v-model="user.username" v-validate="'required|min:2|max:255'" required
               type="text"  class="form-control" id="uam_username" name="username"
             />
@@ -20,9 +20,9 @@
           </div>
 
           <div class="form-group">
-            <label for="email">{{ $t('email.label') }}</label>
+            <label for="email">{{ $t('user.profile.email.label') }}</label>
             <input
-              :placeholder="this.$i18n.t('email.placeholder')" name="email"
+              :placeholder="this.$i18n.t('user.profile.email.placeholder')" name="email"
               v-model="user.email" v-validate="'required|email'" required
               type="email"  class="form-control" id="email"
             />
@@ -31,9 +31,9 @@
           </div>
 
           <div class="form-group">
-            <label for="uam_password">{{ $t('password.label') }}</label>
+            <label for="uam_password">{{ $t('user.profile.password.label') }}</label>
             <input
-              :placeholder="this.$i18n.t('password.placeholder')"
+              :placeholder="this.$i18n.t('user.profile.password.placeholder')"
               v-model="user.password" v-validate="'min:6|max:255|confirmed:confirm_password'"
               type="password"  class="form-control" id="uam_password" name="password"
             />
@@ -42,9 +42,9 @@
           </div>
 
           <div class="form-group">
-            <label for="confirm-password">{{ $t('confirmPassword.label') }}</label>
+            <label for="confirm-password">{{ $t('user.profile.confirmPassword.label') }}</label>
             <input
-              :placeholder="this.$i18n.t('confirmPassword.placeholder')" v-model="confirmPassword"
+              :placeholder="this.$i18n.t('user.profile.confirmPassword.placeholder')" v-model="confirmPassword"
               type="password"  class="form-control" id="confirm-password" name="confirm_password"
             />
 
@@ -53,10 +53,10 @@
             </span>
           </div>
 
-          <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
+          <button type="submit" class="btn btn-primary">{{ $t('user.profile.submit.label') }}</button>
         </form>
       </b-tab>
-      <b-tab :title="this.$i18n.t('tabLabel.you')">
+      <b-tab :title="this.$i18n.t('user.profile.tabLabel.you')">
         <form @submit.prevent="onSubmit('profile')" :data-vv-scope="scope.profile">
           <div class="form-group">
             <div class="form-check form-check-inline" v-for="option in genderOptions" :key="option.value">
@@ -74,10 +74,10 @@
           </div>
 
           <div class="form-group">
-            <label for="given_name">{{ $t('givenName.label') }}</label>
+            <label for="given_name">{{ $t('user.profile.givenName.label') }}</label>
             <input
               v-model="profile.givenName" name="given_name" v-validate="'required|min:2|max:255'"
-              :placeholder="this.$i18n.t('givenName.placeholder')"
+              :placeholder="this.$i18n.t('user.profile.givenName.placeholder')"
               type="text"  class="form-control" id="given_name" required
             />
 
@@ -87,10 +87,10 @@
           </div>
 
           <div class="form-group">
-            <label for="surname">{{ $t('surname.label') }}</label>
+            <label for="surname">{{ $t('user.profile.surname.label') }}</label>
             <input
               v-model="profile.surname" name="surname" v-validate="'required|min:2|max:255'" required
-              type="text"  class="form-control" id="surname" :placeholder="this.$i18n.t('surname.placeholder')"
+              type="text"  class="form-control" id="surname" :placeholder="this.$i18n.t('user.profile.surname.placeholder')"
             />
 
             <span v-show="errors.has('profile.surname')" class="invalid-feedback">
@@ -98,7 +98,7 @@
             </span>
           </div>
 
-          <button type="submit" class="btn btn-primary">{{ $t('submit.label') }}</button>
+          <button type="submit" class="btn btn-primary">{{ $t('user.profile.submit.label') }}</button>
         </form>
       </b-tab>
     </b-tabs>
@@ -134,8 +134,8 @@ export default {
     return {
       confirmPassword: '',
       genderOptions: [
-        { text: this.$i18n.t('gender.options.female'), value: 1 },
-        { text: this.$i18n.t('gender.options.male'), value: 2 }
+        { text: this.$i18n.t('user.profile.gender.options.female'), value: 1 },
+        { text: this.$i18n.t('user.profile.gender.options.male'), value: 2 }
       ],
       profile: new Profile(this.$uamAuth.user.profile.state),
       scope: {
@@ -143,12 +143,6 @@ export default {
         profile: 'profile'
       },
       user: new User(this.$uamAuth.user.state)
-    }
-  },
-
-  i18n: {
-    messages: {
-      'en': require('../i18n/profile.en.json')
     }
   },
 
@@ -174,7 +168,7 @@ export default {
         .then((response) => {
           this.$uamAuth.updateProfile(response.data.profile)
             .then(() => {
-              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+              this.addNotification(this.$i18n.t('user.profile.notifyLabel.updated'), 'success')
             })
         })
         .catch((error) => {
@@ -185,7 +179,7 @@ export default {
                   .then((response) => {
                     this.$uamAuth.updateProfile(response.data.profile)
                       .then(() => {
-                        this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+                        this.addNotification(this.$i18n.t('user.profile.notifyLabel.updated'), 'success')
                       })
                   })
               })
@@ -193,13 +187,13 @@ export default {
                 if (error.response.status === 401) {
                   this.$emit('unauthorized-error')
                 } else {
-                  this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
+                  this.addNotification(this.$i18n.t('user.profile.notifyLabel.cannotrefresh'))
                 }
               })
           } else if (error.response && error.response.status === 422) {
-            this.addNotification(this.$i18n.t('notifyLabel.validationError'))
+            this.addNotification(this.$i18n.t('user.profile.notifyLabel.validationError'))
           } else {
-            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+            this.addNotification(this.$i18n.t('user.profile.notifyLabel.cannotconnect'))
           }
         })
     },
@@ -211,7 +205,7 @@ export default {
         .then((response) => {
           this.$uamAuth.updateUser(response.data)
             .then(() => {
-              this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+              this.addNotification(this.$i18n.t('user.profile.notifyLabel.updated'), 'success')
             })
         })
         .catch((error) => {
@@ -222,7 +216,7 @@ export default {
                   .then((response) => {
                     this.$uamAuth.updateUser(response.data)
                       .then(() => {
-                        this.addNotification(this.$i18n.t('notifyLabel.updated'), 'success')
+                        this.addNotification(this.$i18n.t('user.profile.notifyLabel.updated'), 'success')
                       })
                   })
               })
@@ -230,13 +224,13 @@ export default {
                 if (error.response.status === 401) {
                   this.$emit('unauthorized-error')
                 } else {
-                  this.addNotification(this.$i18n.t('notifyLabel.cannotrefresh'))
+                  this.addNotification(this.$i18n.t('user.profile.notifyLabel.cannotrefresh'))
                 }
               })
           } else if (error.response && error.response.status === 422) {
-            this.addNotification(this.$i18n.t('notifyLabel.uniqueEmail'))
+            this.addNotification(this.$i18n.t('user.profile.notifyLabel.uniqueEmail'))
           } else {
-            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+            this.addNotification(this.$i18n.t('user.profile.notifyLabel.cannotconnect'))
           }
         })
     }

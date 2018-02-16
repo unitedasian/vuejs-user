@@ -11,10 +11,7 @@
     <template v-else>
       <b-nav-item-dropdown :right="right">
         <template slot="button-content">
-          {{ $t(
-              welcome ? welcome : 'user.menu.welcome',
-              { user: $uamAuth.user.username  }
-            ) }}
+          {{ welcome ? welcome : $t('user.menu.welcome', { user: $uamAuth.user.username  }) }}
         </template>
 
         <b-dropdown-item  @click="profile" v-if="profileRoute">
@@ -85,14 +82,13 @@ export default {
   name: 'uam_user_menu',
 
   props: {
-    buttonContent: String,
-    right: { // Right align dowpdown menu (default is left align)
-      type: Boolean,
-      default: false
-    },
     divider: {
       type: Boolean,
       default: true
+    },
+    right: { // Right align dowpdown menu (default is left align)
+      type: Boolean,
+      default: false
     },
     welcome: String
   }
