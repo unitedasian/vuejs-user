@@ -1,10 +1,10 @@
 <template>
   <b-nav>
     <template v-if="!isLoggedIn">
-      <b-nav-item @click="login">
+      <b-nav-item @click.prevent="login">
         {{ $t('user.menu.login') }}
       </b-nav-item>
-      <b-nav-item @click="signup" v-if="signupRoute">
+      <b-nav-item @click.prevent="signup" v-if="signupRoute">
         {{ $t('user.menu.signup') }}
       </b-nav-item>
     </template>
@@ -14,7 +14,7 @@
           {{ welcome ? welcome : $t('user.menu.welcome', { user: $uamAuth.user.username  }) }}
         </template>
 
-        <b-dropdown-item  @click="profile" v-if="profileRoute">
+        <b-dropdown-item  @click.prevent="profile" v-if="profileRoute">
           <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
           {{ $t('user.menu.profile') }}
         </b-dropdown-item>
@@ -37,14 +37,6 @@ export default {
   computed: {
     isLoggedIn () {
       return this.$uamAuth.isLoggedIn()
-    },
-
-    loginRoute () {
-      return this.$uamAuth.routes.login
-    },
-
-    logoutRoute () {
-      return this.$uamAuth.routes.logout
     },
 
     profileRoute () {
