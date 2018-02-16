@@ -2,10 +2,10 @@
   <b-nav>
     <template v-if="!isLoggedIn">
       <b-nav-item @click="login">
-        {{ $t(loginRoute.label || 'user.menu.login') }}
+        {{ $t('user.menu.login') }}
       </b-nav-item>
       <b-nav-item @click="signup" v-if="signupRoute">
-        {{ $t(signupRoute.label || 'user.menu.signup') }}
+        {{ $t('user.menu.signup') }}
       </b-nav-item>
     </template>
     <template v-else>
@@ -19,7 +19,7 @@
 
         <b-dropdown-item  @click="profile" v-if="profileRoute">
           <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
-          {{ $t(profileRoute.label || 'user.menu.profile') }}
+          {{ $t('user.menu.profile') }}
         </b-dropdown-item>
 
         <slot></slot>
@@ -28,7 +28,7 @@
 
         <b-dropdown-item href="#" @click.prevent="logout">
           <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
-          {{ $t(logoutRoute.label || 'user.menu.logout') }}
+          {{ $t('user.menu.logout') }}
         </b-dropdown-item>
       </b-nav-item-dropdown>
     </template>
@@ -59,31 +59,25 @@ export default {
     }
   },
 
-  i18n: {
-    messages: {
-      'en': require('../i18n/user-menu.json')
-    }
-  },
-
   methods: {
     login () {
-      this.$router.push({ name: this.loginRoutes.name })
+      this.$router.push({ name: this.$uamAuth.routes.login })
     },
 
     logout () {
       this.$uamAuth.logout()
         .then(() => {
-          this.$router.push({ name: this.logoutRoute.name })
+          this.$router.push({ name: this.$uamAuth.routes.logout })
         })
     },
 
     profile () {
-      this.$router.push({ name: this.profileRoute.name })
+      this.$router.push({ name: this.$uamAuth.routes.profile })
     },
 
     signup () {
       if (this.$uamAuth.doSignup) {
-        this.$router.push({ name: this.signupRoute.name })
+        this.$router.push({ name: this.$uamAuth.routes.signup })
       }
     }
   },
