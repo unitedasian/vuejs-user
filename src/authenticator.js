@@ -1,8 +1,8 @@
 class Authenticator {
-  constructor (store, routes, apiRoutes, namespace) {
-    this.store = store
+  constructor (options = {}) {
+    this.store = options.store
 
-    this.routes = routes
+    this.routes = options.routes
 
     this.apiRoutes = {
       login: '/login',
@@ -11,9 +11,16 @@ class Authenticator {
       currentUser: '/user/me?includes[]=profile'
     }
 
-    Object.assign(this.apiRoutes, apiRoutes)
+    Object.assign(this.apiRoutes, options.apiRoutes)
 
-    this.namespace = namespace ? namespace : 'user' // namespace of store module
+    this.credentialsParamMapper = {
+      username: 'username',
+      password: 'password'
+    }
+
+    Object.assign(this.credentialsParamMapper, options.credentialsParamMapper)
+
+    this.namespace = options.namespace || 'user' // namespace of store module
   }
 
   get user () {
@@ -32,11 +39,20 @@ class Authenticator {
     return (this.store.getters[this.namespace + '/tokenExpiresAt'] <= new Date().getTime())
   }
 
+  convertCredentials (credentials) {
+    return {
+      [this.credentialsParamMapper.username] : credentials.username,
+      [this.credentialsParamMapper.password] : credentials.password
+    }
+  }
+
   login (credentials) {
+    let convertedCredentials = this.convertCredentials(credentials)
+
     return this.store.dispatch(
       this.namespace + '/login',
       {
-        credentials,
+        credentials: convertedCredentials,
         loginUrl: this.apiRoutes.login,
         currentUserUrl: this.apiRoutes.currentUser
       }
