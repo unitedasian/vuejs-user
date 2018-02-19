@@ -1,8 +1,8 @@
-import * as components from './src/components'
-import Authenticator from './src/authenticator'
-import UAMProfile from './src/models/Profile'
-import UAMUser from './src/models/User'
-import userStoreModuleFunction from './src/user-store-module'
+import * as components from './components'
+import Authenticator from './authenticator'
+import UAMProfile from './models/Profile'
+import UAMUser from './models/User'
+import userStoreModuleFunction from './user-store-module'
 
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
