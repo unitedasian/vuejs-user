@@ -2,6 +2,8 @@ class Authenticator {
   constructor (options = {}) {
     this.store = options.store
 
+    this.router = options.router
+
     this.routes = options.routes
 
     this.apiRoutes = {
@@ -80,7 +82,9 @@ class Authenticator {
       {
         logoutUrl: this.apiRoutes.logout
       }
-    )
+    ).then(() => {
+      this.router.push({ name: this.routes.logout })
+    })
   }
 
   refreshToken () {
