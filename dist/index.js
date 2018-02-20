@@ -2174,11 +2174,7 @@ var User = function () {
       this.$router.push({ name: this.$uamAuth.routes.login });
     },
     logout: function logout() {
-      var _this = this;
-
-      this.$uamAuth.logout().then(function () {
-        _this.$router.push({ name: _this.$uamAuth.routes.logout });
-      });
+      this.$uamAuth.logout();
     },
     profile: function profile() {
       this.$router.push({ name: this.$uamAuth.routes.profile });
@@ -2311,6 +2307,7 @@ var VuePlugin = {
       apiRoutes: options.apiRoutes,
       credentialsParamMapper: options.credentialsParamMapper,
       namespace: moduleNamespace,
+      router: options.router,
       routes: options.routes,
       store: store
     });
@@ -3314,6 +3311,8 @@ var Authenticator = function () {
 
     this.store = options.store;
 
+    this.router = options.router;
+
     this.routes = options.routes;
 
     this.apiRoutes = {
@@ -3386,8 +3385,12 @@ var Authenticator = function () {
   }, {
     key: 'logout',
     value: function logout() {
+      var _this = this;
+
       return this.store.dispatch(this.namespace + '/logout', {
         logoutUrl: this.apiRoutes.logout
+      }).then(function () {
+        _this.router.push({ name: _this.routes.logout });
       });
     }
   }, {

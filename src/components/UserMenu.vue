@@ -55,9 +55,6 @@ export default {
 
     logout () {
       this.$uamAuth.logout()
-        .then(() => {
-          this.$router.push({ name: this.$uamAuth.routes.logout })
-        })
     },
 
     profile () {

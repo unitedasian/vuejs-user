@@ -50,6 +50,7 @@ const VuePlugin = {
         apiRoutes: options.apiRoutes,
         credentialsParamMapper: options.credentialsParamMapper,
         namespace: moduleNamespace,
+        router: options.router,
         routes: options.routes,
         store
       }
