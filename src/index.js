@@ -45,7 +45,15 @@ const VuePlugin = {
     // register `user` module to store dynamically
     store.registerModule(moduleName, userModule)
 
-    let authenticator = new Authenticator(store, options.routes, options.apiRoutes, moduleNamespace)
+    let authenticator = new Authenticator(
+      {
+        apiRoutes: options.apiRoutes,
+        credentialsParamMapper: options.credentialsParamMapper,
+        namespace: moduleNamespace,
+        routes: options.routes,
+        store
+      }
+    )
 
     Vue.uamAuth = authenticator
     Vue.prototype.$uamAuth = authenticator

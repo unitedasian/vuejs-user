@@ -21,9 +21,9 @@
               :placeholder="this.$i18n.t('user.login.username.placeholder')"
               class="form-control"
               id="username"
-              name="email"
+              name="username"
               type="text"
-              v-model="credentials.email"
+              v-model="credentials.username"
               required />
           </div>
           <div class="form-group">
@@ -92,7 +92,7 @@ export default {
   data () {
     return {
       credentials: {
-        email: '',
+        username: '',
         password: ''
       }
     }
