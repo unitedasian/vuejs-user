@@ -3,7 +3,7 @@ import * as components from './components'
 import UAMProfile from './models/Profile'
 import UAMUser from './models/User'
 import UAMUserRouter from './router'
-import userStoreModuleFunction from './user-store-module'
+import userStoreModuleFunction from './store'
 
 import VueAuthenticate from 'vue-authenticate'
 import VueAxios from 'vue-axios'
