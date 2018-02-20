@@ -71,7 +71,7 @@ export default {
     }
   },
 
-  name: 'uam_user_menu',
+  name: 'uam-user-menu',
 
   props: {
     divider: {
