@@ -1,18 +1,18 @@
 <template>
   <div class="login">
     <main>
-      <h1>
-        {{ title ? title : $t('user.login.title') }}
-      </h1>
-
       <i v-if="isRequestPending || isSocialAuthPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
 
       <div v-else>
+        <h1>
+          {{ title ? title : $t('user.login.title') }}
+        </h1>
+
         <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
 
         <form @submit.prevent="onSubmit" class="login-form">
           <div class="form-group">
-            <label for="email">{{ $t('user.login.username.label') }}</label>
+            <label for="username">{{ $t('user.login.username.label') }}</label>
             <input
               :placeholder="this.$i18n.t('user.login.username.placeholder')"
               class="form-control"
@@ -25,10 +25,12 @@
           <div class="form-group">
             <label for="password">{{ $t('user.login.password.label') }}</label>
             <input
-              type="password"
+              :placeholder="this.$i18n.t('user.login.password.placeholder')"
               class="form-control"
-              id="password" :placeholder="this.$i18n.t('user.login.password.placeholder')" v-model="credentials.password"
+              id="password"
               name="password"
+              type="password"
+              v-model="credentials.password"
               required />
           </div>
           <button class="btn btn-primary" type="submit">
@@ -83,11 +85,11 @@ export default {
               this.$router.push({ name: 'home' })
             })
             .catch(() => {
-              this.addNotification(this.$i18n.t('notifyLabel.unknownError'))
+              this.addNotification(this.$i18n.t('user.login.notifyLabel.unknownError'))
             })
         }, (error) => {
           if (error.message === 'Network Error') {
-            this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+            this.addNotification(this.$i18n.t('user.login.notifyLabel.cannotconnect'))
           }
         })
     },
@@ -112,9 +114,9 @@ export default {
             .catch((error) => {
               if (error.response && error.response.status === 401) {
                 this.credentials.password = ''
-                this.addNotification(this.$i18n.t('notifyLabel.unauthorized'))
+                this.addNotification(this.$i18n.t('user.login.notifyLabel.unauthorized'))
               } else {
-                this.addNotification(this.$i18n.t('notifyLabel.cannotconnect'))
+                this.addNotification(this.$i18n.t('user.login.notifyLabel.cannotconnect'))
               }
             })
         }

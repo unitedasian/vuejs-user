@@ -1,23 +1,20 @@
 <template>
   <b-nav>
     <template v-if="!isLoggedIn">
-      <b-nav-item @click="login">
+      <b-nav-item @click.prevent="login">
         {{ $t('user.menu.login') }}
       </b-nav-item>
-      <b-nav-item @click="signup" v-if="signupRoute">
+      <b-nav-item @click.prevent="signup" v-if="signupRoute">
         {{ $t('user.menu.signup') }}
       </b-nav-item>
     </template>
     <template v-else>
       <b-nav-item-dropdown :right="true">
         <template slot="button-content">
-          {{ $t(
-              welcome ? welcome : 'user.menu.welcome',
-              { user: $uamAuth.user.username  }
-            ) }}
+          {{ welcome ? welcome : $t('user.menu.welcome', { user: $uamAuth.user.username  }) }}
         </template>
 
-        <b-dropdown-item  @click="profile" v-if="profileRoute">
+        <b-dropdown-item  @click.prevent="profile" v-if="profileRoute">
           <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
           {{ $t('user.menu.profile') }}
         </b-dropdown-item>
@@ -40,14 +37,6 @@ export default {
   computed: {
     isLoggedIn () {
       return this.$uamAuth.isLoggedIn()
-    },
-
-    loginRoute () {
-      return this.$uamAuth.routes.login
-    },
-
-    logoutRoute () {
-      return this.$uamAuth.routes.logout
     },
 
     profileRoute () {
@@ -85,14 +74,13 @@ export default {
   name: 'uam_user_menu',
 
   props: {
-    buttonContent: String,
-    right: { // Right align dowpdown menu (default is left align)
-      type: Boolean,
-      default: false
-    },
     divider: {
       type: Boolean,
       default: true
+    },
+    right: { // Right align dowpdown menu (default is left align)
+      type: Boolean,
+      default: false
     },
     welcome: String
   }
