@@ -1,12 +1,9 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import LocalStorage from 'vue-ls'
 
 import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
-
-Vue.use(Vuex)
 
 export default function (options) {
   const storageOptions = {
