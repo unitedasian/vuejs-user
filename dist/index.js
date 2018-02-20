@@ -1439,6 +1439,21 @@ module.exports = function (C, x) {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3349,7 +3364,7 @@ exports = module.exports = __webpack_require__(16)(false);
 
 
 // module
-exports.push([module.i, "\n.login[data-v-ef68022e] {\n  align-items: flex-start;\n  display: flex;\n  flex-direction: row;\n  justify-content: center;\n  margin: 3rem 0;\n}\n.login main[data-v-ef68022e] {\n  width: 20rem;\n}\n.login .invalid-feedback[data-v-ef68022e] {\n  display: block;\n}\n.login .social-login[data-v-ef68022e] {\n  margin-top: 30px;\n}\n\n/* Style all font awesome icons */\n.login a.fa[data-v-ef68022e] {\n  cursor: pointer;\n  padding: 10px;\n  font-size: 30px;\n  width: 50px;\n  text-align: center;\n  text-decoration: none;\n  margin: 5px;\n}\n.login a.fa[data-v-ef68022e]:hover {\n  opacity: 0.8;\n  color: white;\n}\n\n/* Set a specific color for each social platform */\n.login a.fa-facebook[data-v-ef68022e] {\n  background: #3B5998;\n  color: white;\n}\n.login a.fa-github[data-v-ef68022e] {\n  background: #222;\n  color: white;\n}\n.login a.fa-google[data-v-ef68022e] {\n  background: #dd4b39;\n  color: white;\n}\n.login a.fa-linkedin[data-v-ef68022e] {\n  background: #007bb5;\n  color: white;\n}\n", ""]);
+exports.push([module.i, "\n.login[data-v-ef68022e] {\n  align-items: flex-start;\n  display: flex;\n  flex-direction: row;\n  justify-content: center;\n}\n.login .invalid-feedback[data-v-ef68022e] {\n    display: block;\n}\n", ""]);
 
 // exports
 
@@ -3719,12 +3734,12 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _vm.facebook || _vm.github || _vm.google || _vm.linkedin
-                  ? _c("div", { staticClass: "social-login" }, [
+                  ? _c("div", { staticClass: "with" }, [
                       _c("p", [_vm._v(_vm._s(_vm.$t("login.with")))]),
                       _vm._v(" "),
                       _vm.facebook
                         ? _c("a", {
-                            staticClass: "fa fa-facebook",
+                            staticClass: "fa fa facebook",
                             on: {
                               click: function($event) {
                                 _vm.authenticate("facebook")
@@ -3735,7 +3750,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.google
                         ? _c("a", {
-                            staticClass: "fa fa-google",
+                            staticClass: "fa fa google",
                             on: {
                               click: function($event) {
                                 _vm.authenticate("google")
@@ -3746,7 +3761,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.linkedin
                         ? _c("a", {
-                            staticClass: "fa fa-linkedin",
+                            staticClass: "fa fa linkedin",
                             on: {
                               click: function($event) {
                                 _vm.authenticate("linkedin")
@@ -3757,7 +3772,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.github
                         ? _c("a", {
-                            staticClass: "fa fa-github",
+                            staticClass: "fa fa github",
                             on: {
                               click: function($event) {
                                 _vm.authenticate("github")

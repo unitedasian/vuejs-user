@@ -42,7 +42,10 @@
           </button>
         </form>
 
-        <div v-if="facebook || github || google || linkedin" class="social-login">
+        <div
+          class="with"
+          v-if="facebook || github || google || linkedin">
+
           <p>{{ $t('login.with') }}</p>
 
           <a
@@ -188,14 +191,9 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin: 3rem 0;
 
   .invalid-feedback {
     display: block;
   }
-
-  .social-login {
-    margin-top: 30px;
-  }
-
+}
 </style>

@@ -1,7 +1,7 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const extractSass = new ExtractTextPlugin({
-  filename: "uam-vuejs-user.css",
+  filename: "user.css",
   disable: process.env.NODE_ENV === "development"
 })
 
