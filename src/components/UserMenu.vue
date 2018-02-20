@@ -9,7 +9,7 @@
       </b-nav-item>
     </template>
     <template v-else>
-      <b-nav-item-dropdown :right="true">
+      <b-nav-item-dropdown right>
         <template slot="button-content">
           {{ welcome ? welcome : $t('user.menu.welcome', { user: $uamAuth.user.username  }) }}
         </template>
