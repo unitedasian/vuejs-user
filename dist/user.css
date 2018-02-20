@@ -1,0 +1,31 @@
+.login {
+  margin: 3rem 0; }
+  .login > main {
+    width: 20rem; }
+    .login > main h1 {
+      margin-bottom: 2rem; }
+  .login .with {
+    margin-top: 2rem; }
+    .login .with a fa {
+      cursor: pointer;
+      padding: 10px;
+      font-size: 30px;
+      width: 50px;
+      text-align: center;
+      text-decoration: none;
+      margin: 5px; }
+      .login .with a fa:hover {
+        opacity: 0.8;
+        color: white; }
+      .login .with a fa.facebook {
+        background: #3B5998;
+        color: white; }
+      .login .with a fa.github {
+        background: #222;
+        color: white; }
+      .login .with a fa.google {
+        background: #dd4b39;
+        color: white; }
+      .login .with a fa .linkedin {
+        background: #007bb5;
+        color: white; }
