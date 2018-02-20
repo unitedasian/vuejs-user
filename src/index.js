@@ -1,5 +1,5 @@
-import * as components from './components'
 import Authenticator from './authenticator'
+import * as components from './components'
 import UAMProfile from './models/Profile'
 import UAMUser from './models/User'
 import UAMUserRouter from './router'
