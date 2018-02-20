@@ -1,13 +1,17 @@
 <template>
   <div class="login">
     <main>
-      <i v-if="isRequestPending || isSocialAuthPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
+      <h1>
+        {{ title ? title : $t('user.login.title') }}
+      </h1>
+
+      <slot
+        name="loading"
+        v-if="isRequestPending || isSocialAuthPending">
+        <Loading />
+      </slot>
 
       <div v-else>
-        <h1>
-          {{ title ? title : $t('user.login.title') }}
-        </h1>
-
         <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
 
         <form @submit.prevent="onSubmit" class="login-form">
@@ -38,13 +42,28 @@
           </button>
         </form>
 
-        <div v-if="facebook || github || google || linkedin" class="social-login">
+        <div
+          class="with"
+          v-if="facebook || github || google || linkedin">
+
           <p>{{ $t('login.with') }}</p>
 
-          <a v-if="facebook" @click="authenticate('facebook')" class="fa fa-facebook" />
-          <a v-if="google" @click="authenticate('google')" class="fa fa-google" />
-          <a v-if="linkedin" @click="authenticate('linkedin')" class="fa fa-linkedin" />
-          <a v-if="github" @click="authenticate('github')" class="fa fa-github" />
+          <a
+            @click="authenticate('facebook')"
+            class="fa fa facebook"
+            v-if="facebook" />
+          <a
+            @click="authenticate('google')"
+            class="fa fa google"
+            v-if="google" />
+          <a
+            @click="authenticate('linkedin')"
+            class="fa fa linkedin"
+            v-if="linkedin" />
+          <a
+            @click="authenticate('github')"
+            class="fa fa github"
+            v-if="github" />
         </div>
       </div>
     </main>
@@ -52,6 +71,7 @@
 </template>
 
 <script>
+import Loading from '../components/Loading'
 import mixinNotification from '../mixins/MixinNotification.vue'
 
 export default {
@@ -63,6 +83,10 @@ export default {
     isRequestPending () {
       return this.$store.getters['user/isRequestPending']
     }
+  },
+
+  components: {
+    Loading
   },
 
   data () {
@@ -126,7 +150,7 @@ export default {
 
   mixins: [mixinNotification],
 
-  name: 'uam_login',
+  name: 'uam-user-login',
 
   props: {
     noRedirect: { // if enabled, no redirect after successful login
@@ -161,61 +185,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .login {
   align-items: flex-start;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin: 3rem 0;
-}
 
-.login main {
-  width: 20rem;
-}
-
-.login .invalid-feedback {
-  display: block;
-}
-
-.login .social-login {
-  margin-top: 30px;
-}
-
-/* Style all font awesome icons */
-.login a.fa {
-  cursor: pointer;
-  padding: 10px;
-  font-size: 30px;
-  width: 50px;
-  text-align: center;
-  text-decoration: none;
-  margin: 5px;
-}
-
-.login a.fa:hover {
-  opacity: 0.8;
-  color: white;
-}
-
-/* Set a specific color for each social platform */
-.login a.fa-facebook {
-  background: #3B5998;
-  color: white;
-}
-
-.login a.fa-github {
-  background: #222;
-  color: white;
-}
-
-.login a.fa-google {
-  background: #dd4b39;
-  color: white;
-}
-
-.login a.fa-linkedin {
-  background: #007bb5;
-  color: white;
+  .invalid-feedback {
+    display: block;
+  }
 }
 </style>
