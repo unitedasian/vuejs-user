@@ -1,7 +1,8 @@
-import * as components from './components'
 import Authenticator from './authenticator'
+import * as components from './components'
 import UAMProfile from './models/Profile'
 import UAMUser from './models/User'
+import UAMUserRouter from './router'
 import userStoreModuleFunction from './user-store-module'
 
 import VueAuthenticate from 'vue-authenticate'
@@ -154,5 +155,6 @@ export default VuePlugin
 
 export {
   UAMProfile,
-  UAMUser
+  UAMUser,
+  UAMUserRouter
 }
