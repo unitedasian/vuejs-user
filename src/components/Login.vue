@@ -12,8 +12,6 @@
       </slot>
 
       <div v-else>
-        <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
-
         <form @submit.prevent="onSubmit" class="login-form">
           <div class="form-group">
             <label for="username">{{ $t('user.login.username.label') }}</label>
@@ -72,7 +70,6 @@
 
 <script>
 import Loading from '../components/Loading'
-import mixinNotification from '../mixins/MixinNotification.vue'
 
 export default {
   computed: {
@@ -100,20 +97,20 @@ export default {
 
   methods: {
     authenticate (provider) {
-      this.clearNotifications()
+      this.$emit('before-login')
 
       this.$auth.authenticate(provider)
         .then((authResponse) => {
           this.$uamAuth.loginWithToken(authResponse.data)
             .then(() => {
-              this.$router.push({ name: 'home' })
+              this.$emit('login-success', {social: true})
             })
             .catch(() => {
-              this.addNotification(this.$i18n.t('user.login.notifyLabel.unknownError'))
+              this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.unknownError')})
             })
         }, (error) => {
           if (error.message === 'Network Error') {
-            this.addNotification(this.$i18n.t('user.login.notifyLabel.cannotconnect'))
+            this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.cannotconnect')})
           }
         })
     },
@@ -121,34 +118,24 @@ export default {
     onSubmit () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.clearNotifications()
+          this.$emit('before-login')
 
           this.$uamAuth.login(this.credentials)
             .then(() => {
-              this.$emit('login-success')
-
-              if (!this.noRedirect) {
-                if (this.redirectTo !== undefined) {
-                  this.$router.push({ name: this.redirectTo })
-                } else {
-                  this.$router.push({ name: 'home' })
-                }
-              }
+              this.$emit('login-success', {social: false})
             })
             .catch((error) => {
+              this.credentials.password = ''
               if (error.response && error.response.status === 401) {
-                this.credentials.password = ''
-                this.addNotification(this.$i18n.t('user.login.notifyLabel.unauthorized'))
+                this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.unauthorized')})
               } else {
-                this.addNotification(this.$i18n.t('user.login.notifyLabel.cannotconnect'))
+                this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.cannotconnect')})
               }
             })
         }
       })
     }
   },
-
-  mixins: [mixinNotification],
 
   name: 'uam-user-login',
 
