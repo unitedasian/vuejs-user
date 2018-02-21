@@ -1,6 +1,6 @@
 {
   "name": "uam-vuejs-user",
-  "version": "0.6.4",
+  "version": "0.6.8",
   "description": "Vuejs user plugin",
   "main": "dist/index.js",
   "repository": "git@gitlab.united-asian.com:vuejs/user.git",
