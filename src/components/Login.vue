@@ -20,9 +20,10 @@
               class="form-control"
               id="username"
               name="username"
+              required
               type="text"
               v-model="credentials.username"
-              required />
+            />
           </div>
           <div class="form-group">
             <label for="password">{{ $t('user.login.password.label') }}</label>
@@ -31,9 +32,10 @@
               class="form-control"
               id="password"
               name="password"
+              required
               type="password"
               v-model="credentials.password"
-              required />
+            />
           </div>
           <button class="btn btn-primary" type="submit">
             {{ $t('user.login.submit') }}
