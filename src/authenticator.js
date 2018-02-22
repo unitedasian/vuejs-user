@@ -43,8 +43,8 @@ class Authenticator {
 
   convertCredentials (credentials) {
     return {
-      [this.credentialsParamMapper.username] : credentials.username,
-      [this.credentialsParamMapper.password] : credentials.password
+      [this.credentialsParamMapper.username]: credentials.username,
+      [this.credentialsParamMapper.password]: credentials.password
     }
   }
 

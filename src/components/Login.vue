@@ -180,7 +180,7 @@ export default {
     linkedin: { // linkedin login
       type: Boolean,
       default: false
-    },
+    }
   }
 }
 </script>
