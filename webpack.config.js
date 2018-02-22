@@ -14,7 +14,6 @@ module.exports = merge(require('./webpack.base'), {
   },
 
   externals: {
-    'vee-validate': 'vee-validate',
     'vue-authenticate': 'vue-authenticate',
     'vue-axios': 'vue-axios',
     'vue-ls': 'vue-ls',
