@@ -23,7 +23,7 @@ export default function (options) {
     isLoggedIn: !!Vue.ls.get('access_token'),
     tokenExpiresAt: Vue.ls.get('access_token_expire'),
     isRefreshExpired: Vue.ls.get('is_refresh_expired'),
-    user : Vue.ls.get('user'),
+    user: Vue.ls.get('user'),
     pending: false,
     locale: 'en',
     isSocialAuthPending: false,

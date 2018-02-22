@@ -61,7 +61,7 @@ export default function (axios) {
   }
 
   const logout = ({commit}, payload) => {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       axios.post(payload.logoutUrl)
         .then((response) => {
           Vue.ls.clear()
@@ -77,7 +77,7 @@ export default function (axios) {
           delete axios.defaults.headers.common['Authorization']
 
           commit(types.LOGOUT)
-          resolve()
+          reject(error)
         })
     })
   }

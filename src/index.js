@@ -31,7 +31,7 @@ const VuePlugin = {
     let profileModel = options.profileModel || new UAMProfile()
     let userModel = options.userModel || new UAMUser()
 
-    const localStorageNamespace = options.localStorageNamespace || '_user_';
+    const localStorageNamespace = options.localStorageNamespace || '_user_'
 
     let userModule = userStoreModuleFunction({ axios, userModel, profileModel, localStorageNamespace })
 
