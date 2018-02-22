@@ -84,6 +84,8 @@ class Authenticator {
       }
     ).then(() => {
       this.router.push({ name: this.routes.logout })
+    }).catch(() => {
+      this.router.push({ name: this.routes.logout })
     })
   }
 
