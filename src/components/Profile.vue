@@ -221,7 +221,7 @@ export default {
     }
   },
 
-  name: 'uam_profile',
+  name: 'uam-profile',
 
   props: ['update-url']
 }
