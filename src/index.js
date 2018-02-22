@@ -147,6 +147,23 @@ const VuePlugin = {
       store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return response
     }, (error) => {
+      if (error.response && error.response.status === 401) {
+        return new Promise((resolve, reject) => {
+          Vue.uamAuth.refreshToken()
+            .then(() => {
+              error.config.headers.Authorization = axios.defaults.headers.common['Authorization']
+
+              store.dispatch(moduleNamespace + '/updateRequestPending', false)
+
+              resolve(axios(error.config))
+            })
+            .catch((error) => {
+              store.dispatch(moduleNamespace + '/updateRequestPending', false)
+              reject(error)
+            })
+        })
+      }
+
       store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return Promise.reject(error)
     })
