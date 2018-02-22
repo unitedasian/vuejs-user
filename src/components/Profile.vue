@@ -161,23 +161,17 @@ export default {
     updateProfile () {
       this.$emit('before-update')
 
-      this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { profile: this.profile.state })
-        .then((response) => {
-          this.$uamAuth.updateProfile(response.data.profile)
-            .then(() => {
-              this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
-            })
+      this.$uamAuth.updateProfile({ profile: this.profile.state }, this.updateUrl)
+        .then(() => {
+          this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             this.$uamAuth.refreshToken()
               .then(() => {
-                this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { profile: this.profile.state })
-                  .then((response) => {
-                    this.$uamAuth.updateProfile(response.data.profile)
-                      .then(() => {
-                        this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
-                      })
+                this.$uamAuth.updateProfile({ profile: this.profile.state }, this.updateUrl)
+                  .then(() => {
+                    this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
                   })
               })
               .catch((error) => {
@@ -198,23 +192,17 @@ export default {
     updateUser () {
       this.$emit('before-update')
 
-      this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { user: this.user.state })
-        .then((response) => {
-          this.$uamAuth.updateUser(response.data)
-            .then(() => {
-              this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
-            })
+      this.$uamAuth.updateUser({ user: this.user.state }, this.updateUrl)
+        .then(() => {
+          this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             this.$uamAuth.refreshToken()
               .then(() => {
-                this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { user: this.user.state })
-                  .then((response) => {
-                    this.$uamAuth.updateUser(response.data)
-                      .then(() => {
-                        this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
-                      })
+                this.$uamAuth.updateUser({ user: this.user.state }, this.updateUrl)
+                  .then(() => {
+                    this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
                   })
               })
               .catch((error) => {

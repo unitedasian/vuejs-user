@@ -26,10 +26,7 @@ const VuePlugin = {
 
     let store = options.store
 
-    Vue.axios = options.axios
-    Vue.prototype.$axios = options.axios
-
-    let axios = Vue.axios
+    let axios = options.axios
 
     let profileModel = options.profileModel || new UAMProfile()
     let userModel = options.userModel || new UAMUser()
