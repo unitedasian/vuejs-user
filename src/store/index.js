@@ -21,13 +21,14 @@ export default function (options) {
 
   const state = {
     isLoggedIn: !!Vue.ls.get('access_token'),
-    tokenExpiresAt: Vue.ls.get('access_token_expire'),
     isRefreshExpired: Vue.ls.get('is_refresh_expired'),
-    user: Vue.ls.get('user'),
-    pending: false,
-    locale: 'en',
+    isRefreshing: Vue.ls.get('is_refreshing'),
+    isRequestPending: false,
     isSocialAuthPending: false,
-    isRequestPending: false
+    locale: 'en',
+    pending: false,
+    tokenExpiresAt: Vue.ls.get('access_token_expire'),
+    user: Vue.ls.get('user')
   }
 
   return {

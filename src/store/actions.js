@@ -87,6 +87,10 @@ export default function (axios) {
 
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common['Authorization'] = ''
+
+      Vue.ls.set('is_refreshing', true)
+      commit(types.UPDATE_IS_REFRESHING, true)
+
       axios.post(payload.refreshUrl)
         .then((response) => {
           let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
@@ -97,10 +101,17 @@ export default function (axios) {
 
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
           commit(types.LOGIN_SUCCESS)
+
+          Vue.ls.set('is_refreshing', false)
+          commit(types.UPDATE_IS_REFRESHING, false)
+
           resolve()
         }, (error) => {
           Vue.ls.clear()
           Vue.ls.set('is_refresh_expired', true)
+
+          Vue.ls.set('is_refreshing', false)
+          commit(types.UPDATE_IS_REFRESHING, false)
 
           commit(types.LOGOUT)
           reject(error)

@@ -147,10 +147,16 @@ const VuePlugin = {
       store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return response
     }, (error) => {
-      if (error.response && error.response.status === 401) {
+      if (
+        error.response &&
+        error.response.status === 401 &&
+        !error.config.__isRetryRequest &&
+        !Vue.uamAuth.isRefreshing()
+      ) {
         return new Promise((resolve, reject) => {
           Vue.uamAuth.refreshToken()
             .then(() => {
+              error.config.__isRetryRequest = true
               error.config.headers.Authorization = axios.defaults.headers.common['Authorization']
 
               store.dispatch(moduleNamespace + '/updateRequestPending', false)
