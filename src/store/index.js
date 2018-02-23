@@ -22,7 +22,6 @@ export default function (options) {
   const state = {
     isLoggedIn: !!Vue.ls.get('access_token'),
     isRefreshExpired: Vue.ls.get('is_refresh_expired'),
-    isRefreshing: Vue.ls.get('is_refreshing'),
     isRequestPending: false,
     isSocialAuthPending: false,
     locale: 'en',

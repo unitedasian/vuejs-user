@@ -44,10 +44,6 @@ class Authenticator {
     return this.store.getters[this.namespace + '/isRefreshExpired']
   }
 
-  isRefreshing () {
-    return this.store.getters[this.namespace + '/isRefreshing']
-  }
-
   isTokenExpired () {
     return (this.store.getters[this.namespace + '/tokenExpiresAt'] <= new Date().getTime())
   }

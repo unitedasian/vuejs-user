@@ -2,8 +2,6 @@ const isLoggedIn = state => state.isLoggedIn
 
 const isRefreshExpired = state => state.isRefreshExpired
 
-const isRefreshing = state => state.isRefreshing
-
 const isRequestPending = state => state.isRequestPending
 
 const isSocialAuthPending = state => state.isSocialAuthPending
@@ -28,7 +26,6 @@ export default function (options) {
   return {
     isLoggedIn,
     isRefreshExpired,
-    isRefreshing,
     isRequestPending,
     isSocialAuthPending,
     locale,

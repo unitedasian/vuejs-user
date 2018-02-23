@@ -21,10 +21,6 @@ export default {
     state.isLoggedIn = false
   },
 
-  [types.UPDATE_IS_REFRESHING] (state, isRefreshing) {
-    state.isRefreshing = isRefreshing
-  },
-
   [types.UPDATE_PROFILE] (state, profile) {
     state.user.profile = profile
   },

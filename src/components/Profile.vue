@@ -165,24 +165,15 @@ export default {
         .then(() => {
           this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
         })
-        .catch((error) => {
-          if (error.response && error.response.status === 401) {
-            this.$uamAuth.refreshToken()
-              .then(() => {
-                this.$uamAuth.updateProfile({ profile: this.profile.state }, this.updateUrl)
-                  .then(() => {
-                    this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
-                  })
-              })
-              .catch((error) => {
-                if (error.response.status === 401) {
-                  this.$emit('unauthorized-error')
-                } else {
-                  this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')})
-                }
-              })
-          } else if (error.response && error.response.status === 422) {
-            this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.validationError')})
+        .catch(error => {
+          if (error.response) {
+            if (error.response.status === 401) {
+              this.$emit('unauthorized-error')
+            } else if (error.response.status === 422) {
+              this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.validationError')})
+            } else {
+              this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')})
+            }
           } else {
             this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotconnect')})
           }
@@ -196,24 +187,15 @@ export default {
         .then(() => {
           this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
         })
-        .catch((error) => {
-          if (error.response && error.response.status === 401) {
-            this.$uamAuth.refreshToken()
-              .then(() => {
-                this.$uamAuth.updateUser({ user: this.user.state }, this.updateUrl)
-                  .then(() => {
-                    this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
-                  })
-              })
-              .catch((error) => {
-                if (error.response.status === 401) {
-                  this.$emit('unauthorized-error')
-                } else {
-                  this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')})
-                }
-              })
-          } else if (error.response && error.response.status === 422) {
-            this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.uniqueEmail')})
+        .catch(error => {
+          if (error.response) {
+            if (error.response.status === 401) {
+              this.$emit('unauthorized-error')
+            } else if (error.response.status === 422) {
+              this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.uniqueEmail')})
+            } else {
+              this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')})
+            }
           } else {
             this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotconnect')})
           }
