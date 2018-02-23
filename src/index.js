@@ -142,6 +142,26 @@ const VuePlugin = {
       return Promise.reject(error)
     })
 
+    let ongoingRefreshTokenPromise = null
+
+    /**
+     * This function makes a call to refresh access token(if ongoingRefreshTokenPromise is not set)
+     * or else, it returns the same promise as an in-progress call that refresh access token
+     */
+    function refreshToken () {
+      if (!ongoingRefreshTokenPromise) {
+        ongoingRefreshTokenPromise = Vue.uamAuth.refreshToken()
+
+        ongoingRefreshTokenPromise.then(resetOngoingRefreshTokenPromise, resetOngoingRefreshTokenPromise)
+      }
+
+      return ongoingRefreshTokenPromise
+    }
+
+    function resetOngoingRefreshTokenPromise () {
+      ongoingRefreshTokenPromise = null
+    }
+
     // Axios response interceptor
     axios.interceptors.response.use((response) => {
       store.dispatch(moduleNamespace + '/updateRequestPending', false)
@@ -150,25 +170,32 @@ const VuePlugin = {
       if (
         error.response &&
         error.response.status === 401 &&
-        !error.config.__isRetryRequest &&
-        !Vue.uamAuth.isRefreshing()
+        !error.config.__isRetryRequest/* &&
+        !Vue.uamAuth.isRefreshing() */
       ) {
         return new Promise((resolve, reject) => {
-          Vue.uamAuth.refreshToken()
+          refreshToken()
             .then(() => {
               error.config.__isRetryRequest = true
-              error.config.headers.Authorization = axios.defaults.headers.common['Authorization']
+              delete error.config.headers.Authorization
+              // error.config.headers.Authorization = axios.defaults.headers.common['Authorization']
+
+              console.log('After refresh success ', error.response)
 
               store.dispatch(moduleNamespace + '/updateRequestPending', false)
 
               resolve(axios(error.config))
             })
             .catch((error) => {
+              console.log('PluginRefreshError', error)
+
               store.dispatch(moduleNamespace + '/updateRequestPending', false)
               reject(error)
             })
         })
       }
+
+      console.log('indexPluginError', error.response)
 
       store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return Promise.reject(error)

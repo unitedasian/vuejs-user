@@ -91,7 +91,10 @@ export default function (axios) {
       Vue.ls.set('is_refreshing', true)
       commit(types.UPDATE_IS_REFRESHING, true)
 
-      axios.post(payload.refreshUrl)
+      let refreshAxiosInstance = axios.create({
+      })
+
+      refreshAxiosInstance.post(payload.refreshUrl)
         .then((response) => {
           let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
 
