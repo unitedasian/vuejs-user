@@ -1,7 +1,5 @@
 <template lang="html">
 <div>
-  <notification class="notify" v-if="showNotification" :notifications="notifications"></notification>
-
   <i v-if="isRequestPending" class="fa fa-spinner fa-3x fa-spin loading" aria-hidden="true"></i>
 
   <b-card no-body v-else>
@@ -107,7 +105,6 @@
 </template>
 
 <script>
-import mixinNotification from '../mixins/MixinNotification.vue'
 import Profile from '../models/Profile'
 import User from '../models/User'
 
@@ -162,90 +159,76 @@ export default {
     },
 
     updateProfile () {
-      this.clearNotifications()
+      this.$emit('before-update')
 
-      this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { profile: this.profile.state })
-        .then((response) => {
-          this.$uamAuth.updateProfile(response.data.profile)
-            .then(() => {
-              this.addNotification(this.$i18n.t('user.profile.notifyLabel.updated'), 'success')
-            })
+      this.$uamAuth.updateProfile({ profile: this.profile.state }, this.updateUrl)
+        .then(() => {
+          this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             this.$uamAuth.refreshToken()
               .then(() => {
-                this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { profile: this.profile.state })
-                  .then((response) => {
-                    this.$uamAuth.updateProfile(response.data.profile)
-                      .then(() => {
-                        this.addNotification(this.$i18n.t('user.profile.notifyLabel.updated'), 'success')
-                      })
+                this.$uamAuth.updateProfile({ profile: this.profile.state }, this.updateUrl)
+                  .then(() => {
+                    this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
                   })
               })
               .catch((error) => {
                 if (error.response.status === 401) {
                   this.$emit('unauthorized-error')
                 } else {
-                  this.addNotification(this.$i18n.t('user.profile.notifyLabel.cannotrefresh'))
+                  this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')})
                 }
               })
           } else if (error.response && error.response.status === 422) {
-            this.addNotification(this.$i18n.t('user.profile.notifyLabel.validationError'))
+            this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.validationError')})
           } else {
-            this.addNotification(this.$i18n.t('user.profile.notifyLabel.cannotconnect'))
+            this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotconnect')})
           }
         })
     },
 
     updateUser () {
-      this.clearNotifications()
+      this.$emit('before-update')
 
-      this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { user: this.user.state })
-        .then((response) => {
-          this.$uamAuth.updateUser(response.data)
-            .then(() => {
-              this.addNotification(this.$i18n.t('user.profile.notifyLabel.updated'), 'success')
-            })
+      this.$uamAuth.updateUser({ user: this.user.state }, this.updateUrl)
+        .then(() => {
+          this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             this.$uamAuth.refreshToken()
               .then(() => {
-                this.$axios.put(this.updateUrl + this.$uamAuth.user.id, { user: this.user.state })
-                  .then((response) => {
-                    this.$uamAuth.updateUser(response.data)
-                      .then(() => {
-                        this.addNotification(this.$i18n.t('user.profile.notifyLabel.updated'), 'success')
-                      })
+                this.$uamAuth.updateUser({ user: this.user.state }, this.updateUrl)
+                  .then(() => {
+                    this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
                   })
               })
               .catch((error) => {
                 if (error.response.status === 401) {
                   this.$emit('unauthorized-error')
                 } else {
-                  this.addNotification(this.$i18n.t('user.profile.notifyLabel.cannotrefresh'))
+                  this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')})
                 }
               })
           } else if (error.response && error.response.status === 422) {
-            this.addNotification(this.$i18n.t('user.profile.notifyLabel.uniqueEmail'))
+            this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.uniqueEmail')})
           } else {
-            this.addNotification(this.$i18n.t('user.profile.notifyLabel.cannotconnect'))
+            this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotconnect')})
           }
         })
     }
   },
 
-  mixins: [mixinNotification],
-
-  name: 'uam_profile',
+  name: 'uam-profile',
 
   props: ['update-url']
 }
 </script>
 
 <style scoped>
-    .invalid-feedback {
-        display: block;
-    }
+.invalid-feedback {
+  display: block;
+}
 </style>

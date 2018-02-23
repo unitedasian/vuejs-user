@@ -26,15 +26,12 @@ const VuePlugin = {
 
     let store = options.store
 
-    Vue.axios = options.axios
-    Vue.prototype.$axios = options.axios
-
-    let axios = Vue.axios
+    let axios = options.axios
 
     let profileModel = options.profileModel || new UAMProfile()
     let userModel = options.userModel || new UAMUser()
 
-    const localStorageNamespace = options.localStorageNamespace || '_user_';
+    const localStorageNamespace = options.localStorageNamespace || '_user_'
 
     let userModule = userStoreModuleFunction({ axios, userModel, profileModel, localStorageNamespace })
 

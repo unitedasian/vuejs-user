@@ -1,17 +1,41 @@
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const webpack = require('webpack')
 
 const extractSass = new ExtractTextPlugin({
-  filename: "user.css",
-  disable: process.env.NODE_ENV === "development"
+  filename: "user.css"
 })
+
+const uglifyPlugin = new webpack.optimize.UglifyJsPlugin({
+  parallel: true,
+  sourceMap : true
+})
+
+const plugins = [
+  extractSass
+]
+
+if (process.env.NODE_ENV === "production") {
+  plugins.push(uglifyPlugin)
+}
+
+
 
 module.exports = {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        options: {
+          formatter: require('eslint-friendly-formatter')
+        },
+        test: /\.(js|vue)$/
+      },
+      {
         exclude: /node_modules/,
         loaders: ['babel-loader'],
-        test: /\.js/
+        test: /\.js$/
       },
       {
         exclude: /node_modules/,
@@ -35,9 +59,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    extractSass
-  ],
+  plugins,
   resolve: {
     extensions: ['.js', '.vue'],
     alias: {

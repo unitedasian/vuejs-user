@@ -24,9 +24,12 @@ export default function (axios) {
 
               commit(types.LOGIN_SUCCESS)
               resolve()
-          })
+            })
+            .catch((error) => {
+              reject(error)
+            })
         })
-        .catch(function (error) {
+        .catch((error) => {
           reject(error)
         })
     })
@@ -51,14 +54,14 @@ export default function (axios) {
           commit(types.LOGIN_SUCCESS)
           resolve()
         })
-        .catch(function (error) {
+        .catch((error) => {
           reject(error)
         })
     })
   }
 
   const logout = ({commit}, payload) => {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       axios.post(payload.logoutUrl)
         .then((response) => {
           Vue.ls.clear()
@@ -67,7 +70,8 @@ export default function (axios) {
 
           commit(types.LOGOUT)
           resolve()
-        },(error) => {
+        })
+        .catch((error) => {
           Vue.ls.clear()
 
           delete axios.defaults.headers.common['Authorization']
@@ -104,15 +108,21 @@ export default function (axios) {
     })
   }
 
-  const updateProfile = ({commit}, profile) => {
-    return new Promise(resolve => {
-      let user = Vue.ls.get('user')
+  const updateProfile = ({commit}, payload) => {
+    return new Promise((resolve, reject) => {
+      axios.put(payload.updateUrl, payload.profile)
+        .then((response) => {
+          let user = Vue.ls.get('user')
 
-      user.profile = profile
+          user.profile = response.data.profile
 
-      Vue.ls.set('user', user)
-      commit(types.UPDATE_PROFILE, profile)
-      resolve()
+          Vue.ls.set('user', user)
+          commit(types.UPDATE_PROFILE, response.data.profile)
+          resolve()
+        })
+        .catch((error) => {
+          reject(error)
+        })
     })
   }
 
@@ -130,15 +140,23 @@ export default function (axios) {
     })
   }
 
-  const updateUser = ({commit}, user) => {
-    return new Promise(resolve => {
-      if (!user.profile) {
-        user.profile = Vue.ls.get('user').profile
-      }
+  const updateUser = ({commit}, payload) => {
+    return new Promise((resolve, reject) => {
+      axios.put(payload.updateUrl, payload.user)
+        .then((response) => {
+          let updatedUser = response.data
 
-      Vue.ls.set('user', user)
-      commit(types.UPDATE_USER, user)
-      resolve()
+          if (!updatedUser.profile) {
+            updatedUser.profile = Vue.ls.get('user').profile
+          }
+
+          Vue.ls.set('user', updatedUser)
+          commit(types.UPDATE_USER, updatedUser)
+          resolve()
+        })
+        .catch((error) => {
+          reject(error)
+        })
     })
   }
 

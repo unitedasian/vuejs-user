@@ -29,6 +29,13 @@ class Authenticator {
     return this.store.getters[this.namespace + '/user']
   }
 
+  convertCredentials (credentials) {
+    return {
+      [this.credentialsParamMapper.username]: credentials.username,
+      [this.credentialsParamMapper.password]: credentials.password
+    }
+  }
+
   isLoggedIn () {
     return this.store.getters[this.namespace + '/isLoggedIn']
   }
@@ -39,13 +46,6 @@ class Authenticator {
 
   isTokenExpired () {
     return (this.store.getters[this.namespace + '/tokenExpiresAt'] <= new Date().getTime())
-  }
-
-  convertCredentials (credentials) {
-    return {
-      [this.credentialsParamMapper.username] : credentials.username,
-      [this.credentialsParamMapper.password] : credentials.password
-    }
   }
 
   login (credentials) {
@@ -84,6 +84,8 @@ class Authenticator {
       }
     ).then(() => {
       this.router.push({ name: this.routes.logout })
+    }).catch(() => {
+      this.router.push({ name: this.routes.logout })
     })
   }
 
@@ -96,14 +98,14 @@ class Authenticator {
     )
   }
 
-  updateProfile (profile) {
+  updateProfile (profile, updateUrl) {
     return this.store
-      .dispatch(this.namespace + '/updateProfile', profile)
+      .dispatch(this.namespace + '/updateProfile', { profile, updateUrl })
   }
 
-  updateUser (user) {
+  updateUser (user, updateUrl) {
     return this.store
-      .dispatch(this.namespace + '/updateUser', user)
+      .dispatch(this.namespace + '/updateUser', { user, updateUrl })
   }
 }
 
