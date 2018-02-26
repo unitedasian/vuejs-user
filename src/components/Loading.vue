@@ -1,5 +1,5 @@
 <template>
-  <div class="loading"><i class="fa fa-refresh fa-spin fa-4x"></i></div>
+  <div class="loading"><i class="fa fa-refresh fa-spin fa-4x" aria-hidden="true"></i></div>
 </template>
 
 <script>
