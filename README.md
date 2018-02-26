@@ -146,13 +146,13 @@ Then you can render login component with various social login links by passing r
 
 ## For login form on modal dialog
 
-When refreshing token, if error occurs with 401 Unauthorized status, you can use `uam-login` component as modal body inside your modal.
+When mounting component if refresh token is expired(with `Vue.$uamAuth.isRefreshExpired()`) or on axios request if error occurs with 401 Unauthorized status, you can authenticate using `uam-login` component as modal body inside your modal.
 
 You can set `no-redirect` prop to remain on current page after logging through modal dialog.
-You can listen to `login-success` event and handle closing modal dialog, re-requesting endpoint etc. on your event handler.
+You have to handle events emitted by `uam-login` component. Such as, you can listen to `login-success` event and handle closing modal dialog, re-requesting endpoint etc. on your event handler.
 
 ```html
-<uam-login @login-success="hideLoginModal"></uam-login>
+<uam-login @before-login="clearFlashMessage" @login-error="showError" @login-success="hideLoginModal"/>
 ```
 
 ## Component Reference
