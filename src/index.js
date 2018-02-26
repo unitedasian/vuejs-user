@@ -179,7 +179,6 @@ const VuePlugin = {
               delete error.config.headers.Authorization
 
               store.dispatch(moduleNamespace + '/updateRequestPending', false)
-
               resolve(axios(error.config))
             })
             .catch((error) => {
