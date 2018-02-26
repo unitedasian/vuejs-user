@@ -142,13 +142,6 @@ export default {
   name: 'uam-user-login',
 
   props: {
-    noRedirect: { // if enabled, no redirect after successful login
-      type: Boolean,
-      default: false
-    },
-
-    redirectTo: String,
-
     title: String,
 
     facebook: { // facebook login

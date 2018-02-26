@@ -29,16 +29,27 @@ Install Vuejs user module as follows:
 ```js
 # main.js
 
+import userPlugin from 'uam-vuejs-user'
+
 import Profile from './models/Profile'
 import User from './models/User'
 
-import userPlugin from 'uam-vuejs-user'
-
-let userEndpoints = {
+let apiRoutes = {
+  currentUser: '/user/me?includes[]=profile',
   login: '/login',
   logout: '/logout',
-  refresh: '/login/refresh',
-  currentUser: '/user/me?includes[]=profile'
+  refresh: '/login/refresh'
+}
+
+let routes = {
+  login: 'login',
+  logout: 'login', // route to go after logout
+  profile: 'profile'
+}
+
+// key is credential param used by user plugin, value is param needed by backend
+let credentialsParamMapper = {
+  username: 'email'
 }
 
 let profileModel = new Profile()
@@ -46,7 +57,19 @@ let userModel = new User()
 
 Vue.use(
   userPlugin,
-  { store, router, redirectRoute: '/login', userEndpoints, vueAuthenticateOptions, axios, profileModel, userModel }
+  {
+    apiRoutes,
+    axios,
+    credentialsParamMapper,
+    localStorageNamespace: '_app_name_',
+    profileModel,
+    redirectRoute: 'login',
+    router,
+    routes,
+    store,
+    userModel,
+    vueAuthenticateOptions,
+  }
 )
 ```
 
@@ -54,15 +77,30 @@ Vue.use(
 
 | Option                 | Description                                   | Type     | Default Value       |
 |:-----------------------|:----------------------------------------------|:---------|:--------------------|
+| apiRoutes              | API endpoints related to user authentication  | Object   |                     |
 | axios                  | The instance of axios used by app             | Object   |                     |
+| credentialsParamMapper | Overridden credential keys to API keys mapper | Object   |                     |
 | localStorageNamespace  | Namespace(prefix) for local storage keys      | String   | `'_user_'`          |
 | profileModel           | The stub instance of profile model            | Object   | `UAMProfile` object |
 | redirectRoute          | Route name to redirect to, for authentication | String   | `'login'`           |
 | router                 | The registered router instance                | Object   |                     |
+| routes                 | Routes defined on app that are usd by plugin  | Object   |                     |
 | store                  | The Vuex store to use                         | Object   |                     |
-| userEndpoints          | User auth related backend urls                | Object   |                     |
 | userModel              | The stub instance of user model               | Object   | `UAMUser` object    |
 | vueAuthenticateOptions | Social login provider options                 | Object   |                     |
+
+**Note:** `routes` option can have `logout` key whose value does not refer route of logout. It refers the route to go after logout.
+
+## Route meta fields
+
+This plugin uses following meta fields in `beforeEach` guard of router instance.
+These can be specified when defining a route in the app
+
+
+| Meta field key   | Description                                                                       | Type    | Value  |
+|:-----------------|:----------------------------------------------------------------------------------|:--------|:-------|
+| redirectOnExpire | Redirect to `redirectRoute` when both access token and refresh token gets expired | Boolean | `true` |
+| requiresAuth     | Make route accessible to only authenticated user. Redirects to `redirectRoute` when user is not logged in. | Boolean | `true` |
 
 ## Social login
 
@@ -114,56 +152,54 @@ You can set `no-redirect` prop to remain on current page after logging through m
 You can listen to `login-success` event and handle closing modal dialog, re-requesting endpoint etc. on your event handler.
 
 ```html
-<uam-login @login-success="hideLoginModal" no-redirect></uam-login>
+<uam-login @login-success="hideLoginModal"></uam-login>
 ```
 
 ## Component Reference
 
 ### `<uam-login>`
 
-**Note:** App using `uam-login` component should have vue route named `home`. After successful login, page redirects to `home` route.
-
 #### Properties
 
-| Property    | Description                           | Type    | Default Value |
-|:------------|:--------------------------------------|:--------|:--------------|
-| redirect-to | vue route to redirect to, after login | String  |               |
-| no-redirect | No redirect on login success          | Boolean | `false`       |
-| facebook    | Facebook login button                 | Boolean | `false`       |
-| github      | Github login button                   | Boolean | `false`       |
-| google      | Google login button                   | Boolean | `false`       |
-| linkedin    | Linkedin login button                 | Boolean | `false`       |
+| Property    | Description                           | Type    | Default Value                     |
+|:------------|:--------------------------------------|:--------|:----------------------------------|
+| facebook    | Facebook login button                 | Boolean | `false`                           |
+| github      | Github login button                   | Boolean | `false`                           |
+| google      | Google login button                   | Boolean | `false`                           |
+| linkedin    | Linkedin login button                 | Boolean | `false`                           |
+| title       | Title to show as heading              | String  | translated `user.login.title` key |
 
 #### Events
 
-| Event         | Description                   |
-|:--------------|:------------------------------|
-| login-success | emits after successful login  |
+| Event         | Description                        |
+|:--------------|:-----------------------------------|
+| before-login  | emits before invoking login        |
+| login-error   | emits after error while logging in |
+| login-success | emits after successful login       |
 
 ### `<uam-profile>`
 
-**Note:** App using `uam-profile` component should have vue route named `login`. After successful logout, page redirects to `login` route.
-
 #### Properties
 
-| Property    | Description                    | Type    | Default Value |
-|:------------|:-------------------------------|:--------|:--------------|
-| update-url  | endpoint uri to update profile | String  |               |
+| Property    | Description                              | Type    | Default Value |
+|:------------|:-----------------------------------------|:--------|:--------------|
+| update-url  | API route to update current user profile | String  |               |
 
 #### Events
 
 | Event              | Description                                            |
 |:-------------------|:-------------------------------------------------------|
+| before-update      | emits before invoking update                           |
 | unauthorized-error | emits if response status is 401 while refreshing token |
+| update-error       | emits after error while updating profile               |
+| update-success     | emits after successful profile update                  |
 
 ### `<uam-user-menu>`
 
 #### Properties
 
-| Property       | Description                    | Type    | Default Value |
-|:---------------|:-------------------------------|:--------|:--------------|
-| button-content | Content to show on menu button | String  |               |
-| no-divider     | Do not show divider            | Boolean | `false`       |
-| no-profile     | Do not show profile menu item  | Boolean | `false`       |
-| profile-route  | Vue route name for profile     | String  | `'profile'`  |
-| right          | Right align dowpdown menu      | Boolean | `false`       |
+| Property       | Description                    | Type    | Default Value                      |
+|:---------------|:-------------------------------|:--------|:-----------------------------------|
+| divider        | Show dropdown divider          | Boolean | `true`                             |
+| right          | Right align dowpdown menu      | Boolean | `false`                            |
+| welcome        | Content to show on menu button | String  | translated `user.menu.welcome` key |
