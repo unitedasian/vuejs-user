@@ -74,18 +74,18 @@
 import Loading from '../components/Loading'
 
 export default {
-  computed: {
-    isSocialAuthPending () {
-      return this.$store.getters['user/isSocialAuthPending']
-    },
-
-    isRequestPending () {
-      return this.$store.getters['user/isRequestPending']
-    }
-  },
-
   components: {
     Loading
+  },
+
+  computed: {
+    isRequestPending () {
+      return this.$store.getters['user/isRequestPending']
+    },
+
+    isSocialAuthPending () {
+      return this.$store.getters['user/isSocialAuthPending']
+    }
   },
 
   data () {
@@ -142,13 +142,6 @@ export default {
   name: 'uam-user-login',
 
   props: {
-    noRedirect: { // if enabled, no redirect after successful login
-      type: Boolean,
-      default: false
-    },
-
-    redirectTo: String,
-
     title: String,
 
     facebook: { // facebook login

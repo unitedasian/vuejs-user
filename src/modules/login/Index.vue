@@ -1,6 +1,5 @@
 <template>
-  <uamLogin
-    :redirect-to="redirectTo" />
+  <uam-login/>
 </template>
 
 <script>

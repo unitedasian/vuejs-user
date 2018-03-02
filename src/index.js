@@ -142,11 +142,52 @@ const VuePlugin = {
       return Promise.reject(error)
     })
 
+    let ongoingRefreshTokenPromise = null
+
+    /**
+     * This function makes a call to refresh access token(if ongoingRefreshTokenPromise is not set)
+     * or else, it returns the same promise as an in-progress call that refresh access token
+     */
+    function getRefreshTokenPromise () {
+      if (!ongoingRefreshTokenPromise) {
+        ongoingRefreshTokenPromise = Vue.uamAuth.refreshToken()
+
+        ongoingRefreshTokenPromise.then(resetOngoingRefreshTokenPromise, resetOngoingRefreshTokenPromise)
+      }
+
+      return ongoingRefreshTokenPromise
+    }
+
+    function resetOngoingRefreshTokenPromise () {
+      ongoingRefreshTokenPromise = null
+    }
+
     // Axios response interceptor
     axios.interceptors.response.use((response) => {
       store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return response
     }, (error) => {
+      if (
+        error.response &&
+        error.response.status === 401 &&
+        !error.config.__isRetryRequest
+      ) {
+        return new Promise((resolve, reject) => {
+          getRefreshTokenPromise()
+            .then(() => {
+              error.config.__isRetryRequest = true
+              delete error.config.headers.Authorization
+
+              store.dispatch(moduleNamespace + '/updateRequestPending', false)
+              resolve(axios(error.config))
+            })
+            .catch((error) => {
+              store.dispatch(moduleNamespace + '/updateRequestPending', false)
+              reject(error)
+            })
+        })
+      }
+
       store.dispatch(moduleNamespace + '/updateRequestPending', false)
       return Promise.reject(error)
     })

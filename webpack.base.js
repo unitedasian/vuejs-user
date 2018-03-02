@@ -18,8 +18,6 @@ if (process.env.NODE_ENV === "production") {
   plugins.push(uglifyPlugin)
 }
 
-
-
 module.exports = {
   module: {
     rules: [
