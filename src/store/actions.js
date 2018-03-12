@@ -14,6 +14,7 @@ export default function (axios) {
 
           Vue.ls.set('access_token_expire', expireUtcTime - transmissionLagDuration)
           Vue.ls.set('access_token', response.data.access_token)
+          Vue.ls.set('refresh_token', response.data.refresh_token)
           Vue.ls.set('is_refresh_expired', false)
 
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
@@ -91,7 +92,13 @@ export default function (axios) {
       let refreshAxiosInstance = axios.create({
       })
 
-      refreshAxiosInstance.post(payload.refreshUrl)
+      let refreshPayload = null
+
+      if (Vue.ls.get('refresh_token')) {
+        refreshPayload = { refresh_token: Vue.ls.get('refresh_token') }
+      }
+
+      refreshAxiosInstance.post(payload.refreshUrl, refreshPayload)
         .then((response) => {
           let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
 
