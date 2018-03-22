@@ -14,10 +14,10 @@ module.exports = merge(require('./webpack.base'), {
   },
 
   externals: {
+    'vue': 'vue',
     'vue-authenticate': 'vue-authenticate',
     'vue-axios': 'vue-axios',
     'vue-ls': 'vue-ls',
-    'vuex': 'vuex',
-    'vue': 'vue'
+    'vuex': 'vuex'
   }
 })
