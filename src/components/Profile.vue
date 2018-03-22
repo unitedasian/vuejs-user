@@ -176,7 +176,7 @@ export default {
         })
         .catch(error => {
           if (error.response) {
-            if (error.response.status === 401) {
+            if (error.response.status === 401 || error.response.status === 403) {
               this.$emit('unauthorized-error')
             } else if (error.response.status === 422) {
               this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.validationError')})
@@ -198,7 +198,7 @@ export default {
         })
         .catch(error => {
           if (error.response) {
-            if (error.response.status === 401) {
+            if (error.response.status === 401 || error.response.status === 403) {
               this.$emit('unauthorized-error')
             } else if (error.response.status === 422) {
               this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.uniqueEmail')})
@@ -212,7 +212,7 @@ export default {
     }
   },
 
-  name: 'uam-profile',
+  name: 'UAMUserProfile',
 
   props: ['update-url']
 }

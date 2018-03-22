@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'uam-user-loading'
+  name: 'UAMUserLoading'
 }
 </script>
 

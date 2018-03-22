@@ -128,7 +128,7 @@ export default {
             })
             .catch((error) => {
               this.credentials.password = ''
-              if (error.response && error.response.status === 401) {
+              if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                 this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.unauthorized')})
               } else {
                 this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.cannotconnect')})
@@ -139,7 +139,7 @@ export default {
     }
   },
 
-  name: 'uam-user-login',
+  name: 'UAMUserLogin',
 
   props: {
     title: String,
