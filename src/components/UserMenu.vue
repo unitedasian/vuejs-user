@@ -1,10 +1,13 @@
 <template>
   <b-nav>
     <template v-if="!isLoggedIn">
-      <b-nav-item @click.prevent="login">
+      <b-nav-item
+        @click.prevent="doLogin">
         {{ $t('user.menu.login') }}
       </b-nav-item>
-      <b-nav-item @click.prevent="signup" v-if="signupRoute">
+      <b-nav-item
+        @click.prevent="doSignup"
+        v-if="signup">
         {{ $t('user.menu.signup') }}
       </b-nav-item>
     </template>
@@ -14,16 +17,18 @@
           {{ welcome ? welcome : $t('user.menu.welcome', { user: $uamAuth.user.username  }) }}
         </template>
 
-        <b-dropdown-item  @click.prevent="profile" v-if="profileRoute">
+        <b-dropdown-item
+          @click.prevent="doProfile"
+          v-if="profile">
           <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
-          {{ $t('user.menu.profile') }}
+          {{ $t('user.menu.profilex') }}
         </b-dropdown-item>
 
         <slot></slot>
 
         <div v-if="divider" class="dropdown-divider"></div>
 
-        <b-dropdown-item href="#" @click.prevent="logout">
+        <b-dropdown-item href="#" @click.prevent="doLogout">
           <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
           {{ $t('user.menu.logout') }}
         </b-dropdown-item>
@@ -33,44 +38,44 @@
 </template>
 
 <script>
+import route from '../mixins/route'
+
 export default {
   computed: {
     isLoggedIn () {
       return this.$uamAuth.isLoggedIn()
-    },
-
-    profileRoute () {
-      return this.$uamAuth.routes.profile
-    },
-
-    signupRoute () {
-      return this.$uamAuth.routes.signup
     }
   },
 
   methods: {
-    login () {
-      this.$router.push({ name: this.$uamAuth.routes.login })
+    doLogin () {
+      this.$router.push(this.getRoute(this.login))
     },
 
-    logout () {
+    doLogout () {
       this.$uamAuth.logout()
     },
 
-    profile () {
-      this.$router.push({ name: this.$uamAuth.routes.profile })
+    doProfile () {
+      this.$router.push(this.getRoute(this.profile))
     },
 
-    signup () {
-      if (this.$uamAuth.doSignup) {
-        this.$router.push({ name: this.$uamAuth.routes.signup })
+    doSignup () {
+      if (this.signup) {
+        this.$router.push(this.getRoute(this.signup))
       }
     }
   },
 
+  mixins: [ route ],
+
   name: 'UAMUserMenu',
 
   props: {
+    login: {
+      type: [ Object, String ],
+      default: 'login'
+    },
     divider: {
       type: Boolean,
       default: true
@@ -78,6 +83,10 @@ export default {
     right: { // Right align dowpdown menu (default is left align)
       type: Boolean,
       default: false
+    },
+    signup: {
+      type: [ Object, String ],
+      default: 'signup'
     },
     welcome: String
   }

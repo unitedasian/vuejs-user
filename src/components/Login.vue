@@ -12,6 +12,10 @@
       </slot>
 
       <div v-else>
+        <div class="alert alert-danger" v-if="error">
+          {{ this.$i18n.t('user.login.error.' + this.error) }}
+        </div>
+
         <form @submit.prevent="onSubmit" class="login-form">
           <div class="form-group">
             <label for="username">{{ $t('user.login.username.label') }}</label>
@@ -72,6 +76,7 @@
 
 <script>
 import Loading from '../components/Loading'
+import route from '../mixins/route'
 
 export default {
   components: {
@@ -93,26 +98,32 @@ export default {
       credentials: {
         username: '',
         password: ''
-      }
+      },
+
+      error: false
     }
   },
 
   methods: {
     authenticate (provider) {
-      this.$emit('before-login')
+      this.$emit('login:start')
 
       this.$auth.authenticate(provider)
         .then((authResponse) => {
           this.$uamAuth.loginWithToken(authResponse.data)
             .then(() => {
-              this.$emit('login-success', {social: true})
+              this.$emit('login:success', { social: true })
             })
             .catch(() => {
-              this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.unknownError')})
+              this.$emit('login:error', { error: error })
+
+              this.error = 'other'
             })
         }, (error) => {
           if (error.message === 'Network Error') {
-            this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.cannotconnect')})
+            this.$emit('login:error', { error: error })
+
+            this.error = 'connection'
           }
         })
     },
@@ -120,24 +131,37 @@ export default {
     onSubmit () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.$emit('before-login')
+          this.error = false
+
+          this.$emit('login:start')
 
           this.$uamAuth.login(this.credentials)
             .then(() => {
-              this.$emit('login-success', {social: false})
+              this.$emit('login:success', { social: false })
+
+              this.$router.push(this.getRoute(this.getRoute(this.redirectTo || 'home')))
             })
             .catch((error) => {
               this.credentials.password = ''
-              if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-                this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.unauthorized')})
+
+              if (error.response &&
+                (error.response.status === 401 ||
+                  error.response.status === 403)) {
+                this.$emit('login:error', { error: error })
+
+                this.error = 'authentication'
               } else {
-                this.$emit('login-error', {message: this.$i18n.t('user.login.notifyLabel.cannotconnect')})
+                this.$emit('login:error', { error: error })
+
+                this.error = 'connection'
               }
             })
         }
       })
     }
   },
+
+  mixins: [ route ],
 
   name: 'UAMUserLogin',
 

@@ -1,15 +1,10 @@
 {
   "user": {
     "login": {
-      "errors": {
+      "error": {
         "authentication": "Invalid credentials.",
         "connection": "Cannot connect to authentication server",
         "other": "Oops! An unexpected error occurred."
-      },
-      "notifyLabel": {
-        "cannotconnect": "Cannot connect to server",
-        "unauthorized": "Invalid credentials",
-        "unknownError": "Sorry. An error occurred."
       },
       "password": {
         "label": "Password",
