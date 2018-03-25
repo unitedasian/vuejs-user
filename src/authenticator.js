@@ -25,6 +25,8 @@ class Authenticator {
     }
 
     this.namespace = options.namespace || 'user' // namespace of store module
+
+    this.redirectAfterLogout = options.redirectAfterLogout || 'home'
   }
 
   get user () {
@@ -85,9 +87,9 @@ class Authenticator {
         logoutUrl: this.apiRoutes.logout
       }
     ).then(() => {
-      this.router.push({ name: this.routes.logout })
+      this.router.push({ name: this.redirectAfterLogout })
     }).catch(() => {
-      this.router.push({ name: this.routes.logout })
+      this.router.push({ name: this.redirectAfterLogout })
     })
   }
 

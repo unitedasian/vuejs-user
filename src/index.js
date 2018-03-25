@@ -49,7 +49,7 @@ const VuePlugin = {
         credentialsParamMapper: options.credentialsParamMapper,
         namespace: moduleNamespace,
         router: options.router,
-        routes: options.routes,
+        redirectAfterLogout: options.redirectAfterLogout,
         store
       }
     )
@@ -69,7 +69,7 @@ const VuePlugin = {
           // if not, redirect to login page.
           if (!Vue.uamAuth.isLoggedIn()) {
             next({
-              name:loginRouteName,
+              name: loginRouteName,
               query: { redirect: to.name }
             })
           } else {

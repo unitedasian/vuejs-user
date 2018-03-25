@@ -109,23 +109,26 @@ export default {
       this.$emit('login:start')
 
       this.$auth.authenticate(provider)
-        .then((authResponse) => {
-          this.$uamAuth.loginWithToken(authResponse.data)
-            .then(() => {
-              this.$emit('login:success', { social: true })
-            })
-            .catch(() => {
+        .then(
+          authResponse => {
+            this.$uamAuth.loginWithToken(authResponse.data)
+              .then(() => {
+                this.$emit('login:success', { social: true })
+              })
+              .catch(error => {
+                this.$emit('login:error', { error: error })
+
+                this.error = 'other'
+              })
+          },
+          error => {
+            if (error.message === 'Network Error') {
               this.$emit('login:error', { error: error })
 
-              this.error = 'other'
-            })
-        }, (error) => {
-          if (error.message === 'Network Error') {
-            this.$emit('login:error', { error: error })
-
-            this.error = 'connection'
+              this.error = 'connection'
+            }
           }
-        })
+        )
     },
 
     onSubmit () {
@@ -139,9 +142,12 @@ export default {
             .then(() => {
               this.$emit('login:success', { social: false })
 
-              this.$router.push(this.getRoute(this.getRoute(this.redirectTo || 'home')))
+              this.$router.push(this.getRoute(
+                this.$route.query.redirect ||
+                this.redirect
+              ))
             })
-            .catch((error) => {
+            .catch(error => {
               this.credentials.password = ''
 
               if (error.response &&
@@ -166,6 +172,11 @@ export default {
   name: 'UAMUserLogin',
 
   props: {
+    redirect: {
+      type: [Object, String],
+      default: 'home'
+    },
+
     title: String,
 
     facebook: { // facebook login

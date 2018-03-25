@@ -82,9 +82,9 @@ Vue.use(
 | credentialsParamMapper | Overridden credential keys to API keys mapper | Object   |                     |
 | localStorageNamespace  | Namespace(prefix) for local storage keys      | String   | `'_user_'`          |
 | profileModel           | The stub instance of profile model            | Object   | `UAMProfile` object |
-| redirectRoute          | Route name to redirect to, for authentication | String   | `'login'`           |
+| loginRouteName         | The name of the login route                  | String   | `'login'`           |
+| redirectAfterLogout.   | The name of the route to redirect to after user logs out | String        | home |
 | router                 | The registered router instance                | Object   |                     |
-| routes                 | Routes defined on app that are usd by plugin  | Object   |                     |
 | store                  | The Vuex store to use                         | Object   |                     |
 | userModel              | The stub instance of user model               | Object   | `UAMUser` object    |
 | vueAuthenticateOptions | Social login provider options                 | Object   |                     |
@@ -167,6 +167,7 @@ You have to handle events emitted by `uam-login` component. Such as, you can lis
 | github      | Github login button                   | Boolean | `false`                           |
 | google      | Google login button                   | Boolean | `false`                           |
 | linkedin    | Linkedin login button                 | Boolean | `false`                           |
+| redirect    | Route to redirect to after login.     | 'String|Object' | home |
 | title       | Title to show as heading              | String  | translated `user.login.title` key |
 
 #### Events
@@ -198,8 +199,11 @@ You have to handle events emitted by `uam-login` component. Such as, you can lis
 
 #### Properties
 
-| Property       | Description                    | Type    | Default Value                      |
-|:---------------|:-------------------------------|:--------|:-----------------------------------|
-| divider        | Show dropdown divider          | Boolean | `true`                             |
-| right          | Right align dowpdown menu      | Boolean | `false`                            |
-| welcome        | Content to show on menu button | String  | translated `user.menu.welcome` key |
+| Property | Description                    | Type    | Default Value                      |
+|:---------|:-------------------------------|:--------|:-----------------------------------|
+| divider  | Show dropdown divider          | Boolean | `true` |
+| login    | Login route                    | Object, String | `login` |
+| profile  | Profile route                  | Object, String |  |
+| right    | Right align dowpdown menu      | Boolean | `false` |
+| signup   | Signup route                   | Object, String | `signup` |
+| welcome  | Content to show on menu button | String  | translated `user.menu.welcome` key |

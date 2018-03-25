@@ -21,7 +21,7 @@
           @click.prevent="doProfile"
           v-if="profile">
           <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
-          {{ $t('user.menu.profilex') }}
+          {{ $t('user.menu.profile') }}
         </b-dropdown-item>
 
         <slot></slot>
@@ -79,6 +79,9 @@ export default {
     divider: {
       type: Boolean,
       default: true
+    },
+    profile: {
+      type: [ Object, String ]
     },
     right: { // Right align dowpdown menu (default is left align)
       type: Boolean,
