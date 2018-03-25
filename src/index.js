@@ -28,6 +28,7 @@ const VuePlugin = {
     let axios = options.axios
 
     let profileModel = options.profileModel || new UAMProfile()
+
     let userModel = options.userModel || new UAMUser()
 
     const localStorageNamespace = options.localStorageNamespace || '_user_'
@@ -36,6 +37,7 @@ const VuePlugin = {
 
     // Registered store module is namespaced based on the path(module name) the module is registered at
     const moduleName = 'user'
+
     const moduleNamespace = moduleName
 
     // register `user` module to store dynamically

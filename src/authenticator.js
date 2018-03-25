@@ -20,7 +20,9 @@ class Authenticator {
       password: 'password'
     }
 
-    Object.assign(this.credentialsParamMapper, options.credentialsParamMapper)
+    if (options.credentialsParamMapper) {
+      Object.assign(this.credentialsParamMapper, options.credentialsParamMapper)
+    }
 
     this.namespace = options.namespace || 'user' // namespace of store module
   }
