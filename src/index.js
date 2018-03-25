@@ -2,7 +2,6 @@ import Authenticator from './authenticator'
 import * as components from './components'
 import UAMProfile from './models/Profile'
 import UAMUser from './models/User'
-import UAMUserRouter from './router'
 import userStoreModuleFunction from './store'
 
 import VueAuthenticate from 'vue-authenticate'
@@ -100,8 +99,7 @@ const VuePlugin = {
       }
     })
 
-    let socialAuthAxiosInstance = axios.create({
-    })
+    let socialAuthAxiosInstance = axios.create({})
 
     Vue.use(VueAxios, socialAuthAxiosInstance)
 
@@ -169,8 +167,8 @@ const VuePlugin = {
     }, (error) => {
       if (
         error.response &&
-        error.response.status === 401 &&
-        !error.config.__isRetryRequest
+          error.response.status === 401 &&
+          !error.config.__isRetryRequest
       ) {
         return new Promise((resolve, reject) => {
           getRefreshTokenPromise()
@@ -189,6 +187,7 @@ const VuePlugin = {
       }
 
       store.dispatch(moduleNamespace + '/updateRequestPending', false)
+
       return Promise.reject(error)
     })
   }
@@ -202,6 +201,5 @@ export default VuePlugin
 
 export {
   UAMProfile,
-  UAMUser,
-  UAMUserRouter
+  UAMUser
 }
