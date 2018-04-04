@@ -142,10 +142,12 @@ export default {
             .then(() => {
               this.$emit('login:success', { social: false })
 
-              this.$router.push(this.getRoute(
-                this.$route.query.redirect ||
-                this.redirect
-              ))
+              if (!this.noRedirect) {
+                this.$router.push(this.getRoute(
+                  this.$route.query.redirect ||
+                  this.redirect
+                ))
+              }
             })
             .catch(error => {
               this.credentials.password = ''
@@ -172,6 +174,11 @@ export default {
   name: 'UAMUserLogin',
 
   props: {
+    noRedirect: { // if enabled, no redirect after successful login
+      type: Boolean,
+      default: false
+    },
+
     redirect: {
       type: [Object, String],
       default: 'home'
