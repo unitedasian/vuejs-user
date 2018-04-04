@@ -81,9 +81,9 @@ Vue.use(
 | axios                  | The instance of axios used by app             | Object   |                     |
 | credentialsParamMapper | Overridden credential keys to API keys mapper | Object   |                     |
 | localStorageNamespace  | Namespace(prefix) for local storage keys      | String   | `'_user_'`          |
+| loginRouteName         | The name of the login route                   | String   | `'login'`           |
 | profileModel           | The stub instance of profile model            | Object   | `UAMProfile` object |
-| loginRouteName         | The name of the login route                  | String   | `'login'`           |
-| redirectAfterLogout.   | The name of the route to redirect to after user logs out | String        | home |
+| redirectAfterLogout.   | The name of the route to redirect to after user logs out | String       | home |
 | router                 | The registered router instance                | Object   |                     |
 | store                  | The Vuex store to use                         | Object   |                     |
 | userModel              | The stub instance of user model               | Object   | `UAMUser` object    |
@@ -149,10 +149,10 @@ Then you can render login component with various social login links by passing r
 When mounting component if refresh token is expired(with `Vue.$uamAuth.isRefreshExpired()`) or on axios request if error occurs with 401 Unauthorized status, you can authenticate using `uam-login` component as modal body inside your modal.
 
 You can set `no-redirect` prop to remain on current page after logging through modal dialog.
-You have to handle events emitted by `uam-login` component. Such as, you can listen to `login-success` event and handle closing modal dialog, re-requesting endpoint etc. on your event handler.
+You can listen to `login:success` event and handle closing modal dialog, re-requesting endpoint etc. on your event handler.
 
 ```html
-<uam-login @before-login="clearFlashMessage" @login-error="showError" @login-success="hideLoginModal"/>
+<uam-login @login:success="hideLoginModal" no-redirect></uam-login>
 ```
 
 ## Component Reference
@@ -167,16 +167,17 @@ You have to handle events emitted by `uam-login` component. Such as, you can lis
 | github      | Github login button                   | Boolean | `false`                           |
 | google      | Google login button                   | Boolean | `false`                           |
 | linkedin    | Linkedin login button                 | Boolean | `false`                           |
-| redirect    | Route to redirect to after login.     | 'String|Object' | home |
+| no-redirect | No redirect on login success          | Boolean | `false`                           |
+| redirect    | Route to redirect to after login.     | 'String|Object' | `'home'`                  |
 | title       | Title to show as heading              | String  | translated `user.login.title` key |
 
 #### Events
 
 | Event         | Description                        |
 |:--------------|:-----------------------------------|
-| before-login  | emits before invoking login        |
-| login-error   | emits after error while logging in |
-| login-success | emits after successful login       |
+| login:error   | emits after error while logging in |
+| login:start   | emits before invoking login        |
+| login:success | emits after successful login       |
 
 ### `<uam-profile>`
 
@@ -199,11 +200,11 @@ You have to handle events emitted by `uam-login` component. Such as, you can lis
 
 #### Properties
 
-| Property | Description                    | Type    | Default Value                      |
-|:---------|:-------------------------------|:--------|:-----------------------------------|
-| divider  | Show dropdown divider          | Boolean | `true` |
-| login    | Login route                    | Object, String | `login` |
-| profile  | Profile route                  | Object, String |  |
-| right    | Right align dowpdown menu      | Boolean | `false` |
-| signup   | Signup route                   | Object, String | `signup` |
-| welcome  | Content to show on menu button | String  | translated `user.menu.welcome` key |
+| Property | Description                    | Type           | Default Value                      |
+|:---------|:-------------------------------|:---------------|:-----------------------------------|
+| divider  | Show dropdown divider          | Boolean        | `true`                             |
+| login    | Login route                    | Object, String | `'login'`                          |
+| profile  | Profile route                  | Object, String |                                    |
+| right    | Right align dowpdown menu      | Boolean        | `false`                            |
+| signup   | Signup route                   | Object, String | `'signup'`                         |
+| welcome  | Content to show on menu button | String         | translated `user.menu.welcome` key |
