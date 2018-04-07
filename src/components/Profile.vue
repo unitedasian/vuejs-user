@@ -1,12 +1,12 @@
 <template lang="html">
-  <div>
+  <div class="profile">
     <slot
       name="loading"
       v-if="isRequestPending">
       <Loading />
     </slot>
 
-    <b-card no-body v-else>
+    <template v-else>
       <b-tabs ref="tabs" card>
         <b-tab :title="this.$i18n.t('user.profile.tabLabel.credentials')" active>
           <form @submit.prevent="onSubmit('user')" :data-vv-scope="scope.credentials">
@@ -104,7 +104,7 @@
           </form>
         </b-tab>
       </b-tabs>
-    </b-card>
+    </template>
   </div>
 </template>
 
@@ -170,21 +170,47 @@ export default {
     updateProfile () {
       this.$emit('before-update')
 
-      this.$uamAuth.updateProfile({ profile: this.profile.state }, this.updateUrl)
+      this.$uamAuth.updateProfile(
+        {
+          profile: this.profile.state
+        },
+        this.updateUrl
+      )
         .then(() => {
-          this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
+          this.$emit(
+            'update-success',
+            {
+              message: this.$i18n.t('user.profile.notifyLabel.updated')
+            }
+          )
         })
         .catch(error => {
           if (error.response) {
-            if (error.response.status === 401 || error.response.status === 403) {
+            if (error.response.status === 401 ||
+              error.response.status === 403) {
               this.$emit('unauthorized-error')
             } else if (error.response.status === 422) {
-              this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.validationError')})
+              this.$emit(
+                'update-error',
+                {
+                  message: this.$i18n.t('user.profile.notifyLabel.validationError')
+                }
+              )
             } else {
-              this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')})
+              this.$emit(
+                'update-error',
+                {
+                  message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')
+                }
+              )
             }
           } else {
-            this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotconnect')})
+            this.$emit(
+              'update-error',
+              {
+                message: this.$i18n.t('user.profile.notifyLabel.cannotconnect')
+              }
+            )
           }
         })
     },
@@ -192,21 +218,47 @@ export default {
     updateUser () {
       this.$emit('before-update')
 
-      this.$uamAuth.updateUser({ user: this.user.state }, this.updateUrl)
+      this.$uamAuth.updateUser(
+        {
+          user: this.user.state
+        },
+        this.updateUrl
+      )
         .then(() => {
-          this.$emit('update-success', {message: this.$i18n.t('user.profile.notifyLabel.updated')})
+          this.$emit(
+            'update-success',
+            {
+              message: this.$i18n.t('user.profile.notifyLabel.updated')
+            }
+          )
         })
         .catch(error => {
           if (error.response) {
-            if (error.response.status === 401 || error.response.status === 403) {
+            if (error.response.status === 401 ||
+              error.response.status === 403) {
               this.$emit('unauthorized-error')
             } else if (error.response.status === 422) {
-              this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.uniqueEmail')})
+              this.$emit(
+                'update-error',
+                {
+                  message: this.$i18n.t('user.profile.notifyLabel.uniqueEmail')
+                }
+              )
             } else {
-              this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')})
+              this.$emit(
+                'update-error',
+                {
+                  message: this.$i18n.t('user.profile.notifyLabel.cannotrefresh')
+                }
+              )
             }
           } else {
-            this.$emit('update-error', {message: this.$i18n.t('user.profile.notifyLabel.cannotconnect')})
+            this.$emit(
+              'update-error',
+              {
+                message: this.$i18n.t('user.profile.notifyLabel.cannotconnect')
+              }
+            )
           }
         })
     }
