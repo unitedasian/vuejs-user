@@ -7,7 +7,7 @@
     </slot>
 
     <template v-else>
-      <b-card no-body>
+      <div class="card">
         <b-tabs ref="tabs" card>
           <b-tab :title="this.$i18n.t('user.profile.tabLabel.credentials')" active>
             <form @submit.prevent="onSubmit('user')" :data-vv-scope="scope.credentials">
@@ -144,7 +144,7 @@
             </form>
           </b-tab>
         </b-tabs>
-      </b-card>
+      </div>
     </template>
   </div>
 </template>
