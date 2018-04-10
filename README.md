@@ -83,7 +83,7 @@ Vue.use(
 | localStorageNamespace  | Namespace(prefix) for local storage keys      | String   | `'_user_'`          |
 | loginRouteName         | The name of the login route                   | String   | `'login'`           |
 | profileModel           | The stub instance of profile model            | Object   | `UAMProfile` object |
-| redirectAfterLogout.   | The name of the route to redirect to after user logs out | String       | home |
+| redirectAfterLogout    | The name of the route to redirect to after user logs out | String   | `'home'` |
 | router                 | The registered router instance                | Object   |                     |
 | store                  | The Vuex store to use                         | Object   |                     |
 | userModel              | The stub instance of user model               | Object   | `UAMUser` object    |
