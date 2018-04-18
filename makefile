@@ -18,6 +18,3 @@ patch:
 
 publish:
   npm publish --access public
-
-
-
