@@ -8,7 +8,7 @@ import mutations from './mutations'
 export default function (options) {
   const storageOptions = {
     namespace: options.localStorageNamespace,
-    name. 'uamUserLs'
+    name: 'uamUserLs'
   }
 
   Vue.use(LocalStorage, storageOptions)
