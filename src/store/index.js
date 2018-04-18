@@ -7,7 +7,8 @@ import mutations from './mutations'
 
 export default function (options) {
   const storageOptions = {
-    namespace: options.localStorageNamespace
+    namespace: options.localStorageNamespace,
+    name. 'uamUserLs'
   }
 
   Vue.use(LocalStorage, storageOptions)
@@ -16,18 +17,18 @@ export default function (options) {
   let profileModel = options.profileModel
   let userModel = options.userModel
 
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get('access_token')
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + vue.uamuUserLs.get('access_token')
   axios.defaults.withCredentials = true
 
   const state = {
-    isLoggedIn: !!Vue.ls.get('access_token'),
-    isRefreshExpired: Vue.ls.get('is_refresh_expired'),
+    isLoggedIn: !!vue.uamuUserLs.get('access_token'),
+    isRefreshExpired: vue.uamuUserLs.get('is_refresh_expired'),
     isRequestPending: false,
     isSocialAuthPending: false,
     locale: 'en',
     pending: false,
-    tokenExpiresAt: Vue.ls.get('access_token_expire'),
-    user: Vue.ls.get('user')
+    tokenExpiresAt: Vue.uamUserLs.get('access_token_expire'),
+    user: vue.uamuUserLs.get('user')
   }
 
   return {
