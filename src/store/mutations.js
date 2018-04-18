@@ -7,16 +7,16 @@ export default {
   },
 
   [types.LOGIN_SUCCESS] (state) {
-    state.tokenExpiresAt = vue.uamuUserLs.get('access_token_expire')
-    state.isRefreshExpired = vue.uamuUserLs.get('is_refresh_expired')
-    state.user = vue.uamuUserLs.get('user')
+    state.tokenExpiresAt = Vue.uamUserStorage.get('access_token_expire')
+    state.isRefreshExpired = Vue.uamUserStorage.get('is_refresh_expired')
+    state.user = Vue.uamUserStorage.get('user')
     state.isLoggedIn = true
     state.pending = false
   },
 
   [types.LOGOUT] (state) {
     state.tokenExpiresAt = null
-    state.isRefreshExpired = vue.uamuUserLs.get('is_refresh_expired')
+    state.isRefreshExpired = Vue.uamUserStorage.get('is_refresh_expired')
     state.user = null
     state.isLoggedIn = false
   },

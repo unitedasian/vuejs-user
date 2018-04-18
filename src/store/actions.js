@@ -12,16 +12,16 @@ export default function (axios) {
         .then((response) => {
           let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
 
-          vue.uamuUserLs.set('access_token_expire', expireUtcTime - transmissionLagDuration)
-          vue.uamuUserLs.set('access_token', response.data.access_token)
-          vue.uamuUserLs.set('refresh_token', response.data.refresh_token)
-          vue.uamuUserLs.set('is_refresh_expired', false)
+          Vue.uamUserStorage.set('access_token_expire', expireUtcTime - transmissionLagDuration)
+          Vue.uamUserStorage.set('access_token', response.data.access_token)
+          Vue.uamUserStorage.set('refresh_token', response.data.refresh_token)
+          Vue.uamUserStorage.set('is_refresh_expired', false)
 
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.uamUserLs.get('access_token')
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.uamUserStorage.get('access_token')
 
           axios.all([axios.get(payload.currentUserUrl)])
             .then(([{ data: userResponse }]) => {
-              vue.uamuUserLs.set('user', userResponse.user)
+              Vue.uamUserStorage.set('user', userResponse.user)
 
               commit(types.LOGIN_SUCCESS)
               resolve()
@@ -42,16 +42,16 @@ export default function (axios) {
     return new Promise((resolve, reject) => {
       let expireUtcTime = new Date().getTime() + (payload.token.expires_in * 1000) // in milliseconds
 
-      vue.uamuUserLs.set('access_token_expire', expireUtcTime - transmissionLagDuration)
-      vue.uamuUserLs.set('access_token', payload.token.access_token)
-      vue.uamuUserLs.set('refresh_token', payload.token.refresh_token)
-      vue.uamuUserLs.set('is_refresh_expired', false)
+      Vue.uamUserStorage.set('access_token_expire', expireUtcTime - transmissionLagDuration)
+      Vue.uamUserStorage.set('access_token', payload.token.access_token)
+      Vue.uamUserStorage.set('refresh_token', payload.token.refresh_token)
+      Vue.uamUserStorage.set('is_refresh_expired', false)
 
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.uamUserLs.get('access_token')
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.uamUserStorage.get('access_token')
 
       axios.get(payload.currentUserUrl)
         .then((response) => {
-          Vue.uamUserLs.set('user', response.data.user)
+          Vue.uamUserStorage.set('user', response.data.user)
 
           commit(types.LOGIN_SUCCESS)
           resolve()
@@ -66,7 +66,7 @@ export default function (axios) {
     return new Promise((resolve, reject) => {
       axios.post(payload.logoutUrl)
         .then((response) => {
-          Vue.uamUserLs.clear()
+          Vue.uamUserStorage.clear()
 
           delete axios.defaults.headers.common['Authorization']
 
@@ -74,7 +74,7 @@ export default function (axios) {
           resolve()
         })
         .catch((error) => {
-          vue.uamuUserLs.clear()
+          Vue.uamUserStorage.clear()
 
           delete axios.defaults.headers.common['Authorization']
 
@@ -95,25 +95,25 @@ export default function (axios) {
 
       let refreshPayload = null
 
-      if (vue.uamuUserLs.get('refresh_token')) {
-        refreshPayload = { refresh_token: vue.uamuUserLs.get('refresh_token') }
+      if (Vue.uamUserStorage.get('refresh_token')) {
+        refreshPayload = { refresh_token: Vue.uamUserStorage.get('refresh_token') }
       }
 
       refreshAxiosInstance.post(payload.refreshUrl, refreshPayload)
         .then((response) => {
           let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
 
-          vue.uamuUserLs.set('access_token_expire', expireUtcTime - transmissionLagDuration)
-          vue.uamuUserLs.set('access_token', response.data.access_token)
-          vue.uamuUserLs.set('refresh_token', response.data.refresh_token)
-          vue.uamuUserLs.set('is_refresh_expired', false)
+          Vue.uamUserStorage.set('access_token_expire', expireUtcTime - transmissionLagDuration)
+          Vue.uamUserStorage.set('access_token', response.data.access_token)
+          Vue.uamUserStorage.set('refresh_token', response.data.refresh_token)
+          Vue.uamUserStorage.set('is_refresh_expired', false)
 
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + vue.uamuUserLs.get('access_token')
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + Vue.uamUserStorage.get('access_token')
           commit(types.LOGIN_SUCCESS)
           resolve()
         }, (error) => {
-          vue.uamuUserLs.clear()
-          vue.uamuUserLs.set('is_refresh_expired', true)
+          Vue.uamUserStorage.clear()
+          Vue.uamUserStorage.set('is_refresh_expired', true)
 
           commit(types.LOGOUT)
           reject(error)
@@ -125,11 +125,11 @@ export default function (axios) {
     return new Promise((resolve, reject) => {
       axios.put(payload.updateUrl, payload.profile)
         .then((response) => {
-          let user = vue.uamuUserLs.get('user')
+          let user = Vue.uamUserStorage.get('user')
 
           user.profile = response.data.profile
 
-          vue.uamuUserLs.set('user', user)
+          Vue.uamUserStorage.set('user', user)
           commit(types.UPDATE_PROFILE, response.data.profile)
           resolve()
         })
@@ -160,10 +160,10 @@ export default function (axios) {
           let updatedUser = response.data
 
           if (!updatedUser.profile) {
-            updatedUser.profile = vue.uamuUserLs.get('user').profile
+            updatedUser.profile = Vue.uamUserStorage.get('user').profile
           }
 
-          vue.uamuUserLs.set('user', updatedUser)
+          Vue.uamUserStorage.set('user', updatedUser)
           commit(types.UPDATE_USER, updatedUser)
           resolve()
         })
