@@ -5,13 +5,13 @@
 ### via npm
 
 ```bash
-npm install uam-vuejs-user
+npm install @uam/vuejs-user
 ```
 
 ### via yarn
 
 ```bash
-yarn add uam-vuejs-user
+yarn add @uam/vuejs-user
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ Install Vuejs user module as follows:
 ```js
 # main.js
 
-import userPlugin from 'uam-vuejs-user'
+import userPlugin from '@uam/vuejs-user'
 
 import Profile from './models/Profile'
 import User from './models/User'
