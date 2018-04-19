@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import storage from './storage'
 import * as types from './mutation-types'
 
 export default {
@@ -7,16 +7,16 @@ export default {
   },
 
   [types.LOGIN_SUCCESS] (state) {
-    state.tokenExpiresAt = Vue.uamUserStorage.get('access_token_expire')
-    state.isRefreshExpired = Vue.uamUserStorage.get('is_refresh_expired')
-    state.user = Vue.uamUserStorage.get('user')
+    state.tokenExpiresAt = storage.get('access_token_expire')
+    state.isRefreshExpired = storage.get('is_refresh_expired')
+    state.user = storage.get('user')
     state.isLoggedIn = true
     state.pending = false
   },
 
   [types.LOGOUT] (state) {
     state.tokenExpiresAt = null
-    state.isRefreshExpired = Vue.uamUserStorage.get('is_refresh_expired')
+    state.isRefreshExpired = storage.get('is_refresh_expired')
     state.user = null
     state.isLoggedIn = false
   },
