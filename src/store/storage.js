@@ -57,7 +57,5 @@ export default {
     })
 
     localStorage.setItem('uam_user_' + name, stringifyValue)
-
-    console.log(localStorage.getItem('uam_user_' + name))
   }
 }
