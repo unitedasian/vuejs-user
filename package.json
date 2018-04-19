@@ -1,6 +1,6 @@
 {
   "name": "@uam/vuejs-user",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Vuejs user plugin",
   "homepage": "https://github.com/unitedasian/vuejs-user",
   "main": "dist/index.js",
