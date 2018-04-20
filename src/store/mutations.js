@@ -1,5 +1,5 @@
-import storage from './storage'
 import * as types from './mutation-types'
+import storage from './storage'
 
 export default {
   [types.LOGIN] (state) {

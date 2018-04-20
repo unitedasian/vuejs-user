@@ -1,5 +1,5 @@
-import Authenticator from './authenticator'
 import * as components from './components'
+import Authenticator from './authenticator'
 import UAMProfile from './models/Profile'
 import UAMUser from './models/User'
 import userStoreModuleFunction from './store'
@@ -31,9 +31,7 @@ const VuePlugin = {
 
     let userModel = options.userModel || new UAMUser()
 
-    const localStorageNamespace = options.localStorageNamespace || 'uam_user_'
-
-    let userModule = userStoreModuleFunction({ axios, userModel, profileModel, localStorageNamespace })
+    let userModule = userStoreModuleFunction({ axios, userModel, profileModel })
 
     // Registered store module is namespaced based on the path(module name) the module is registered at
     const moduleName = 'user'

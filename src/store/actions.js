@@ -1,5 +1,5 @@
-import storage from './storage'
 import * as types from './mutation-types'
+import storage from './storage'
 
 const transmissionLagDuration = 500 // in milliseconds
 
