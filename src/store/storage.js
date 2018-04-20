@@ -1,18 +1,20 @@
+const itemKeyPrefix = 'uam_user_'
+
 export default {
 
   /**
    * Clear storage
    */
   clear () {
-    if (this.length === 0) {
+    if (localStorage.length === 0) {
       return
     }
 
     const removedKeys = []
 
-    for (let i = 0; i < this.length; i++) {
-      const key = this.storage.key(i)
-      const regexp = new RegExp(`^${'uam_user_'}.+`, 'i')
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      const regexp = new RegExp(`^${itemKeyPrefix}.+`, 'i')
 
       if (regexp.test(key) === false) {
         continue
@@ -26,8 +28,15 @@ export default {
     }
   },
 
-  get (name, def = null) {
-    const item = localStorage.getItem('uam_user_' + name)
+  /**
+   * Get item
+   *
+   * @param {string} name
+   * @param {*} defaultValue - default value
+   * @returns {*}
+   */
+  get (name, defaultValue = null) {
+    const item = localStorage.getItem(itemKeyPrefix + name)
 
     if (item !== null) {
       try {
@@ -43,19 +52,26 @@ export default {
 
         this.remove(name)
       } catch (err) {
-        return def
+        return defaultValue
       }
     }
 
-    return def
+    return defaultValue
   },
 
+  /**
+   * Set item
+   *
+   * @param {string} name
+   * @param {*} value
+   * @param {number} expire - milliseconds
+   */
   set (name, value, expire = null) {
     const stringifyValue = JSON.stringify({
       value,
       expire: expire !== null ? new Date().getTime() + expire : null
     })
 
-    localStorage.setItem('uam_user_' + name, stringifyValue)
+    localStorage.setItem(itemKeyPrefix + name, stringifyValue)
   }
 }
