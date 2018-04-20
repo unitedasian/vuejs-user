@@ -61,7 +61,6 @@ Vue.use(
     apiRoutes,
     axios,
     credentialsParamMapper,
-    localStorageNamespace: '_app_name_',
     profileModel,
     redirectRoute: 'login',
     router,
@@ -80,7 +79,6 @@ Vue.use(
 | apiRoutes              | API endpoints related to user authentication  | Object   |                     |
 | axios                  | The instance of axios used by app             | Object   |                     |
 | credentialsParamMapper | Overridden credential keys to API keys mapper | Object   |                     |
-| localStorageNamespace  | Namespace(prefix) for local storage keys      | String   | `'_user_'`          |
 | loginRouteName         | The name of the login route                   | String   | `'login'`           |
 | profileModel           | The stub instance of profile model            | Object   | `UAMProfile` object |
 | redirectAfterLogout    | The name of the route to redirect to after user logs out | String   | `'home'` |
