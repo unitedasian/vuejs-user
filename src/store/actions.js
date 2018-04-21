@@ -9,7 +9,7 @@ export default function (axios) {
 
     return new Promise((resolve, reject) => {
       axios.post(payload.loginUrl, payload.credentials)
-        .then((response) => {
+        .then(response => {
           let expireUtcTime = new Date().getTime() + (response.data.expires_in * 1000) // in milliseconds
 
           storage.set('access_token_expire', expireUtcTime - transmissionLagDuration)
@@ -20,8 +20,8 @@ export default function (axios) {
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + storage.get('access_token')
 
           axios.get(payload.profileUrl)
-            .then(([{ data: userResponse }]) => {
-              storage.set('user', userResponse.user)
+            .then(profileResponse => {
+              storage.set('user', profileResponse.data.user)
 
               commit(types.LOGIN_SUCCESS)
 
