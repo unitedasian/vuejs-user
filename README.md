@@ -35,9 +35,9 @@ import Profile from './models/Profile'
 import User from './models/User'
 
 let apiRoutes = {
-  currentUser: '/user/me?includes[]=profile',
   login: '/login',
   logout: '/logout',
+  profile: '/profile',
   refresh: '/login/refresh'
 }
 

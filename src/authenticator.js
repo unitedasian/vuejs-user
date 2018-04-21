@@ -9,8 +9,8 @@ class Authenticator {
     this.apiRoutes = {
       login: '/login',
       logout: '/logout',
-      refresh: '/login/refresh',
-      currentUser: '/user/me?includes[]=profile'
+      profile: '/profile',
+      refresh: '/login/refresh'
     }
 
     Object.assign(this.apiRoutes, options.apiRoutes)
