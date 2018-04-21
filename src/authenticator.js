@@ -60,7 +60,7 @@ class Authenticator {
       {
         credentials: convertedCredentials,
         loginUrl: this.apiRoutes.login,
-        currentUserUrl: this.apiRoutes.currentUser
+        profileUrl: this.apiRoutes.profile
       }
     )
   }
@@ -75,7 +75,7 @@ class Authenticator {
       this.namespace + '/loginWithToken',
       {
         token,
-        currentUserUrl: this.apiRoutes.currentUser
+        profileUrl: this.apiRoutes.profile
       }
     )
   }

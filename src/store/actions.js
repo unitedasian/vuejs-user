@@ -19,11 +19,12 @@ export default function (axios) {
 
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + storage.get('access_token')
 
-          axios.all([axios.get(payload.currentUserUrl)])
+          axios.get(payload.profileUrl)
             .then(([{ data: userResponse }]) => {
               storage.set('user', userResponse.user)
 
               commit(types.LOGIN_SUCCESS)
+
               resolve()
             })
             .catch((error) => {
