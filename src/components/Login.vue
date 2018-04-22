@@ -132,7 +132,7 @@ export default {
     },
 
     onSubmit () {
-      this.$validator.validateAll().then((result) => {
+      this.$validator.validateAll().then(result => {
         if (result) {
           this.error = false
 
@@ -142,7 +142,7 @@ export default {
             .then(() => {
               this.$emit('login:success', { social: false })
 
-              if (!this.noRedirect) {
+              if (this.redirect) {
                 this.$router.push(this.getRoute(
                   this.$route.query.redirect ||
                   this.redirect
@@ -150,6 +150,8 @@ export default {
               }
             })
             .catch(error => {
+              console.log(error.response)
+
               this.credentials.password = ''
 
               if (error.response &&
@@ -171,14 +173,15 @@ export default {
 
   mixins: [ route ],
 
+  mounted () {
+    if (this.$uamAuth.isLoggedIn() && this.redirect) {
+      this.$router.push(this.redirect)
+    }
+  },
+
   name: 'UAMUserLogin',
 
   props: {
-    noRedirect: { // if enabled, no redirect after successful login
-      type: Boolean,
-      default: false
-    },
-
     redirect: {
       type: [Object, String],
       default: 'home'

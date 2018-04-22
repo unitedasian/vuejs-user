@@ -164,9 +164,8 @@ You can listen to `login:success` event and handle closing modal dialog, re-requ
 | facebook    | Facebook login button                 | Boolean | `false`                           |
 | github      | Github login button                   | Boolean | `false`                           |
 | google      | Google login button                   | Boolean | `false`                           |
-| linkedin    | Linkedin login button                 | Boolean | `false`                           |
-| no-redirect | No redirect on login success          | Boolean | `false`                           |
-| redirect    | Route to redirect to after login.     | 'String|Object' | `'home'`                  |
+| linkedin    | Linkedin login button                 | Boolean | `false`                           |                           |
+| redirect    | Route to redirect to after login. `false` for no redirect.     | 'Boolean|String|Object' | `'home'`                  |
 | title       | Title to show as heading              | String  | translated `user.login.title` key |
 
 #### Events
